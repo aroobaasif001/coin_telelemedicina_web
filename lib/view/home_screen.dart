@@ -1,6 +1,7 @@
 import 'package:coin_telelemedicina_web/controller/HomeController.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctor_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/interpreter_screen.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,7 +72,7 @@ class HomeScreen extends GetView<HomeController> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   const DoctorScreen(),
-                  const Center(child: Text('Interpreter Screen')),
+                  const InterpreterScreen(),
                   const Center(child: Text('Hospital Screen')),
                   const Center(child: Text('Services Screen')),
                 ],
