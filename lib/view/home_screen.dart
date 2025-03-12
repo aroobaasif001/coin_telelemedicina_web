@@ -6,6 +6,9 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'screens/healthCenterScreen/health_center_screen.dart';
+import 'screens/serviceScreen/service_screen.dart';
+
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
@@ -71,10 +74,11 @@ class HomeScreen extends GetView<HomeController> {
                 controller: controller.pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  const DoctorScreen(),
-                  const InterpreterScreen(),
-                  const Center(child: Text('Hospital Screen')),
-                  const Center(child: Text('Services Screen')),
+                   DoctorScreen(),  
+                   InterpreterScreen(),
+                  HealthCenterScreen(),
+                  ServiceScreen(),
+                  
                 ],
               ),
             ),

@@ -1,0 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class ProviderModel {
+  String fullName;
+  String biography;
+  String education;
+  int experience;
+  String healthCenterId;
+  bool isVerified;
+  List<String> languages;
+  String photoUrl;
+  double rating;
+  int reviewCount;
+  String specialty;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  ProviderModel({
+    required this.fullName,
+    required this.biography,
+    required this.education,
+    required this.experience,
+    required this.healthCenterId,
+    required this.isVerified,
+    required this.languages,
+    required this.photoUrl,
+    required this.rating,
+    required this.reviewCount,
+    required this.specialty,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'fullName': fullName,
+      'biography': biography,
+      'education': education,
+      'experience': experience,
+      'healthCenterId': healthCenterId,
+      'isVerified': isVerified,
+      'languages': languages,
+      'photoUrl': photoUrl,
+      'rating': rating,
+      'reviewCount': reviewCount,
+      'specialty': specialty,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+    };
+  }
+
+  factory ProviderModel.fromMap(Map<String, dynamic> map) {
+    return ProviderModel(
+      fullName: map['fullName'] ?? '',
+      biography: map['biography'] ?? '',
+      education: map['education'] ?? '',
+      experience: map['experience'] ?? 0,
+      healthCenterId: map['healthCenterId'] ?? '',
+      isVerified: map['isVerified'] ?? false,
+      languages: List<String>.from(map['languages'] ?? []),
+      photoUrl: map['photoUrl'] ?? '',
+      rating: map['rating']?.toDouble() ?? 0.0,
+      reviewCount: map['reviewCount'] ?? 0,
+      specialty: map['specialty'] ?? '',
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+      updatedAt: (map['updatedAt'] as Timestamp).toDate(),
+    );
+  }
+}
