@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InterpreterModel {
+   String docId;
   String fullName;
   String biography;
   String education;
@@ -16,6 +17,7 @@ class InterpreterModel {
   DateTime updatedAt;
 
   InterpreterModel({
+     required this.docId,
     required this.fullName,
     required this.biography,
     required this.education,
@@ -33,6 +35,7 @@ class InterpreterModel {
 
   Map<String, dynamic> toMap() {
     return {
+       'docId': docId,
       'fullName': fullName,
       'biography': biography,
       'education': education,
@@ -51,6 +54,7 @@ class InterpreterModel {
 
   factory InterpreterModel.fromMap(Map<String, dynamic> map) {
     return InterpreterModel(
+      docId: map['docId'] ?? '',
       fullName: map['fullName'],
       biography: map['biography'],
       education: map['education'],

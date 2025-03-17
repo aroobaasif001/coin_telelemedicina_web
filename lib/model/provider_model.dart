@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProviderModel {
+   String docId;
+  String email;
   String fullName;
   String biography;
   String education;
@@ -16,6 +18,8 @@ class ProviderModel {
   DateTime updatedAt;
 
   ProviderModel({
+      required this.docId,
+    required this.email,
     required this.fullName,
     required this.biography,
     required this.education,
@@ -33,6 +37,8 @@ class ProviderModel {
 
   Map<String, dynamic> toMap() {
     return {
+       'docId': docId, 
+      'email': email, 
       'fullName': fullName,
       'biography': biography,
       'education': education,
@@ -44,13 +50,15 @@ class ProviderModel {
       'rating': rating,
       'reviewCount': reviewCount,
       'specialty': specialty,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+       'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
     };
   }
 
   factory ProviderModel.fromMap(Map<String, dynamic> map) {
     return ProviderModel(
+       docId: map['docId'] ?? '', 
+      email: map['email'] ?? '',
       fullName: map['fullName'] ?? '',
       biography: map['biography'] ?? '',
       education: map['education'] ?? '',
@@ -62,8 +70,12 @@ class ProviderModel {
       rating: map['rating']?.toDouble() ?? 0.0,
       reviewCount: map['reviewCount'] ?? 0,
       specialty: map['specialty'] ?? '',
-      createdAt: (map['createdAt'] as Timestamp).toDate(),
-      updatedAt: (map['updatedAt'] as Timestamp).toDate(),
+       createdAt: map['createdAt'] != null
+          ? (map['createdAt'] as Timestamp).toDate()
+          : DateTime.now(), 
+      updatedAt: map['updatedAt'] != null
+          ? (map['updatedAt'] as Timestamp).toDate()
+          : DateTime.now(),
     );
   }
 }

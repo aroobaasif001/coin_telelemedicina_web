@@ -1,12 +1,17 @@
 import 'package:coin_telelemedicina_web/controller/HomeController.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
-import 'package:coin_telelemedicina_web/view/screens/doctor_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/interpreter_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_list_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_list_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'screens/doctorScreens/doctor_list_screen.dart';
 import 'screens/healthCenterScreen/health_center_screen.dart';
+import 'screens/interpreterScreens/interpreter_detail_screen.dart';
 import 'screens/serviceScreen/service_screen.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -74,10 +79,13 @@ class HomeScreen extends GetView<HomeController> {
                 controller: controller.pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                   DoctorScreen(),  
-                   InterpreterScreen(),
-                  HealthCenterScreen(),
-                  ServiceScreen(),
+                  
+                 //  DoctorScreen(),  
+                 DoctorListScreen(),
+                   InterpreterListScreen(),
+                  HealthCenterListScreen(),
+                  ServiceListScreen(),
+                 
                   
                 ],
               ),

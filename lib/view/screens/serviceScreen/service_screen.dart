@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -80,6 +81,9 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+        centerTitle: true,
+        title: Text('Add Service',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(

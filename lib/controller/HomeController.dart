@@ -26,4 +26,5 @@ class HomeController extends GetxController {
     currentPage.value = index;
     sideMenu.changePage(index);
   }
+  
 }

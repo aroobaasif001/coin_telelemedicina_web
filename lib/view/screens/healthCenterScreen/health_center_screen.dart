@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../utils/AppTheme.dart';
+
 class HealthCenterScreen extends StatefulWidget {
   @override
   _HealthCenterScreenState createState() => _HealthCenterScreenState();
@@ -19,7 +21,8 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _sectorController = TextEditingController();
   List<String> selectedServices = [];
-
+final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
   bool isActive = true;
   bool isLoading = false;
 
@@ -32,6 +35,17 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
     'saturday': {'open': null, 'close': null},
     'sunday': {'open': null, 'close': null},
   };
+List<String> accessibilityOptions = [
+  'Priority Assistance / Asistencia prioritaria',
+  'Wheelchair Ramp / Rampa de acceso',
+  'Accessible Restrooms / Baños adaptados',
+  'Sign Language Support / Atención en lengua de señas',
+  'Elevator Available / Elevador disponible',
+  'Accessible Parking / Estacionamiento accesible',
+  'Wheelchairs Available / Sillas de ruedas disponibles',
+];
+
+List<String> selectedAccessibilityOptions = [];
 
   Future<void> _selectTime(
       BuildContext context, String day, String type) async {
@@ -51,8 +65,6 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
       setState(() {
         isLoading = true;
       });
-
-      // Convert TimeOfDay to String
       final formattedAvailability = availability.map((day, times) => MapEntry(
             day,
             {
@@ -73,8 +85,13 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
         'description': _descriptionController.text,
         'sector': _sectorController.text,
         'services': selectedServices,
+         'accessibilityOptions': selectedAccessibilityOptions,
         'isActive': isActive,
         'availability': formattedAvailability,
+         'coordinates': {
+          'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
+          'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
+        },
         'createdAt': DateTime.now(),
         'updatedAt': DateTime.now(),
       });
@@ -92,9 +109,9 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Health Center Form'),
-      ),
+        appBar: AppBar(
+        centerTitle: true,
+        title: Text('Add Health Center ',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -112,6 +129,8 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
                 _buildTextField(_websiteController, 'Website'),
                 _buildTextField(_descriptionController, 'Description'),
                 _buildTextField(_sectorController, 'Sector'),
+                 _buildTextField(_latitudeController, 'Latitude'),
+                _buildTextField(_longitudeController, 'Longitude'),
                 const SizedBox(height: 20),
                 const Text('Select Services',
                     style:
@@ -140,6 +159,28 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
                   }).toList(),
                 ),
                 const SizedBox(height: 20),
+                const SizedBox(height: 20),
+const Text('Accessibility Options',
+    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+Wrap(
+  spacing: 5,
+  children: accessibilityOptions.map((option) {
+    return FilterChip(
+      label: Text(option),
+      selected: selectedAccessibilityOptions.contains(option),
+      onSelected: (selected) {
+        setState(() {
+          if (selected) {
+            selectedAccessibilityOptions.add(option);
+          } else {
+            selectedAccessibilityOptions.remove(option);
+          }
+        });
+      },
+    );
+  }).toList(),
+),
+SizedBox(height: 20,),
                 SwitchListTile(
                   title: const Text('Active'),
                   value: isActive,
@@ -230,3 +271,4 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
     );
   }
 }
+
