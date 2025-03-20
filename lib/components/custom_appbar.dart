@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import 'app_colors.dart';
-
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
