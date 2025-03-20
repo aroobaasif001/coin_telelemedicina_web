@@ -1,3 +1,4 @@
+import 'package:coin_telelemedicina_web/view/screens/banner/banner_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_list_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
@@ -5,12 +6,12 @@ import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_c
 import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_list_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/patient/patient_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import '../controller/HomeController.dart';
-import 'screens/Provinces/add_province_screen.dart';
 import 'screens/Provinces/provinceScreen/province_screen.dart';
 import 'screens/disabalityScreens/disablity_screen.dart';
 
@@ -41,10 +42,9 @@ class HomeScreen extends GetView<HomeController> {
                   color: primaryColor,
                   border: Border(right: BorderSide(color: Colors.grey.shade300)),
                 ),
-                arrowCollapse:Colors.grey,
+                arrowCollapse: Colors.grey,
                 arrowOpen: Colors.grey,
                 selectedIconColorExpandable: Colors.grey,
-                
               ),
               title: Container(
                 height: 150,
@@ -180,7 +180,7 @@ class HomeScreen extends GetView<HomeController> {
                   Text("Patients"),      // index 2
                DoctorListScreen(),
                   InterpreterListScreen(),   // index 4
-                  Text("Banners"),       // index 5
+                BannersScreen(),      // index 5
                  ServiceListScreen(),      // index 6
                  DisabilityScreen(),
                   HealthCenterListScreen(), // index 8
@@ -190,7 +190,7 @@ class HomeScreen extends GetView<HomeController> {
                   Text("Availability"),  // index 11
                   Text("Calls"),         // index 12
                   Text("Roles & Permissions"), // index 13
-                  Text("Admin Users"),   // index 14
+                  Text("Admin Users"), // index 14
                 ],
               ),
             ),
@@ -200,5 +200,4 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
-
 

@@ -1,10 +1,8 @@
-import 'package:coin_telelemedicina_web/components/app_colors.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
-import 'package:coin_telelemedicina_web/view/screens/Provinces/add_province_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/Provinces/addProvincesScreen/add_province_screen.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../dashboardScreen/widget/top_nav_bar_widget.dart';
 import 'controller/province_controller.dart';
 
@@ -30,23 +28,28 @@ class ProvinceScreen extends StatelessWidget {
                     style:
                         TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 GestureDetector(
-                  onTap: (){
-                    Get.to(()=>AddProvinceScreen());
+                  onTap: () {
+                    Get.to(() => AddProvinceScreen());
                   },
                   child: Container(
-                    
                     decoration: BoxDecoration(
-                      color:AppTheme.primaryColor  ,
-                      borderRadius: BorderRadius.circular(12)
-                    ),
+                        color: AppTheme.primaryColor,
+                        borderRadius: BorderRadius.circular(12)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Icon(Icons.add,color: Colors.white,),
-                          SizedBox(width: 10,),
-                          CustomText(text: 'New Province',color: Colors.white,)
-                         
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          CustomText(
+                            text: 'New Province',
+                            color: Colors.white,
+                          )
                         ],
                       ),
                     ),
@@ -73,50 +76,62 @@ class ProvinceScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
-Expanded(
-  child: Obx(() => DropdownButton<String>(
-        value: provinceController.selectedProvinceFilter.value.isEmpty
-            ? null
-            : provinceController.selectedProvinceFilter.value,
-        hint: Text("Select Province"),
-        isExpanded: true,
-        items: provinceController.provinces
-            .map((province) => DropdownMenuItem<String>(
-                  value: province["id"] as String,
-                  child: Text(province["name"] as String),
-                ))
-            .toList(),
-        onChanged: (value) {
-          provinceController.selectedProvinceFilter.value = value ?? "";
-          provinceController.fetchMunicipalities(value!); // 🔥 Fetch municipalities when province is selected
-        },
-      )),
-),
-SizedBox(width: 10),
+                Expanded(
+                  child: Obx(() => DropdownButton<String>(
+                        value: provinceController
+                                .selectedProvinceFilter.value.isEmpty
+                            ? null
+                            : provinceController.selectedProvinceFilter.value,
+                        hint: Text("Select Province"),
+                        isExpanded: true,
+                        items: provinceController.provinces
+                            .map((province) => DropdownMenuItem<String>(
+                                  value: province["id"] as String,
+                                  child: Text(province["name"] as String),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          provinceController.selectedProvinceFilter.value =
+                              value ?? "";
+                          provinceController.fetchMunicipalities(
+                              value!); // 🔥 Fetch municipalities when province is selected
+                        },
+                      )),
+                ),
+                SizedBox(width: 10),
 
 // 🔥 Municipality Dropdown (Fix)
-Expanded(
-  child: Obx(() => DropdownButton<String>(
-        value: provinceController.selectedMunicipalityFilter.value.isEmpty
-            ? null
-            : provinceController.selectedMunicipalityFilter.value,
-        hint: Text("Select Municipality"),
-        isExpanded: true,
-        items: provinceController.municipalities[provinceController.selectedProvinceFilter.value] != null
-            ? provinceController.municipalities[provinceController.selectedProvinceFilter.value]!
-                .map<DropdownMenuItem<String>>((municipality) => DropdownMenuItem<String>(
-                      value: municipality["id"] as String,
-                      child: Text(municipality["name"] as String),
-                    ))
-                .toList()
-            : [], // 🔥 Show municipalities for the selected province
-        onChanged: (value) {
-          provinceController.selectedMunicipalityFilter.value = value ?? "";
-        },
-      )),
-),
+                Expanded(
+                  child: Obx(() => DropdownButton<String>(
+                        value: provinceController
+                                .selectedMunicipalityFilter.value.isEmpty
+                            ? null
+                            : provinceController
+                                .selectedMunicipalityFilter.value,
+                        hint: Text("Select Municipality"),
+                        isExpanded: true,
+                        items: provinceController.municipalities[
+                                    provinceController
+                                        .selectedProvinceFilter.value] !=
+                                null
+                            ? provinceController.municipalities[
+                                    provinceController
+                                        .selectedProvinceFilter.value]!
+                                .map<DropdownMenuItem<String>>((municipality) =>
+                                    DropdownMenuItem<String>(
+                                      value: municipality["id"] as String,
+                                      child:
+                                          Text(municipality["name"] as String),
+                                    ))
+                                .toList()
+                            : [], // 🔥 Show municipalities for the selected province
+                        onChanged: (value) {
+                          provinceController.selectedMunicipalityFilter.value =
+                              value ?? "";
+                        },
+                      )),
+                ),
 
-      
                 SizedBox(width: 10),
 
                 // Clear Filters Button
@@ -137,12 +152,13 @@ Expanded(
                 "${provinceController.filteredProvinces.length} provinces found")),
 
             // Province List
-       /// **📌 Province List with Expandable Municipalities**
+            /// **📌 Province List with Expandable Municipalities**
             Obx(() => Expanded(
                   child: ListView.builder(
                     itemCount: provinceController.filteredProvinces.length,
                     itemBuilder: (context, index) {
-                      var province = provinceController.filteredProvinces[index];
+                      var province =
+                          provinceController.filteredProvinces[index];
                       return Card(
                         margin: EdgeInsets.symmetric(vertical: 5),
                         child: ExpansionTile(
@@ -155,7 +171,9 @@ Expanded(
                                 children: [
                                   Text(
                                     province["name"],
-                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "${province["municipalities"]} municipalities",
@@ -176,35 +194,40 @@ Expanded(
                                   IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
                                     onPressed: () {
-                                      provinceController.deleteProvince(province["id"]);
+                                      provinceController
+                                          .deleteProvince(province["id"]);
                                     },
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          leading: Icon(Icons.location_city, color: Colors.green),
+                          leading:
+                              Icon(Icons.location_city, color: Colors.green),
 
                           /// **📍 Expandable Municipalities List**
                           children: [
-                          Obx(() {
-  // Get the list of municipalities for the selected province
-  var municipalitiesList = provinceController.municipalities[province["id"]] ?? [];
+                            Obx(() {
+                              // Get the list of municipalities for the selected province
+                              var municipalitiesList = provinceController
+                                      .municipalities[province["id"]] ??
+                                  [];
 
-  return Column(
-    children: municipalitiesList
-        .map((municipality) => ListTile(
-              title: Text(municipality["name"]),
-              leading: Icon(Icons.apartment, color: Colors.blue),
-            ))
-        .toList(),
-  );
-}),
-
+                              return Column(
+                                children: municipalitiesList
+                                    .map((municipality) => ListTile(
+                                          title: Text(municipality["name"]),
+                                          leading: Icon(Icons.apartment,
+                                              color: Colors.blue),
+                                        ))
+                                    .toList(),
+                              );
+                            }),
                           ],
                           onExpansionChanged: (isExpanded) {
                             if (isExpanded) {
-                              provinceController.fetchMunicipalities(province["id"]);
+                              provinceController
+                                  .fetchMunicipalities(province["id"]);
                             }
                           },
                         ),

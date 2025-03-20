@@ -245,7 +245,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               SizedBox(height: 10),
               
-              _buildStatsGrid(), // ✅ Now properly scrollable
+              _buildStatsGrid(), 
               SizedBox(height: 20),
             ],
           ),

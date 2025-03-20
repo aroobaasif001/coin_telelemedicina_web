@@ -1,7 +1,7 @@
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../widget/CustomText.dart';
+import '../../../../widget/CustomText.dart';
 import 'controller/add_province_controller.dart';
 
 class AddProvinceScreen extends StatelessWidget {

@@ -19,16 +19,6 @@ class ProvinceController extends GetxController {
     super.onInit();
     fetchProvinces();
   }
-
-  // void fetchProvinces() {
-  //   _firestore.collection('provinces').snapshots().listen((snapshot) {
-  //     provinces.value = snapshot.docs.map((doc) => {
-  //           "id": doc.id,
-  //           "name": doc["name"],
-  //         }).toList();
-  //   });
-  // }
-
   void fetchProvinces() {
   _firestore.collection('provinces').snapshots().listen((snapshot) async {
     List<Map<String, dynamic>> provinceList = [];
@@ -37,7 +27,7 @@ class ProvinceController extends GetxController {
       var provinceData = {
         "id": doc.id,
         "name": doc["name"],
-        "municipalities": 0.obs, // 🔥 Make it an observable integer
+        "municipalities": 0.obs, 
       };
 
       var municipalitiesSnapshot = await _firestore
@@ -51,7 +41,7 @@ class ProvinceController extends GetxController {
       provinceList.add(provinceData);
     }
 
-    provinces.value = provinceList; // ✅ Update state once fetched
+    provinces.value = provinceList;
   });
 }
 
@@ -64,19 +54,6 @@ class ProvinceController extends GetxController {
             province["name"].toLowerCase().contains(searchQuery.value.toLowerCase()))
         .toList();
   }
-  // void fetchMunicipalities(String provinceId) {
-  //   _firestore
-  //       .collection('provinces')
-  //       .doc(provinceId)
-  //       .collection('municipalities')
-  //       .snapshots()
-  //       .listen((snapshot) {
-  //     municipalities.value = snapshot.docs.map((doc) => {
-  //           "id": doc.id,
-  //           "name": doc["name"],
-  //         }).toList();
-  //   });
-  // }
   void fetchMunicipalities(String provinceId) {
   _firestore
       .collection('provinces')
