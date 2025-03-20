@@ -1,6 +1,8 @@
+import 'package:coin_telelemedicina_web/view/screens/patient/patient_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
+import 'package:get/get.dart';
 
 class PatientScreen extends StatefulWidget {
   const PatientScreen({Key? key}) : super(key: key);
@@ -227,7 +229,9 @@ class _PatientScreenState extends State<PatientScreen> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        IconButton(icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13), onPressed: () {}),
+                                        IconButton(icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13), onPressed: () {
+                                          Get.to(()=> PatientViewScreen());
+                                        }),
                                         IconButton(icon: const Icon(Icons.delete, color: Colors.red, size: 13), onPressed: () {}),
                                       ],
                                     ),

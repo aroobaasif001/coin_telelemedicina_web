@@ -1,10 +1,9 @@
+import 'package:coin_telelemedicina_web/view/screens/availability/availability_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/banner/banner_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_list_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_list_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_list_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/patient/patient_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
@@ -169,29 +168,29 @@ class HomeScreen extends GetView<HomeController> {
               ],
             ),
 
-            // ============== MAIN VIEW ==============
+            // ============== MAIN VIEW (Using IndexedStacsk) ==============
             Expanded(
-              child: PageView(
-                controller: controller.pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  DashboardScreen(),     // index 0
-                  NotificationScreen(),  // index 1
-                  Text("Patients"),      // index 2
-               DoctorListScreen(),
-                  InterpreterListScreen(),   // index 4
-                BannersScreen(),      // index 5
-                 ServiceListScreen(),      // index 6
-                 DisabilityScreen(),
-                  HealthCenterListScreen(), // index 8
-               // AddProvinceScreen(),
-                 ProvinceScreen(),   // index 9
-                  Text("Chats"),         // index 10
-                  Text("Availability"),  // index 11
-                  Text("Calls"),         // index 12
-                  Text("Roles & Permissions"), // index 13
-                  Text("Admin Users"), // index 14
-                ],
+              child: Obx(
+                    () => IndexedStack(
+                  index: controller.stackIndex,
+                  children: [
+                    DashboardScreen(),         // index 0
+                    NotificationScreen(),        // index 1
+                    PatientScreen(),             // index 2
+                    DoctorListScreen(),          // index 3
+                    InterpreterListScreen(),     // index 4
+                    BannersScreen(),             // index 5
+                    ServiceListScreen(),         // index 6
+                    DisabilityScreen(),       // index 7
+                    HealthCenterListScreen(),    // index 8
+                    ProvinceScreen(),           // index 9
+                    Text("Chats"),               // index 10
+                    AvailabilityScreen(),        // index 11
+                    Text("Calls"),               // index 12
+                    Text("Roles & Permissions"), // index 13
+                    Text("Admin Users"),         // index 14
+                  ],
+                ),
               ),
             ),
           ],
@@ -200,4 +199,3 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
-
