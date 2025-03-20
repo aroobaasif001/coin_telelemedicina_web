@@ -9,6 +9,7 @@ import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'screens/dashboardScreen/dashboard_screen.dart';
 import 'screens/doctorScreens/doctor_list_screen.dart';
 import 'screens/healthCenterScreen/health_center_screen.dart';
 import 'screens/interpreterScreens/interpreter_detail_screen.dart';
@@ -52,6 +53,11 @@ class HomeScreen extends GetView<HomeController> {
                 ),
               ),
               items: [
+                  SideMenuItem(
+                  title: 'Dashboard',
+                  onTap: (index, _) => controller.changePage(index),
+                  icon: const Icon(Icons.medical_services_outlined),
+                ),
                 SideMenuItem(
                   title: 'Doctor',
                   onTap: (index, _) => controller.changePage(index),
@@ -80,7 +86,8 @@ class HomeScreen extends GetView<HomeController> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   
-                 //  DoctorScreen(),  
+                 //  DoctorScreen(), 
+                 DashboardScreen(), 
                  DoctorListScreen(),
                    InterpreterListScreen(),
                   HealthCenterListScreen(),
