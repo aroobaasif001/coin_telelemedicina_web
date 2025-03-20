@@ -1,99 +1,188 @@
-import 'package:coin_telelemedicina_web/controller/HomeController.dart';
-import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_list_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_list_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
-import 'package:easy_sidemenu/easy_sidemenu.dart';
+import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'screens/dashboardScreen/dashboard_screen.dart';
-import 'screens/doctorScreens/doctor_list_screen.dart';
-import 'screens/healthCenterScreen/health_center_screen.dart';
-import 'screens/interpreterScreens/interpreter_detail_screen.dart';
-import 'screens/serviceScreen/service_screen.dart';
+import 'package:easy_sidemenu/easy_sidemenu.dart';
+import '../controller/HomeController.dart';
 
 class HomeScreen extends GetView<HomeController> {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryColor = Color(0xFF1C8B4A); // Primary color
+
     return Scaffold(
       body: SafeArea(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            // ============== SIDE MENU ==============
             SideMenu(
               controller: controller.sideMenu,
               style: SideMenuStyle(
                 displayMode: SideMenuDisplayMode.auto,
                 backgroundColor: Colors.white,
-                selectedColor: AppTheme.primaryColor,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: AppTheme.primaryColor,
-                  border: Border(
-                    right: BorderSide(color: Colors.grey.shade300)
-                  )
-                ),
+                selectedColor: primaryColor,
+                selectedIconColor: Colors.white,
                 unselectedIconColor: Colors.black54,
                 unselectedTitleTextStyle: const TextStyle(color: Colors.black54),
                 selectedTitleTextStyle: const TextStyle(color: Colors.white),
-                selectedIconColor: Colors.white,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: primaryColor,
+                  border: Border(right: BorderSide(color: Colors.grey.shade300)),
+                ),
+                arrowCollapse:Colors.grey,
+                arrowOpen: Colors.grey,
+                selectedIconColorExpandable: Colors.grey,
+                
               ),
               title: Container(
-                height: 200,
-                width: double.maxFinite,
+                height: 150,
+                width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/img.png'),
+                    image: AssetImage('assets/img.png'), // Replace with your logo
                   ),
                 ),
               ),
               items: [
-                  SideMenuItem(
+                // Dashboard
+                SideMenuItem(
                   title: 'Dashboard',
-                  onTap: (index, _) => controller.changePage(index),
-                  icon: const Icon(Icons.medical_services_outlined),
+                  icon: const Icon(Icons.dashboard),
+                  onTap: (index, _) => controller.changePage(0),
                 ),
+
+                // Notifications
                 SideMenuItem(
-                  title: 'Doctor',
-                  onTap: (index, _) => controller.changePage(index),
-                  icon: const Icon(Icons.medical_services_outlined),
+                  title: 'Notifications',
+                  icon: const Icon(Icons.notifications),
+                  onTap: (index, _) => controller.changePage(1),
                 ),
-                SideMenuItem(
-                  title: 'Interpreter',
-                  onTap: (index, _) => controller.changePage(index),
-                  icon: const Icon(Icons.translate_outlined),
+
+                // Users (Collapsible)
+                SideMenuExpansionItem(
+                  title: 'Users',
+                  icon: const Icon(Icons.people),
+                  children: [
+                    SideMenuItem(
+                      title: 'Patients',
+                      icon: const Icon(Icons.person),
+                      onTap: (index, _) => controller.changePage(2),
+                    ),
+                    SideMenuItem(
+                      title: 'Doctors',
+                      icon: const Icon(Icons.local_hospital_outlined),
+                      onTap: (index, _) => controller.changePage(3),
+                    ),
+                    SideMenuItem(
+                      title: 'Interpreters',
+                      icon: const Icon(Icons.translate_outlined),
+                      onTap: (index, _) => controller.changePage(4),
+                    ),
+                  ],
                 ),
-                SideMenuItem(
-                  title: 'Hospital',
-                  onTap: (index, _) => controller.changePage(index),
-                  icon: const Icon(Icons.local_hospital_outlined),
+
+                // Content (Collapsible)
+                SideMenuExpansionItem(
+                  title: 'Content',
+                  icon: const Icon(Icons.folder),
+                  children: [
+                    SideMenuItem(
+                      title: 'Banners',
+                      icon: const Icon(Icons.image),
+                      onTap: (index, _) => controller.changePage(5),
+                    ),
+                    SideMenuItem(
+                      title: 'Services',
+                      icon: const Icon(Icons.medical_services),
+                      onTap: (index, _) => controller.changePage(6),
+                    ),
+                    SideMenuItem(
+                      title: 'Disabilities',
+                      icon: const Icon(Icons.accessible),
+                      onTap: (index, _) => controller.changePage(7),
+                    ),
+                    SideMenuItem(
+                      title: 'Health Centers',
+                      icon: const Icon(Icons.local_hospital),
+                      onTap: (index, _) => controller.changePage(8),
+                    ),
+                    SideMenuItem(
+                      title: 'Provinces',
+                      icon: const Icon(Icons.map),
+                      onTap: (index, _) => controller.changePage(9),
+                    ),
+                  ],
                 ),
-                SideMenuItem(
-                  title: 'Services',
-                  onTap: (index, _) => controller.changePage(index),
-                  icon: const Icon(Icons.medical_information_outlined),
+
+                // Management (Collapsible)
+                SideMenuExpansionItem(
+                  title: 'Management',
+                  icon: const Icon(Icons.calendar_today),
+                  children: [
+                    SideMenuItem(
+                      title: 'Chats',
+                      icon: const Icon(Icons.chat),
+                      onTap: (index, _) => controller.changePage(10),
+                    ),
+                    SideMenuItem(
+                      title: 'Availability',
+                      icon: const Icon(Icons.access_time),
+                      onTap: (index, _) => controller.changePage(11),
+                    ),
+                    SideMenuItem(
+                      title: 'Calls',
+                      icon: const Icon(Icons.phone),
+                      onTap: (index, _) => controller.changePage(12),
+                    ),
+                  ],
+                ),
+
+                // Admin Panel (Collapsible)
+                SideMenuExpansionItem(
+                  title: 'Admin Panel',
+                  icon: const Icon(Icons.admin_panel_settings_outlined),
+                  children: [
+                    SideMenuItem(
+                      title: 'Roles & Permissions',
+                      icon: const Icon(Icons.security),
+                      onTap: (index, _) => controller.changePage(13),
+                    ),
+                    SideMenuItem(
+                      title: 'Admin Users',
+                      icon: const Icon(Icons.supervisor_account),
+                      onTap: (index, _) => controller.changePage(14),
+                    ),
+                  ],
                 ),
               ],
             ),
+
+            // ============== MAIN VIEW ==============
             Expanded(
               child: PageView(
                 controller: controller.pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  
-                 //  DoctorScreen(), 
-                 DashboardScreen(), 
-                 DoctorListScreen(),
-                   InterpreterListScreen(),
-                  HealthCenterListScreen(),
-                  ServiceListScreen(),
-                 
-                  
+                  DashboardScreen(),     // index 0
+                  NotificationScreen(),  // index 1
+                  Text("Patients"),      // index 2
+                  DoctorScreen(),        // index 3
+                  InterpreterScreen(),   // index 4
+                  Text("Banners"),       // index 5
+                  Text("Services"),      // index 6
+                  Text("Disabilities"),  // index 7
+                  Text("Health Centers"), // index 8
+                  Text("Provinces"),     // index 9
+                  Text("Chats"),         // index 10
+                  Text("Availability"),  // index 11
+                  Text("Calls"),         // index 12
+                  Text("Roles & Permissions"), // index 13
+                  Text("Admin Users"),   // index 14
                 ],
               ),
             ),
@@ -103,3 +192,113 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
+
+
+///
+
+// import 'package:coin_telelemedicina_web/controller/HomeController.dart';
+// import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+// import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
+// import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_list_screen.dart';
+// import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_list_screen.dart';
+// import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
+// import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
+// import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
+// import 'package:easy_sidemenu/easy_sidemenu.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+//
+// import 'screens/dashboardScreen/dashboard_screen.dart';
+// import 'screens/doctorScreens/doctor_list_screen.dart';
+// import 'screens/healthCenterScreen/health_center_screen.dart';
+// import 'screens/interpreterScreens/interpreter_detail_screen.dart';
+// import 'screens/serviceScreen/service_screen.dart';
+//
+// class HomeScreen extends GetView<HomeController> {
+//   const HomeScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             SideMenu(
+//               controller: controller.sideMenu,
+//               style: SideMenuStyle(
+//                 displayMode: SideMenuDisplayMode.auto,
+//                 backgroundColor: Colors.white,
+//                 selectedColor: AppTheme.primaryColor,
+//                 decoration: BoxDecoration(
+//                     borderRadius: BorderRadius.circular(15),
+//                     color: AppTheme.primaryColor,
+//                     border: Border(right: BorderSide(color: Colors.grey.shade300))),
+//                 unselectedIconColor: Colors.black54,
+//                 unselectedTitleTextStyle: const TextStyle(color: Colors.black54),
+//                 selectedTitleTextStyle: const TextStyle(color: Colors.white),
+//                 selectedIconColor: Colors.white,
+//               ),
+//               title: Container(
+//                 height: 200,
+//                 width: double.maxFinite,
+//                 decoration: const BoxDecoration(
+//                   image: DecorationImage(
+//                     image: AssetImage('assets/img.png'),
+//                   ),
+//                 ),
+//               ),
+//               items: [
+//                 SideMenuItem(
+//                   title: 'Dashboard',
+//                   onTap: (index, _) => controller.changePage(index),
+//                   icon: const Icon(Icons.medical_services_outlined),
+//                 ),
+//                 SideMenuItem(
+//                   title: 'Notification',
+//                   onTap: (index, _) => controller.changePage(index),
+//                   icon: const Icon(Icons.medical_services_outlined),
+//                 ),
+//                 SideMenuItem(
+//                   title: 'Doctor',
+//                   onTap: (index, _) => controller.changePage(index),
+//                   icon: const Icon(Icons.medical_services_outlined),
+//                 ),
+//                 SideMenuItem(
+//                   title: 'Interpreter',
+//                   onTap: (index, _) => controller.changePage(index),
+//                   icon: const Icon(Icons.translate_outlined),
+//                 ),
+//                 SideMenuItem(
+//                   title: 'Hospital',
+//                   onTap: (index, _) => controller.changePage(index),
+//                   icon: const Icon(Icons.local_hospital_outlined),
+//                 ),
+//                 SideMenuItem(
+//                   title: 'Services',
+//                   onTap: (index, _) => controller.changePage(index),
+//                   icon: const Icon(Icons.medical_information_outlined),
+//                 ),
+//               ],
+//             ),
+//             Expanded(
+//               child: PageView(
+//                 controller: controller.pageController,
+//                 physics: const NeverScrollableScrollPhysics(),
+//                 children: [
+//                   //  DoctorScreen(),
+//                   DashboardScreen(),
+//                   NotificationScreen(),
+//                   DoctorListScreen(),
+//                   InterpreterListScreen(),
+//                   HealthCenterListScreen(),
+//                   ServiceListScreen(),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
