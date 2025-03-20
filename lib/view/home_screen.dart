@@ -1,7 +1,11 @@
 import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_list_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_list_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_list_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
@@ -171,12 +175,12 @@ class HomeScreen extends GetView<HomeController> {
                   DashboardScreen(),     // index 0
                   NotificationScreen(),  // index 1
                   Text("Patients"),      // index 2
-                  DoctorScreen(),        // index 3
-                  InterpreterScreen(),   // index 4
+               DoctorListScreen(),
+                  InterpreterListScreen(),   // index 4
                   Text("Banners"),       // index 5
-                  Text("Services"),      // index 6
+                 ServiceListScreen(),      // index 6
                   Text("Disabilities"),  // index 7
-                  Text("Health Centers"), // index 8
+                  HealthCenterListScreen(), // index 8
                   Text("Provinces"),     // index 9
                   Text("Chats"),         // index 10
                   Text("Availability"),  // index 11
