@@ -6,11 +6,14 @@ class HomeController extends GetxController {
   final pageController = PageController();
   final sideMenu = SideMenuController();
 
-  // Tracks the current page index
+  // Tracks the current page index.
   final currentPage = 0.obs;
 
-  // Tracks whether "Usuarios" sub-menu is expanded
+  // Tracks whether the "Usuarios" submenu is expanded.
   final usuariosExpanded = false.obs;
+
+  // Getter to use as stackIndex in an IndexedStack.
+  int get stackIndex => currentPage.value;
 
   @override
   void onInit() {
@@ -28,17 +31,18 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  // Directly change page from code
+  // Directly change page from code.
   void changePage(int index) {
     currentPage.value = index;
     sideMenu.changePage(index);
   }
 
-  // Toggle "Usuarios" submenu
+  // Toggle the "Usuarios" submenu.
   void toggleUsuarios() {
     usuariosExpanded.value = !usuariosExpanded.value;
   }
 }
+
 
 
 
