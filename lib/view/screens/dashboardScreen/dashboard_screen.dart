@@ -206,7 +206,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         preferredSize: Size.fromHeight(80),
         child: TopNavBar(),
       ),
-      body: SingleChildScrollView( // ✅ Fix overflow by enabling scrolling
+      body: SingleChildScrollView( 
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
