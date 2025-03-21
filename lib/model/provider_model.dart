@@ -10,6 +10,7 @@ class ProviderModel {
   String healthCenterId;
   bool isVerified;
   List<String> languages;
+  List<String> selectedServices;
   String photoUrl;
   double rating;
   int reviewCount;
@@ -27,6 +28,7 @@ class ProviderModel {
     required this.healthCenterId,
     required this.isVerified,
     required this.languages,
+    required this.selectedServices,
     required this.photoUrl,
     required this.rating,
     required this.reviewCount,
@@ -46,6 +48,7 @@ class ProviderModel {
       'healthCenterId': healthCenterId,
       'isVerified': isVerified,
       'languages': languages,
+      'selectedServices': selectedServices,
       'photoUrl': photoUrl,
       'rating': rating,
       'reviewCount': reviewCount,
@@ -66,6 +69,7 @@ class ProviderModel {
       healthCenterId: map['healthCenterId'] ?? '',
       isVerified: map['isVerified'] ?? false,
       languages: List<String>.from(map['languages'] ?? []),
+      selectedServices: List<String>.from(map['selectedServices'] ?? []),
       photoUrl: map['photoUrl'] ?? '',
       rating: map['rating']?.toDouble() ?? 0.0,
       reviewCount: map['reviewCount'] ?? 0,
