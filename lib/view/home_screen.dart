@@ -126,45 +126,45 @@ class HomeScreen extends GetView<HomeController> {
                 ),
 
                 // Management (Collapsible)
-                SideMenuExpansionItem(
-                  title: 'Management',
-                  icon: const Icon(Icons.calendar_today),
-                  children: [
-                    SideMenuItem(
-                      title: 'Chats',
-                      icon: const Icon(Icons.chat),
-                      onTap: (index, _) => controller.changePage(10),
-                    ),
-                    SideMenuItem(
-                      title: 'Availability',
-                      icon: const Icon(Icons.access_time),
-                      onTap: (index, _) => controller.changePage(11),
-                    ),
-                    SideMenuItem(
-                      title: 'Calls',
-                      icon: const Icon(Icons.phone),
-                      onTap: (index, _) => controller.changePage(12),
-                    ),
-                  ],
-                ),
+                // SideMenuExpansionItem(
+                //   title: 'Management',
+                //   icon: const Icon(Icons.calendar_today),
+                //   children: [
+                //     SideMenuItem(
+                //       title: 'Chats',
+                //       icon: const Icon(Icons.chat),
+                //       onTap: (index, _) => controller.changePage(10),
+                //     ),
+                //     SideMenuItem(
+                //       title: 'Availability',
+                //       icon: const Icon(Icons.access_time),
+                //       onTap: (index, _) => controller.changePage(11),
+                //     ),
+                //     SideMenuItem(
+                //       title: 'Calls',
+                //       icon: const Icon(Icons.phone),
+                //       onTap: (index, _) => controller.changePage(12),
+                //     ),
+                //   ],
+                // ),
 
                 // Admin Panel (Collapsible)
-                SideMenuExpansionItem(
-                  title: 'Admin Panel',
-                  icon: const Icon(Icons.admin_panel_settings_outlined),
-                  children: [
-                    SideMenuItem(
-                      title: 'Roles & Permissions',
-                      icon: const Icon(Icons.security),
-                      onTap: (index, _) => controller.changePage(13),
-                    ),
-                    SideMenuItem(
-                      title: 'Admin Users',
-                      icon: const Icon(Icons.supervisor_account),
-                      onTap: (index, _) => controller.changePage(14),
-                    ),
-                  ],
-                ),
+                // SideMenuExpansionItem(
+                //   title: 'Admin Panel',
+                //   icon: const Icon(Icons.admin_panel_settings_outlined),
+                //   children: [
+                //     SideMenuItem(
+                //       title: 'Roles & Permissions',
+                //       icon: const Icon(Icons.security),
+                //       onTap: (index, _) => controller.changePage(13),
+                //     ),
+                //     SideMenuItem(
+                //       title: 'Admin Users',
+                //       icon: const Icon(Icons.supervisor_account),
+                //       onTap: (index, _) => controller.changePage(14),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
 
@@ -184,11 +184,11 @@ class HomeScreen extends GetView<HomeController> {
                     DisabilityScreen(),       // index 7
                     HealthCenterListScreen(),    // index 8
                     ProvinceScreen(),           // index 9
-                    Text("Chats"),               // index 10
-                    AvailabilityScreen(),        // index 11
-                    Text("Calls"),               // index 12
-                    Text("Roles & Permissions"), // index 13
-                    Text("Admin Users"),         // index 14
+                    // Text("Chats"),               // index 10
+                    // AvailabilityScreen(),        // index 11
+                    // Text("Calls"),               // index 12
+                    // Text("Roles & Permissions"), // index 13
+                    // Text("Admin Users"),         // index 14
                   ],
                 ),
               ),

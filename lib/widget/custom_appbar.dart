@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class CustomAppbar extends StatelessWidget {
   final String title;
+  final bool isLeading;
+  
   const CustomAppbar({super.key,
-    this.title = 'Doctor Screen'});
+    this.title = 'Doctor Screen',  this.isLeading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,12 @@ class CustomAppbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+           isLeading?
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)):SizedBox.shrink(),
           CustomText(text: title),
           Row(
             spacing: 5,

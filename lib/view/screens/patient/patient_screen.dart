@@ -1,8 +1,9 @@
-import 'package:coin_telelemedicina_web/view/screens/patient/patient_view_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:get/get.dart';
+import 'package:coin_telelemedicina_web/view/screens/patient/patient_view_screen.dart';
 
 class PatientScreen extends StatefulWidget {
   const PatientScreen({Key? key}) : super(key: key);
@@ -13,46 +14,6 @@ class PatientScreen extends StatefulWidget {
 
 class _PatientScreenState extends State<PatientScreen> {
   final TextEditingController _searchController = TextEditingController();
-
-  // Sample patient data
-  List<Map<String, String>> patients = [
-    {
-      'name': 'Sandra Josefina',
-      'email': 'userinfo4@gmail.com',
-      'disability': 'Auditory',
-      'location': 'Santo Domingo, Santo Domingo Norte',
-      'gender': 'Female',
-      'status': 'Active',
-      'registration': '13 Mar 2025',
-    },
-    {
-      'name': 'Maria del Mar',
-      'email': 'prueba25@gmail.com',
-      'disability': 'Cognitive',
-      'location': 'Santo Domingo, Santo Domingo Norte',
-      'gender': 'Female',
-      'status': 'Active',
-      'registration': '09 Mar 2025',
-    },
-    {
-      'name': 'Miguel Aguirre',
-      'email': 'test298@gmail.com',
-      'disability': 'Cognitive',
-      'location': 'Santo Domingo, Santo Domingo Este',
-      'gender': 'Non-binary',
-      'status': 'Active',
-      'registration': '27 Feb 2025',
-    },
-    {
-      'name': 'Muhammad Mawaz',
-      'email': 'mawaz@gmail.com',
-      'disability': 'Visual',
-      'location': 'Santiago, Licey al Medio',
-      'gender': 'Non-binary',
-      'status': 'Active',
-      'registration': '25 Feb 2025',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +26,6 @@ class _PatientScreenState extends State<PatientScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
               children: [
-                // ✅ Search Bar & Add Button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -75,8 +35,10 @@ class _PatientScreenState extends State<PatientScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                     ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                      icon: const Icon(Icons.add, color: Colors.white, size: 13),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green),
+                      icon:
+                          const Icon(Icons.add, color: Colors.white, size: 13),
                       label: const Text("New Patient",
                           style: TextStyle(color: Colors.white, fontSize: 13)),
                       onPressed: () {
@@ -86,13 +48,13 @@ class _PatientScreenState extends State<PatientScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-
-                // ✅ Search Bar
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
+                    ],
                   ),
                   child: TextField(
                     controller: _searchController,
@@ -109,143 +71,224 @@ class _PatientScreenState extends State<PatientScreen> {
               ],
             ),
           ),
-
-          // ✅ Scrollable Table using ListView.builder
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ClipRect(
-                child: Container(
-                  width: 1100, // Adjusted to fit the table properly
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
-                  ),
-                  child: Column(
-                    children: [
-                      // Table Headers
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        color: Colors.grey.shade200,
-                        child: Row(
-                          children: const [
-                            Expanded(flex: 3, child: Text("Patient", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text("Disability", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text("Location", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text("Gender", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text("Status", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text("Registration", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                          ],
-                        ),
-                      ),
-                      const Divider(height: 1, color: Colors.grey),
+            child: StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('patients').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                      // Table Rows using ListView.builder
-                      SizedBox(
-                        height: 400, // Prevents overflow issue
-                        child: ListView.builder(
-                          itemCount: patients.length,
-                          itemBuilder: (context, index) {
-                            final patient = patients[index];
-                            return Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                              decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
-                              ),
-                              child: Row(
-                                children: [
-                                  // ✅ Patient Name & Email
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      children: [
-                                        const CircleAvatar(radius: 13),
-                                        const SizedBox(width: 8),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                var patients = snapshot.data!.docs;
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ClipRect(
+                    child: Container(
+                      width: 1100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            color: Colors.grey.shade200,
+                            child: Row(
+                              children: const [
+                                Expanded(
+                                    flex: 4,
+                                    child: Text("Patient",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text("Disability",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold))),
+                                //  Expanded(flex: 2, child: Text("Location", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text("Gender",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text("Status",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    flex: 1,
+                                    child: Text("Registration",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold))),
+                                Expanded(
+                                    flex: 2,
+                                    child: Text("Actions",
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold))),
+                              ],
+                            ),
+                          ),
+                          const Divider(height: 1, color: Colors.grey),
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: patients.length,
+                              itemBuilder: (context, index) {
+                                var patient = patients[index].data()
+                                    as Map<String, dynamic>;
+
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey.shade300)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
                                           children: [
-                                            Text(patient['name']!,
-                                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                                                overflow: TextOverflow.ellipsis),
-                                            Text(patient['email']!,
-                                                style: const TextStyle(color: Colors.grey, fontSize: 13),
-                                                overflow: TextOverflow.ellipsis),
+                                            // const CircleAvatar(radius: 13),
+                                            const SizedBox(width: 8),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(patient['fullName'] ?? '',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 13),
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                                Text(patient['email'] ?? '',
+                                                    style: const TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 13),
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ],
+                                            ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Chip(
+                                          label: Text(
+                                              patient['disability'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 13)),
+                                          backgroundColor:
+                                              Colors.green.shade100,
+                                        ),
+                                      ),
+                                      // Expanded(
+                                      //   flex: 2,
+                                      //   child: Text(patient['location'] ?? '',
+                                      //       overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
+                                      // ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Chip(
+                                          label: Text(patient['gender'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 13)),
+                                          backgroundColor: Colors.blue.shade100,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Chip(
+                                          label: Text(patient['status'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 13)),
+                                          backgroundColor:
+                                              Colors.green.shade300,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.calendar_today,
+                                                size: 13),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              patient['regDate'] is Timestamp
+                                                  ? (patient['regDate']
+                                                              as Timestamp)
+                                                          .toDate()
+                                                          .toLocal()
+                                                          .toString()
+                                                          .split(' ')[
+                                                      0] // Extract YYYY-MM-DD
+                                                  : patient['regDate'] ??
+                                                      '', // If it's already a string
+                                              style:
+                                                  const TextStyle(fontSize: 13),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(
+                                                  Icons.remove_red_eye,
+                                                  color: Colors.blue,
+                                                  size: 13),
+                                              onPressed: () {
+                                               
+                                                Get.to(
+                                                    () => PatientViewScreen(patient:patient,));
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete,
+                                                  color: Colors.red, size: 13),
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('patients')
+                                                    .doc(patients[index].id)
+                                                    .delete();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-
-                                  // ✅ Disability
-                                  Expanded(
-                                    flex: 2,
-                                    child: Chip(
-                                      label: Text(patient['disability']!, style: const TextStyle(fontSize: 13)),
-                                      backgroundColor: Colors.green.shade100,
-                                    ),
-                                  ),
-
-                                  // ✅ Location
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(patient['location']!, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
-                                  ),
-
-                                  // ✅ Gender
-                                  Expanded(
-                                    flex: 2,
-                                    child: Chip(
-                                      label: Text(patient['gender']!, style: const TextStyle(fontSize: 13)),
-                                      backgroundColor: Colors.blue.shade100,
-                                    ),
-                                  ),
-
-                                  // ✅ Status
-                                  Expanded(
-                                    flex: 2,
-                                    child: Chip(
-                                      label: Text(patient['status']!, style: const TextStyle(fontSize: 13)),
-                                      backgroundColor: Colors.green.shade300,
-                                    ),
-                                  ),
-
-                                  // ✅ Registration Date
-                                  Expanded(
-                                    flex: 2,
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.calendar_today, size: 13),
-                                        const SizedBox(width: 4),
-                                        Text(patient['registration']!, style: const TextStyle(fontSize: 13)),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // ✅ Actions
-                                  Expanded(
-                                    flex: 2,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        IconButton(icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13), onPressed: () {
-                                          Get.to(()=> PatientViewScreen());
-                                        }),
-                                        IconButton(icon: const Icon(Icons.delete, color: Colors.red, size: 13), onPressed: () {}),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
         ],
