@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
@@ -19,279 +20,353 @@ class _PatientScreenState extends State<PatientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: Column(
-        children: [
-          CustomAppbar(title: 'Patient Management'),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                      text: 'Patient Management',
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green),
-                      icon:
-                          const Icon(Icons.add, color: Colors.white, size: 13),
-                      label: const Text("New Patient",
-                          style: TextStyle(color: Colors.white, fontSize: 13)),
-                      onPressed: () {
-                        // Add new patient functionality
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
-                    ],
+      body: SingleChildScrollView( // Added ScrollView for overall body
+        child: Column(
+          children: [
+            CustomAppbar(title: 'Patient Management'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    text: 'Patient Management',
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
                   ),
-                  child: TextField(
-                    controller: _searchController,
-                    style: const TextStyle(fontSize: 13),
-                    decoration: const InputDecoration(
-                      hintText: 'Search by name, email or disability...',
-                      prefixIcon: Icon(Icons.search, size: 13),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(12),
-                    ),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    icon: const Icon(Icons.add, color: Colors.white, size: 13),
+                    label: const Text("New Patient",
+                        style: TextStyle(color: Colors.white, fontSize: 13)),
+                    onPressed: () {
+                      // Add new patient functionality
+                    },
                   ),
-                ),
-                const SizedBox(height: 16),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('patients').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                var patients = snapshot.data!.docs;
-
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ClipRect(
-                    child: Container(
-                      width: 1100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
-                        ],
+            CustomContainer(
+              margin: const EdgeInsets.all(10),
+              borderRadius: BorderRadius.circular(10),
+              conColor: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+                    ),
+                    child: TextField(
+                      controller: _searchController,
+                      style: const TextStyle(fontSize: 13),
+                      decoration: const InputDecoration(
+                        hintText: 'Search by name, email or disability...',
+                        prefixIcon: Icon(Icons.search, size: 13),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(12),
                       ),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            color: Colors.grey.shade200,
-                            child: Row(
-                              children: const [
-                                Expanded(
-                                    flex: 4,
-                                    child: Text("Patient",
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold))),
-                                Expanded(
-                                    flex: 2,
-                                    child: Text("Disability",
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold))),
-                                //  Expanded(flex: 2, child: Text("Location", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                                Expanded(
-                                    flex: 2,
-                                    child: Text("Gender",
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold))),
-                                Expanded(
-                                    flex: 2,
-                                    child: Text("Status",
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold))),
-                                Expanded(
-                                    flex: 1,
-                                    child: Text("Registration",
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold))),
-                                Expanded(
-                                    flex: 2,
-                                    child: Text("Actions",
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold))),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection('patients').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      var patients = snapshot.data!.docs;
+
+                      return Container(
+                        width: 1100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            // Container(
+                            //   padding: const EdgeInsets.all(10),
+                            //   color: Colors.grey.shade200,
+                            //   child: Row(
+                            //     children: const [
+                            //       Expanded(flex: 4, child: Text("Patient", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                            //       Expanded(flex: 2, child: Text("Disability", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                            //       Expanded(flex: 2, child: Text("Gender", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                            //       Expanded(flex: 3, child: Text("Status", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                            //       Expanded(flex: 2, child: Text("Registration", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                            //       Expanded(flex: 2, child: Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
+                            //     ],
+                            //   ),
+                            // ),
+                            Table(
+                              columnWidths: const {
+                                0: FlexColumnWidth(5),
+                                1: FlexColumnWidth(2),
+                                2: FlexColumnWidth(2),
+                                3: FlexColumnWidth(2),
+                                4: FlexColumnWidth(3),
+                                5: FlexColumnWidth(2),
+                              },
+                              children: [
+                                TableRow(
+                                  decoration: BoxDecoration(color: Colors.grey.shade200),
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Patient", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Disability", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Gender", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Status", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Registration", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                          ),
-                          const Divider(height: 1, color: Colors.grey),
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: patients.length,
-                              itemBuilder: (context, index) {
-                                var patient = patients[index].data()
-                                    as Map<String, dynamic>;
+                            const Divider(height: 1, color: Colors.grey),
 
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Colors.grey.shade300)),
-                                  ),
-                                  child: Row(
+                            const Divider(height: 1, color: Colors.grey),
+                            // SizedBox( // Replaced Expanded with SizedBox
+                            //   height: 500, // Provide fixed height to avoid layout issue
+                            //   child: ListView.builder(
+                            //     shrinkWrap: true,
+                            //     itemCount: patients.length,
+                            //     itemBuilder: (context, index) {
+                            //       var patient = patients[index].data() as Map<String, dynamic>;
+                            //
+                            //       return Container(
+                            //         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                            //         decoration: BoxDecoration(
+                            //           border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                            //         ),
+                            //         child: Row(
+                            //           children: [
+                            //             Expanded(
+                            //               flex: 4,
+                            //               child: Row(
+                            //                 children: [
+                            //                   const SizedBox(width: 5),
+                            //                   Column(
+                            //                     crossAxisAlignment: CrossAxisAlignment.start,
+                            //                     children: [
+                            //                       Text(patient['fullName'] ?? '',
+                            //                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                            //                           overflow: TextOverflow.ellipsis),
+                            //                       Text(patient['email'] ?? '',
+                            //                           style: const TextStyle(color: Colors.grey, fontSize: 13),
+                            //                           overflow: TextOverflow.ellipsis),
+                            //                     ],
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             Expanded(
+                            //               flex: 2,
+                            //               child: Chip(
+                            //                 label: Text(patient['disability'] ?? '', style: const TextStyle(fontSize: 13)),
+                            //                 backgroundColor: Colors.green.shade100,
+                            //               ),
+                            //             ),
+                            //             Expanded(
+                            //               flex: 2,
+                            //               child: Chip(
+                            //                 label: Text(patient['gender'] ?? '', style: const TextStyle(fontSize: 13)),
+                            //                 backgroundColor: Colors.blue.shade100,
+                            //               ),
+                            //             ),
+                            //             Expanded(
+                            //               flex: 3,
+                            //               child: Chip(
+                            //                 label: Text(patient['status'] ?? '', style: const TextStyle(fontSize: 13)),
+                            //                 backgroundColor: Colors.green.shade300,
+                            //               ),
+                            //             ),
+                            //             Expanded(
+                            //               flex: 2,
+                            //               child: Row(
+                            //                 children: [
+                            //                   const Icon(Icons.calendar_today, size: 13),
+                            //                   const SizedBox(width: 4),
+                            //                   Text(
+                            //                     patient['regDate'] is Timestamp
+                            //                         ? (patient['regDate'] as Timestamp).toDate().toLocal().toString().split(' ')[0]
+                            //                         : patient['regDate'] ?? '',
+                            //                     style: const TextStyle(fontSize: 13),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             Flexible(
+                            //               flex: 2,
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.center,
+                            //                 children: [
+                            //                   IconButton(
+                            //                     icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13),
+                            //                     onPressed: () {
+                            //                       Get.to(() => PatientViewScreen(patient: patient));
+                            //                     },
+                            //                   ),
+                            //                   IconButton(
+                            //                     icon: const Icon(Icons.delete, color: Colors.red, size: 13),
+                            //                     onPressed: () {
+                            //                       FirebaseFirestore.instance
+                            //                           .collection('patients')
+                            //                           .doc(patients[index].id)
+                            //                           .delete();
+                            //                     },
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       );
+                            //     },
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: 500,
+                              child: ListView.builder(
+                                itemCount: patients.length,
+                                itemBuilder: (context, index) {
+                                  var patient = patients[index].data() as Map<String, dynamic>;
+                                  var patientId = patients[index].id;
+
+                                  return Table(
+                                    columnWidths: const {
+                                      0: FlexColumnWidth(4),
+                                      1: FlexColumnWidth(2),
+                                      2: FlexColumnWidth(2),
+                                      3: FlexColumnWidth(2),
+                                      4: FlexColumnWidth(3),
+                                      5: FlexColumnWidth(2),
+                                    },
                                     children: [
-                                      Expanded(
-                                        flex: 3,
-                                        child: Row(
-                                          children: [
-                                            // const CircleAvatar(radius: 13),
-                                            const SizedBox(width: 8),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                      TableRow(
+                                        decoration: BoxDecoration(
+                                          border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                                        ),
+                                        children: [
+                                          // Patient Name & Email
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(patient['fullName'] ?? '',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 13),
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                                    overflow: TextOverflow.ellipsis),
                                                 Text(patient['email'] ?? '',
-                                                    style: const TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 13),
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
+                                                    style: const TextStyle(color: Colors.grey, fontSize: 13),
+                                                    overflow: TextOverflow.ellipsis),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Chip(
-                                          label: Text(
-                                              patient['disability'] ?? '',
-                                              style: const TextStyle(
-                                                  fontSize: 13)),
-                                          backgroundColor:
-                                              Colors.green.shade100,
-                                        ),
-                                      ),
-                                      // Expanded(
-                                      //   flex: 2,
-                                      //   child: Text(patient['location'] ?? '',
-                                      //       overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13)),
-                                      // ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Chip(
-                                          label: Text(patient['gender'] ?? '',
-                                              style: const TextStyle(
-                                                  fontSize: 13)),
-                                          backgroundColor: Colors.blue.shade100,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Chip(
-                                          label: Text(patient['status'] ?? '',
-                                              style: const TextStyle(
-                                                  fontSize: 13)),
-                                          backgroundColor:
-                                              Colors.green.shade300,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Row(
-                                          children: [
-                                            const Icon(Icons.calendar_today,
-                                                size: 13),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              patient['regDate'] is Timestamp
-                                                  ? (patient['regDate']
-                                                              as Timestamp)
-                                                          .toDate()
-                                                          .toLocal()
-                                                          .toString()
-                                                          .split(' ')[
-                                                      0] // Extract YYYY-MM-DD
-                                                  : patient['regDate'] ??
-                                                      '', // If it's already a string
-                                              style:
-                                                  const TextStyle(fontSize: 13),
+                                          ),
+                                          // Disability
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Chip(
+                                              label: Text(patient['disability'] ?? '', style: const TextStyle(fontSize: 13)),
+                                              backgroundColor: Colors.green.shade100,
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(
-                                                  Icons.remove_red_eye,
-                                                  color: Colors.blue,
-                                                  size: 13),
-                                              onPressed: () {
-                                               
-                                                Get.to(
-                                                    () => PatientViewScreen(patient:patient,));
-                                              },
+                                          ),
+                                          // Gender
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Chip(
+                                              label: Text(patient['gender'] ?? '', style: const TextStyle(fontSize: 13)),
+                                              backgroundColor: Colors.blue.shade100,
                                             ),
-                                            IconButton(
-                                              icon: const Icon(Icons.delete,
-                                                  color: Colors.red, size: 13),
-                                              onPressed: () {
-                                                FirebaseFirestore.instance
-                                                    .collection('patients')
-                                                    .doc(patients[index].id)
-                                                    .delete();
-                                              },
+                                          ),
+                                          // Status
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Chip(
+                                              label: Text(patient['status'] ?? '', style: const TextStyle(fontSize: 13)),
+                                              backgroundColor: Colors.green.shade300,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          // Registration Date
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                const Icon(Icons.calendar_today, size: 13),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  patient['regDate'] is Timestamp
+                                                      ? (patient['regDate'] as Timestamp).toDate().toLocal().toString().split(' ')[0]
+                                                      : patient['regDate'] ?? '',
+                                                  style: const TextStyle(fontSize: 13),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          // Actions
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 50),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13),
+                                                  onPressed: () {
+                                                    Get.to(() => PatientViewScreen(patient: patient));
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(Icons.delete, color: Colors.red, size: 13),
+                                                  onPressed: () {
+                                                    FirebaseFirestore.instance
+                                                        .collection('patients')
+                                                        .doc(patientId)
+                                                        .delete();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
