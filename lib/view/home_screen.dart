@@ -1,3 +1,4 @@
+import 'package:coin_telelemedicina_web/view/auth/login_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/availability/availability_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/banner/banner_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
@@ -7,6 +8,8 @@ import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpre
 import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/patient/patient_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
+import 'package:coin_telelemedicina_web/widget/CustomText.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
@@ -125,70 +128,33 @@ class HomeScreen extends GetView<HomeController> {
                   ],
                 ),
 
-                // Management (Collapsible)
-                // SideMenuExpansionItem(
-                //   title: 'Management',
-                //   icon: const Icon(Icons.calendar_today),
-                //   children: [
-                //     SideMenuItem(
-                //       title: 'Chats',
-                //       icon: const Icon(Icons.chat),
-                //       onTap: (index, _) => controller.changePage(10),
-                //     ),
-                //     SideMenuItem(
-                //       title: 'Availability',
-                //       icon: const Icon(Icons.access_time),
-                //       onTap: (index, _) => controller.changePage(11),
-                //     ),
-                //     SideMenuItem(
-                //       title: 'Calls',
-                //       icon: const Icon(Icons.phone),
-                //       onTap: (index, _) => controller.changePage(12),
-                //     ),
-                //   ],
-                // ),
-
-                // Admin Panel (Collapsible)
-                // SideMenuExpansionItem(
-                //   title: 'Admin Panel',
-                //   icon: const Icon(Icons.admin_panel_settings_outlined),
-                //   children: [
-                //     SideMenuItem(
-                //       title: 'Roles & Permissions',
-                //       icon: const Icon(Icons.security),
-                //       onTap: (index, _) => controller.changePage(13),
-                //     ),
-                //     SideMenuItem(
-                //       title: 'Admin Users',
-                //       icon: const Icon(Icons.supervisor_account),
-                //       onTap: (index, _) => controller.changePage(14),
-                //     ),
-                //   ],
-                // ),
+                SideMenuItem(
+                  title: 'Logout',
+                  badgeColor: Colors.red,
+                  iconWidget: Icon(Icons.logout_outlined,color: Colors.red),
+                  onTap:(index, sideMenuController) async {
+                    _showLogoutDialog(context);
+                  },
+                ),
               ],
             ),
 
             // ============== MAIN VIEW (Using IndexedStacsk) ==============
             Expanded(
               child: Obx(
-                    () => IndexedStack(
+                () => IndexedStack(
                   index: controller.stackIndex,
                   children: [
-                    DashboardScreen(),         // index 0
-                    NotificationScreen(),        // index 1
-                    PatientScreen(),             // index 2
-                    DoctorListScreen(),          // index 3
-                    InterpreterListScreen(),     // index 4
-                    BannersScreen(),             // index 5
-                    ServiceListScreen(),         // index 6
-                    DisabilityScreen(),       // index 7
-                    HealthCenterListScreen(),    // index 8
-                    ProvinceScreen(),           // index 9
-                    // Text("Chats"),               // index 10
-                    // AvailabilityScreen(),        // index 11
-                    // Text("Calls"),               // index 12
-                    // Text("Roles & Permissions"), // index 13
-                    // Text("Admin Users"),         // index 14
+                    DashboardScreen(), // index 0
+                    NotificationScreen(), // index 1
+                    PatientScreen(), // index 2
+                    DoctorListScreen(), // index 3
+                    InterpreterListScreen(), // index 4
+                    BannersScreen(), // index 5
+                    ServiceListScreen(), // index 6
+                    DisabilityScreen(), // index 7
+                    HealthCenterListScreen(), // index 8
+                    ProvinceScreen(), // index 9
                   ],
                 ),
               ),
@@ -198,4 +164,29 @@ class HomeScreen extends GetView<HomeController> {
       ),
     );
   }
+  void _showLogoutDialog(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Confirm Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await FirebaseAuth.instance.signOut();
+              Get.offAll(() => const LoginScreen());
+            },
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+  }
 }
+

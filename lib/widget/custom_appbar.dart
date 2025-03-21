@@ -24,12 +24,12 @@ class CustomAppbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-           isLeading?
-          IconButton(
+           if (isLeading)
+             IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back)):SizedBox.shrink(),
+            icon: Icon(Icons.arrow_back)),
           CustomText(text: title),
           Row(
             spacing: 5,

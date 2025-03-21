@@ -1,3 +1,4 @@
+import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,47 +59,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: TopNavBar(),
       ),
       body: SingleChildScrollView( 
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 10),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Dashboard",
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      children: [
-                        _buildTimeFilterButton("30 days"),
-                        _buildTimeFilterButton("60 days"),
-                        _buildTimeFilterButton("90 days"),
-                        SizedBox(width: 10),
-                        IconButton(
-                          icon: Icon(Icons.refresh, color: Colors.black),
-                          onPressed: _fetchStats,
-                        ),
-                      ],
-                    ),
-                  ],
+        child: CustomContainer(
+          margin: const EdgeInsets.all(10),
+          borderRadius: BorderRadius.circular(10),
+          conColor: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Dashboard",
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          _buildTimeFilterButton("30 days"),
+                          _buildTimeFilterButton("60 days"),
+                          _buildTimeFilterButton("90 days"),
+                          SizedBox(width: 10),
+                          IconButton(
+                            icon: Icon(Icons.refresh, color: Colors.black),
+                            onPressed: _fetchStats,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 10),
-              Divider(thickness: 1, color: Colors.grey[300]),
-              Text(
-                'General Statistics',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 10),
-              
-              _buildStatsGrid(), 
-              SizedBox(height: 20),
-            ],
+                SizedBox(height: 10),
+                Divider(thickness: 1, color: Colors.grey[300]),
+                Text(
+                  'General Statistics',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
+
+                _buildStatsGrid(),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),

@@ -80,6 +80,8 @@
 
 import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/controller/health_center_controller.dart';
 import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_screen.dart';
+import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
+import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../utils/AppTheme.dart';
@@ -92,55 +94,63 @@ class HealthCenterListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Health Centers', style: TextStyle(color: Colors.white)),
-        backgroundColor: AppTheme.primaryColor,
-      ),
-      body: Obx(() {
-        if (healthCenterController.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        if (healthCenterController.healthCenters.isEmpty) {
-          return Center(child: Text('No health centers found.'));
-        }
-
-        return ListView.builder(
-          itemCount: healthCenterController.healthCenters.length,
-          itemBuilder: (context, index) {
-            final center = healthCenterController.healthCenters[index];
-
-            return Card(
-              margin: EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text(center.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('📍 Address: ${center.address}'),
-                    Text('🌆 City: ${center.city}'),
-                    Text('✅ Status: ${center.isActive ? "Active" : "Inactive"}'),
-                  ],
-                ),
-                trailing: PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'view') {
-                      Get.to(() => HealthCenterDetailScreen(center: center));
-                    } else if (value == 'edit') {
-                      Get.to(() => HealthCenterEditScreen(center: center));
-                    }
+      body: Column(
+        children: [
+          CustomAppbar(title: 'Health Centers',),
+          Expanded(
+            child: CustomContainer(
+              conColor: Colors.white,
+              margin: EdgeInsets.all(10),
+              borderRadius: BorderRadius.circular(10),
+              child: Obx(() {
+                if (healthCenterController.isLoading.value) {
+                  return Center(child: CircularProgressIndicator());
+                }
+            
+                if (healthCenterController.healthCenters.isEmpty) {
+                  return Center(child: Text('No health centers found.'));
+                }
+            
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: healthCenterController.healthCenters.length,
+                  itemBuilder: (context, index) {
+                    final center = healthCenterController.healthCenters[index];
+                
+                    return Card(
+                      margin: EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(center.name, style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('📍 Address: ${center.address}'),
+                            Text('🌆 City: ${center.city}'),
+                            Text('✅ Status: ${center.isActive ? "Active" : "Inactive"}'),
+                          ],
+                        ),
+                        trailing: PopupMenuButton<String>(
+                          onSelected: (value) {
+                            if (value == 'view') {
+                              Get.to(() => HealthCenterDetailScreen(center: center));
+                            } else if (value == 'edit') {
+                              Get.to(() => HealthCenterEditScreen(center: center));
+                            }
+                          },
+                          itemBuilder: (context) => [
+                            PopupMenuItem(value: 'view', child: Text('View Details')),
+                            PopupMenuItem(value: 'edit', child: Text('Edit')),
+                          ],
+                        ),
+                      ),
+                    );
                   },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(value: 'view', child: Text('View Details')),
-                    PopupMenuItem(value: 'edit', child: Text('Edit')),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      }),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
         floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(() => HealthCenterScreen());

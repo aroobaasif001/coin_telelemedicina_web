@@ -1,3 +1,5 @@
+import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
+import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -112,144 +114,149 @@ List<String> selectedAccessibilityOptions = [];
         appBar: AppBar(
         centerTitle: true,
         title: Text('Add Health Center ',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildTextField(_nameController, 'Name'),
-                _buildTextField(_addressController, 'Address'),
-                _buildTextField(_cityController, 'City'),
-                _buildTextField(_municipalityController, 'Municipality'),
-                _buildTextField(_provinceController, 'Province'),
-                _buildTextField(_phoneController, 'Phone'),
-                _buildTextField(_emailController, 'Email'),
-                _buildTextField(_websiteController, 'Website'),
-                _buildTextField(_descriptionController, 'Description'),
-                _buildTextField(_sectorController, 'Sector'),
-                 _buildTextField(_latitudeController, 'Latitude'),
-                _buildTextField(_longitudeController, 'Longitude'),
-                const SizedBox(height: 20),
-                const Text('Select Services',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                Wrap(
-                  spacing: 5,
-                  children: [
-                    'Cardiology',
-                    'General Medicine',
-                    'Pediatrics',
-                    'Psychology'
-                  ].map((service) {
-                    return FilterChip(
-                      label: Text(service),
-                      selected: selectedServices.contains(service),
-                      onSelected: (selected) {
-                        setState(() {
-                          if (selected) {
-                            selectedServices.add(service);
-                          } else {
-                            selectedServices.remove(service);
-                          }
-                        });
-                      },
+      body: CustomContainer(
+        conColor: Colors.white,
+        margin: EdgeInsets.all(10),
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildTextField(_nameController, 'Name'),
+                  _buildTextField(_addressController, 'Address'),
+                  _buildTextField(_cityController, 'City'),
+                  _buildTextField(_municipalityController, 'Municipality'),
+                  _buildTextField(_provinceController, 'Province'),
+                  _buildTextField(_phoneController, 'Phone'),
+                  _buildTextField(_emailController, 'Email'),
+                  _buildTextField(_websiteController, 'Website'),
+                  _buildTextField(_descriptionController, 'Description'),
+                  _buildTextField(_sectorController, 'Sector'),
+                   _buildTextField(_latitudeController, 'Latitude'),
+                  _buildTextField(_longitudeController, 'Longitude'),
+                  const SizedBox(height: 20),
+                  const Text('Select Services',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Wrap(
+                    spacing: 5,
+                    children: [
+                      'Cardiology',
+                      'General Medicine',
+                      'Pediatrics',
+                      'Psychology'
+                    ].map((service) {
+                      return FilterChip(
+                        label: Text(service),
+                        selected: selectedServices.contains(service),
+                        onSelected: (selected) {
+                          setState(() {
+                            if (selected) {
+                              selectedServices.add(service);
+                            } else {
+                              selectedServices.remove(service);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  const SizedBox(height: 20),
+        const Text('Accessibility Options',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Wrap(
+          spacing: 5,
+          children: accessibilityOptions.map((option) {
+            return FilterChip(
+        label: Text(option),
+        selected: selectedAccessibilityOptions.contains(option),
+        onSelected: (selected) {
+          setState(() {
+            if (selected) {
+              selectedAccessibilityOptions.add(option);
+            } else {
+              selectedAccessibilityOptions.remove(option);
+            }
+          });
+        },
+            );
+          }).toList(),
+        ),
+        SizedBox(height: 20,),
+                  SwitchListTile(
+                    title: const Text('Active'),
+                    value: isActive,
+                    onChanged: (value) {
+                      setState(() {
+                        isActive = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('Availability',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 10),
+                  ...availability.keys.map((day) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(day.toUpperCase(),
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () =>
+                                    _selectTime(context, day, 'open'),
+                                child: Text(
+                                  availability[day]!['open']?.format(context) ??
+                                      'Select Open Time',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () =>
+                                    _selectTime(context, day, 'close'),
+                                child: Text(
+                                  availability[day]!['close']?.format(context) ??
+                                      'Select Close Time',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                      ],
                     );
                   }).toList(),
-                ),
-                const SizedBox(height: 20),
-                const SizedBox(height: 20),
-const Text('Accessibility Options',
-    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-Wrap(
-  spacing: 5,
-  children: accessibilityOptions.map((option) {
-    return FilterChip(
-      label: Text(option),
-      selected: selectedAccessibilityOptions.contains(option),
-      onSelected: (selected) {
-        setState(() {
-          if (selected) {
-            selectedAccessibilityOptions.add(option);
-          } else {
-            selectedAccessibilityOptions.remove(option);
-          }
-        });
-      },
-    );
-  }).toList(),
-),
-SizedBox(height: 20,),
-                SwitchListTile(
-                  title: const Text('Active'),
-                  value: isActive,
-                  onChanged: (value) {
-                    setState(() {
-                      isActive = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                const Text('Availability',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 10),
-                ...availability.keys.map((day) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(day.toUpperCase(),
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () =>
-                                  _selectTime(context, day, 'open'),
-                              child: Text(
-                                availability[day]!['open']?.format(context) ??
-                                    'Select Open Time',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () =>
-                                  _selectTime(context, day, 'close'),
-                              child: Text(
-                                availability[day]!['close']?.format(context) ??
-                                    'Select Close Time',
-                              ),
-                            ),
-                          ),
-                        ],
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : _submitForm,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      const SizedBox(height: 12),
-                    ],
-                  );
-                }).toList(),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : _submitForm,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text('Submit',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white)),
                     ),
-                    child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Submit',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.white)),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
