@@ -38,13 +38,13 @@ final TextEditingController _latitudeController = TextEditingController();
     'sunday': {'open': null, 'close': null},
   };
 List<String> accessibilityOptions = [
-  'Priority Assistance / Asistencia prioritaria',
-  'Wheelchair Ramp / Rampa de acceso',
-  'Accessible Restrooms / Baños adaptados',
-  'Sign Language Support / Atención en lengua de señas',
-  'Elevator Available / Elevador disponible',
-  'Accessible Parking / Estacionamiento accesible',
-  'Wheelchairs Available / Sillas de ruedas disponibles',
+  'Priority Assistance',
+  'Wheelchair Ramp',
+  'Accessible Restrooms',
+  'Sign Language Support',
+  'Elevator Available',
+  'Accessible Parking ',
+  'Wheelchairs Available ',
 ];
 
 List<String> selectedAccessibilityOptions = [];
@@ -62,51 +62,122 @@ List<String> selectedAccessibilityOptions = [];
     }
   }
 
+  // Future<void> _submitForm() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //     final formattedAvailability = availability.map((day, times) => MapEntry(
+  //           day,
+  //           {
+  //             'open': times['open']?.format(context) ?? '',
+  //             'close': times['close']?.format(context) ?? '',
+  //           },
+  //         ));
+
+  //     await FirebaseFirestore.instance.collection('healthCenters').add({
+  //       'name': _nameController.text,
+  //       'address': _addressController.text,
+  //       'city': _cityController.text,
+  //       'municipality': _municipalityController.text,
+  //       'province': _provinceController.text,
+  //       'phone': _phoneController.text,
+  //       'email': _emailController.text,
+  //       'website': _websiteController.text,
+  //       'description': _descriptionController.text,
+  //       'sector': _sectorController.text,
+  //       'services': selectedServices,
+  //        'accessibilityOptions': selectedAccessibilityOptions,
+  //       'isActive': isActive,
+  //       'availability': formattedAvailability,
+  //        'coordinates': {
+  //         'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
+  //         'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
+  //       },
+  //       'createdAt': DateTime.now(),
+  //       'updatedAt': DateTime.now(),
+  //     });
+
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Health Center saved successfully!')),
+  //     );
+  //   }
+  // }
   Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = true;
-      });
-      final formattedAvailability = availability.map((day, times) => MapEntry(
-            day,
-            {
-              'open': times['open']?.format(context) ?? '',
-              'close': times['close']?.format(context) ?? '',
-            },
-          ));
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      isLoading = true;
+    });
 
-      await FirebaseFirestore.instance.collection('healthCenters').add({
-        'name': _nameController.text,
-        'address': _addressController.text,
-        'city': _cityController.text,
-        'municipality': _municipalityController.text,
-        'province': _provinceController.text,
-        'phone': _phoneController.text,
-        'email': _emailController.text,
-        'website': _websiteController.text,
-        'description': _descriptionController.text,
-        'sector': _sectorController.text,
-        'services': selectedServices,
-         'accessibilityOptions': selectedAccessibilityOptions,
-        'isActive': isActive,
-        'availability': formattedAvailability,
-         'coordinates': {
-          'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
-          'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
-        },
+    final formattedAvailability = availability.map((day, times) => MapEntry(
+          day,
+          {
+            'open': times['open']?.format(context) ?? '',
+            'close': times['close']?.format(context) ?? '',
+          },
+        ));
+
+    // Add health center data to Firestore
+    DocumentReference healthCenterRef =
+        await FirebaseFirestore.instance.collection('healthCenters').add({
+      'name': _nameController.text,
+      'address': _addressController.text,
+      'city': _cityController.text,
+      'municipality': _municipalityController.text,
+      'province': _provinceController.text,
+      'phone': _phoneController.text,
+      'email': _emailController.text,
+      'website': _websiteController.text,
+      'description': _descriptionController.text,
+      'sector': _sectorController.text,
+      'services': selectedServices,
+      'isActive': isActive,
+      'availability': formattedAvailability,
+      'coordinates': {
+        'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
+        'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
+      },
+      'createdAt': DateTime.now(),
+      'updatedAt': DateTime.now(),
+    });
+
+    // Store accessibility options in a separate collection
+    List<Map<String, dynamic>> accessibilityOptions = [
+      {'id': 'priority-assistance', 'name': 'Priority Assistance'},
+      {'id': 'wheelchair-ramp', 'name': 'Wheelchair Ramp'},
+      {'id': 'accessible-restrooms', 'name': 'Accessible Restrooms'},
+      {'id': 'sign-language-support', 'name': 'Sign Language Support'},
+      {'id': 'elevator-available', 'name': 'Elevator Available'},
+      {'id': 'accessible-parking', 'name': 'Accessible Parking'},
+      {'id': 'wheelchairs-available', 'name': 'Wheelchairs Available'},
+    ];
+
+    for (var option in accessibilityOptions) {
+      await FirebaseFirestore.instance
+          .collection('accessibilityOptions')
+          .doc(option['id'])
+          .set({
+        'name': option['name'],
+        'isActive': selectedAccessibilityOptions.contains(option['name']),
+        'healthCenterId': healthCenterRef.id, // Link to the health center
         'createdAt': DateTime.now(),
-        'updatedAt': DateTime.now(),
       });
-
-      setState(() {
-        isLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Health Center saved successfully!')),
-      );
     }
+
+    setState(() {
+      isLoading = false;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Health Center saved successfully!')),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
