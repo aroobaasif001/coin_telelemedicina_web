@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home:
-      HomeScreen()
-     // LoginScreen(),
+     // HomeScreen()
+      LoginScreen(),
     );
   }
 }

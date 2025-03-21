@@ -130,15 +130,12 @@ Future<void> _submitForm() async {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         docId: userId,
-      );git
+      );
 
-      // Store Interpreter Profile in Firestore
       await FirebaseFirestore.instance.collection('interpreterProfiles').doc(userId).set(interpreter.toMap());
-
-      // Store Interpreter Types Using Language Name as Document ID
       CollectionReference interpreterTypesCollection = FirebaseFirestore.instance.collection('interpreterTypes');
       for (String language in availableInterpreterTypes) {
-        String docId = language.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '_'); // Sanitize the name
+        String docId = language.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '_'); 
 
         Map<String, dynamic> newInterpreterType = {
           'name': language,
@@ -169,72 +166,6 @@ Future<void> _submitForm() async {
   }
 }
 
-
-//   Future<void> _submitForm() async {
-//   if (_formKey.currentState!.validate()) {
-//     if (_webImage == null && _mobileImage == null) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Please select an image.')),
-//       );
-//       return;
-//     }
-
-//     if (selectedInterpreterTypes.isEmpty || selectedLanguages.isEmpty) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Please select Interpreter Types and Languages.')),
-//       );
-//       return;
-//     }
-
-//     setState(() {
-//       isLoading = true;
-//     });
-
-//     try {
-      
-//       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-//         email: _emailController.text.trim(),
-//         password: _passwordController.text.trim(),
-//       );
-
-//       String userId = userCredential.user!.uid;
-//       _imageUrl = await _uploadImage();
-//       String experienceInput = _experienceController.text.trim();
-//       String numericExperience = experienceInput.replaceAll(RegExp(r'[^0-9]'), ''); 
-//       int experienceYears = int.tryParse(numericExperience) ?? 0;
-//       InterpreterModel interpreter = InterpreterModel(
-//         fullName: _fullNameController.text,
-//         biography: _biographyController.text,
-//         education: _educationController.text,
-//         experience: experienceYears,
-//         healthCenterId: _healthCenterIdController.text,
-//         interpreterTypes: selectedInterpreterTypes,
-//         languages: selectedLanguages,
-//         photoUrl: _imageUrl,
-//         isVerified: true,
-//         rating: 4.5,
-//         totalRatings: 100,
-//         createdAt: DateTime.now(),
-//         updatedAt: DateTime.now(),
-//         docId: userId,
-//       );
-
-//       await FirebaseFirestore.instance.collection('interpreterProfiles').doc(userId).set(interpreter.toMap());
-
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Interpreter profile saved successfully!')),
-//       );
-//     } catch (e) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text('Error: $e')),
-//       );
-//     } finally {
-//       setState(() {
-//         isLoading = false;
-//       });
-//     }
-//   }
-// }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
