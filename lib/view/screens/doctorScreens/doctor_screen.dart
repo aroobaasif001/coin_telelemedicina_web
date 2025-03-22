@@ -40,6 +40,23 @@ class _DoctorScreenState extends State<DoctorScreen> {
     'Sign Language',
     'Portuguese'
   ];
+  List<String> availableServices = [];
+  List<String> selectedServices = [];
+  Future<void> _fetchServices() async {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('services').get();
+    setState(() {
+      availableServices =
+          snapshot.docs.map((doc) => doc['name'].toString()).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchServices();
+  }
+
   final List<String> selectedLanguages = [];
 
   String _generatePassword(int length) {
@@ -108,6 +125,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
           isVerified: true,
           languages: selectedLanguages,
           photoUrl: _imageUrl,
+          selectedServices: selectedServices,
           rating: 4.5,
           reviewCount: 100,
           specialty: _specialtyController.text,
@@ -146,8 +164,12 @@ class _DoctorScreenState extends State<DoctorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text('Add Doctor',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
+          centerTitle: true,
+          title: Text(
+            'Add Doctor',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppTheme.primaryColor),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(24),
         child: Form(
@@ -192,6 +214,29 @@ class _DoctorScreenState extends State<DoctorScreen> {
               SizedBox(height: 16),
               _buildTextField(_specialtyController, 'Specialty',
                   Icons.medical_services_outlined),
+              SizedBox(height: 24),
+              SizedBox(height: 16),
+              Text("Select Services Provided",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Wrap(
+                spacing: 8.0,
+                children: availableServices.map((service) {
+                  return ChoiceChip(
+                    label: Text(service),
+                    selected: selectedServices.contains(service),
+                    selectedColor: Colors.green,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        if (selected) {
+                          selectedServices.add(service);
+                        } else {
+                          selectedServices.remove(service);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
               SizedBox(height: 24),
               Wrap(
                 spacing: 10,

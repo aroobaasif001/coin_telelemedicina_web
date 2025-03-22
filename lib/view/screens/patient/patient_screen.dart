@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/components/app_colors.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
@@ -17,6 +18,7 @@ class PatientScreen extends StatefulWidget {
 
 class _PatientScreenState extends State<PatientScreen> {
   final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = ''; // Variable to store the search query
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,11 @@ class _PatientScreenState extends State<PatientScreen> {
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(12),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value; // Update search query
+                        });
+                      },
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -81,6 +88,14 @@ class _PatientScreenState extends State<PatientScreen> {
 
                       var patients = snapshot.data!.docs;
 
+                      // Filter patients based on search query
+                      var filteredPatients = patients.where((doc) {
+                        var patient = doc.data() as Map<String, dynamic>;
+                        return patient['fullName']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true ||
+                               patient['email']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true ||
+                               patient['disability']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true;
+                      }).toList();
+
                       return Container(
                         width: double.maxFinite,
                         decoration: BoxDecoration(
@@ -90,20 +105,6 @@ class _PatientScreenState extends State<PatientScreen> {
                         ),
                         child: Column(
                           children: [
-                            // Container(
-                            //   padding: const EdgeInsets.all(10),
-                            //   color: Colors.grey.shade200,
-                            //   child: Row(
-                            //     children: const [
-                            //       Expanded(flex: 4, child: Text("Patient", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            //       Expanded(flex: 2, child: Text("Disability", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            //       Expanded(flex: 2, child: Text("Gender", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            //       Expanded(flex: 3, child: Text("Status", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            //       Expanded(flex: 2, child: Text("Registration", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            //       Expanded(flex: 2, child: Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold))),
-                            //     ],
-                            //   ),
-                            // ),
                             Table(
                               columnWidths: const {
                                 0: FlexColumnWidth(5),
@@ -157,10 +158,10 @@ class _PatientScreenState extends State<PatientScreen> {
                             SizedBox(
                               height: 500,
                               child: ListView.builder(
-                                itemCount: patients.length,
+                                itemCount: filteredPatients.length,
                                 itemBuilder: (context, index) {
-                                  var patient = patients[index].data() as Map<String, dynamic>;
-                                  var patientId = patients[index].id;
+                                  var patient = filteredPatients[index].data() as Map<String, dynamic>;
+                                  var patientId = filteredPatients[index].id;
 
                                   return Table(
                                     columnWidths: const {
