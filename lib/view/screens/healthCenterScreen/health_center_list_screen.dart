@@ -95,63 +95,162 @@ class HealthCenterListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
-          CustomAppbar(title: 'Health Centers',),
-          Expanded(
-            child: CustomContainer(
-              conColor: Colors.white,
-              margin: EdgeInsets.all(10),
-              borderRadius: BorderRadius.circular(10),
-              child: Obx(() {
-                if (healthCenterController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                }
-            
-                if (healthCenterController.healthCenters.isEmpty) {
-                  return Center(child: Text('No health centers found.'));
-                }
-            
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: healthCenterController.healthCenters.length,
-                  itemBuilder: (context, index) {
-                    final center = healthCenterController.healthCenters[index];
-                
-                    return Card(
-                      margin: EdgeInsets.all(8.0),
-                      child: ListTile(
-                        title: Text(center.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('📍 Address: ${center.address}'),
-                            Text('🌆 City: ${center.city}'),
-                            Text('✅ Status: ${center.isActive ? "Active" : "Inactive"}'),
-                          ],
-                        ),
-                        trailing: PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'view') {
-                              Get.to(() => HealthCenterDetailScreen(center: center));
-                            } else if (value == 'edit') {
-                              Get.to(() => HealthCenterEditScreen(center: center));
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(value: 'view', child: Text('View Details')),
-                            PopupMenuItem(value: 'edit', child: Text('Edit')),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }),
+        spacing: 10,
+          children: [
+        CustomAppbar(
+          title: 'Health Centers',
+        ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+              ),
+              child: TextField(
+                style: const TextStyle(fontSize: 13),
+                decoration: const InputDecoration(
+                  hintText: 'Search by name, email or disability...',
+                  prefixIcon: Icon(Icons.search, size: 13),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(12),
+                ),
+              ),
             ),
+            const SizedBox(height: 16),
+        Expanded(
+          child: CustomContainer(
+            conColor: Colors.white,
+            margin: const EdgeInsets.all(10),
+            borderRadius: BorderRadius.circular(10),
+            child: Obx(() {
+              if (healthCenterController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (healthCenterController.healthCenters.isEmpty) {
+                return const Center(child: Text('No health centers found.'));
+              }
+
+              return Column(
+                children: [
+                  // Table Header
+                  Table(
+                    columnWidths: const {
+                      0: FlexColumnWidth(3),
+                      1: FlexColumnWidth(2),
+                      2: FlexColumnWidth(2),
+                      3: FlexColumnWidth(2),
+                      4: FlexColumnWidth(2),
+                    },
+                    children: [
+                      TableRow(
+                        decoration: BoxDecoration(color: Colors.grey.shade200),
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("Center Name",
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child:
+                                Text("Address", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("City", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child:
+                                Text("Status", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child:
+                                Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // Data Rows
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: healthCenterController.healthCenters.length,
+                      itemBuilder: (context, index) {
+                        final center = healthCenterController.healthCenters[index];
+                        return Table(
+                          columnWidths: const {
+                            0: FlexColumnWidth(3),
+                            1: FlexColumnWidth(2),
+                            2: FlexColumnWidth(2),
+                            3: FlexColumnWidth(2),
+                            4: FlexColumnWidth(2),
+                          },
+                          children: [
+                            TableRow(
+                              decoration: const BoxDecoration(
+                                border: Border(bottom: BorderSide(color: Colors.grey)),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(center.name),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(center.address),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(center.city),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    center.isActive ? "Active" : "Inactive",
+                                    style: TextStyle(
+                                      color: center.isActive ? Colors.green : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 16),
+                                        onPressed: () {
+                                          Get.to(() => HealthCenterDetailScreen(center: center));
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.edit, color: Colors.red, size: 16),
+                                        onPressed: () {
+                                          Get.to(() => HealthCenterEditScreen(center: center));
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }),
           ),
-        ],
-      ),
-        floatingActionButton: FloatingActionButton(
+        ),
+      ]),
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(() => HealthCenterScreen());
         },

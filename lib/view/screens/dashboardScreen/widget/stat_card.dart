@@ -19,8 +19,8 @@ class StatCard extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Container(
-        width: 180, // Set width as per your UI
-        height: 100, // Set height as per your UI
+        width: 300, // Set width as per your UI
+        height: 200, // Set height as per your UI
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),

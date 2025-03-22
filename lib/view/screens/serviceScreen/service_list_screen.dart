@@ -3,7 +3,6 @@ import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../utils/AppTheme.dart';
 import 'controller/service_controller.dart';
 import 'service_detail_screen.dart';
 import 'service_edit_screen.dart';
@@ -15,69 +14,145 @@ class ServiceListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        spacing: 10,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomAppbar(title: 'Services List',),
+          const CustomAppbar(title: 'Service Management'),
+          // Add New Service Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Get.to(() => ServiceScreen());
+              },
+              icon: const Icon(Icons.add),
+              label: const Text("Add New Service"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+            ),
+          ),
+          // Service List Grid
           Expanded(
-            child: CustomContainer(
-              conColor: Colors.white,
-              margin: EdgeInsets.all(10),
-              borderRadius: BorderRadius.circular(10),
-              child: Obx(() {
-                if (serviceController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                }
+            child: Obx(() {
+              if (serviceController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                if (serviceController.services.isEmpty) {
-                  return Center(child: Text('No services found.'));
-                }
+              if (serviceController.services.isEmpty) {
+                return const Center(child: Text('No services found.'));
+              }
 
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  itemCount: serviceController.services.length,
-                  itemBuilder: (context, index) {
-                    final service = serviceController.services[index];
+              return GridView.builder(
+                padding: const EdgeInsets.all(16),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 1.5,
+                ),
+                itemCount: serviceController.services.length,
+                itemBuilder: (context, index) {
+                  final service = serviceController.services[index];
 
-                    return Card(
-                      margin: EdgeInsets.all(8.0),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: service.icon.isNotEmpty
-                              ? NetworkImage(service.icon)
-                              : AssetImage('assets/default_service.png') as ImageProvider,
-                        ),
-                        title: Text(service.name, style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Price: \$${service.price} | Duration: ${service.duration} mins'),
-                        trailing: PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'view') {
-                              Get.to(() => ServiceDetailScreen(service: service));
-                            } else if (value == 'edit') {
-                              Get.to(() => ServiceEditScreen(service: service));
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(value: 'view', child: Text('View Details')),
-                            PopupMenuItem(value: 'edit', child: Text('Edit Service')),
+                  return CustomContainer(
+                    conColor: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Service Icon and Name
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.grey.shade300,
+                              backgroundImage: service.icon.isNotEmpty
+                                  ? NetworkImage(service.icon)
+                                  : const AssetImage('assets/default_service.png') as ImageProvider,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                service.name,
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                );
-              }),
-            ),
+                    
+                        const SizedBox(height: 8),
+                    
+                        // Service Description
+                        Text(
+                          service.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    
+                        const SizedBox(height: 8),
+                    
+                        // Duration and Price
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time, size: 16),
+                            const SizedBox(width: 4),
+                            Text('${service.duration} min'),
+                            const SizedBox(width: 12),
+                            const Icon(Icons.attach_money, size: 16),
+                            const SizedBox(width: 4),
+                            Text('${service.price}'),
+                          ],
+                        ),
+                    
+                        const Spacer(),
+                    
+                        // Status and Actions
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Status Badge
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: service.isActive ? Colors.green : Colors.red,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                service.isActive ? 'Active' : 'Inactive',
+                                style: const TextStyle(color: Colors.white, fontSize: 12),
+                              ),
+                            ),
+                    
+                            // Edit & Delete Actions
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.green),
+                                  onPressed: () {
+                                    Get.to(() => ServiceEditScreen(service: service));
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () {
+                                    // Uncomment to enable delete
+                                    // serviceController.deleteService(service.id);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => ServiceScreen());
-        },
-        backgroundColor: AppTheme.primaryColor,
-        child: Icon(Icons.add, color: Colors.white),
-      ),
-      
     );
   }
 }

@@ -32,10 +32,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       var doctorsSnapshot = await _firestore.collection('providers').get();
       var servicesSnapshot = await _firestore.collection('services').get();
       var appointmentsSnapshot = await _firestore.collection('appointments').get();
-      var completedAppointmentsSnapshot = await _firestore
-          .collection('appointments')
-          .where('status', isEqualTo: 'completed')
-          .get();
+      var completedAppointmentsSnapshot =
+          await _firestore.collection('appointments').where('status', isEqualTo: 'completed').get();
       var companiesSnapshot = await _firestore.collection('interpreterProfiles').get();
 
       setState(() {
@@ -58,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         preferredSize: Size.fromHeight(80),
         child: TopNavBar(),
       ),
-      body: SingleChildScrollView( 
+      body: SingleChildScrollView(
         child: CustomContainer(
           margin: const EdgeInsets.all(10),
           borderRadius: BorderRadius.circular(10),
@@ -100,9 +98,109 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
-
-                _buildStatsGrid(),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    StatCard(
+                        title: "Patients",
+                        value: "$patientCount",
+                        icon: FontAwesomeIcons.users,
+                        borderColor: Colors.green),
+                    StatCard(
+                        title: "Doctors",
+                        value: "$doctorCount",
+                        icon: FontAwesomeIcons.userDoctor,
+                        borderColor: Colors.purple),
+                    StatCard(
+                        title: "InterPreters",
+                        value: "$companiesCount",
+                        icon: FontAwesomeIcons.building,
+                        borderColor: Colors.amber),
+                    StatCard(
+                        title: "Appointments",
+                        value: "$appointmentCount",
+                        icon: FontAwesomeIcons.calendarCheck,
+                        borderColor: Colors.teal),
+                    StatCard(
+                        title: "Services",
+                        value: "$serviceCount",
+                        icon: FontAwesomeIcons.conciergeBell,
+                        borderColor: Colors.blue),
+                    StatCard(
+                        title: "Completed Appointments",
+                        value: "$completedAppointments",
+                        icon: FontAwesomeIcons.check,
+                        borderColor: Colors.green),
+                  ],
+                ),
                 SizedBox(height: 20),
+                const Text(
+                  'General Statistics',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    // First Card
+                    Expanded(
+                        child: Container(
+                      height: 220,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Confirmed Appointments per Day',
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 16),
+                          Expanded(child: Center(child: Text('Graph or Data Here'))),
+                        ],
+                      ),
+                    )),
+                    const SizedBox(width: 16),
+                    // Second Card
+                    Expanded(
+                        child: Container(
+                      height: 220,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'New Patients Registered',
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: 16),
+                          Expanded(child: Center(child: Text('Graph or Data Here'))),
+                        ],
+                      ),
+                    )),
+                  ],
+                ),
               ],
             ),
           ),
@@ -137,25 +235,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
-  Widget _buildStatsGrid() {
-    return GridView.count(
-      shrinkWrap: true, 
-      physics: NeverScrollableScrollPhysics(), 
-      crossAxisCount: 3,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      childAspectRatio: 1.5,
-      children: [
-        StatCard(title: "Patients", value: "$patientCount", icon: FontAwesomeIcons.users, borderColor: Colors.green),
-        StatCard(title: "Doctors", value: "$doctorCount", icon: FontAwesomeIcons.userDoctor, borderColor: Colors.purple),
-        StatCard(title: "InterPreters", value: "$companiesCount", icon: FontAwesomeIcons.building, borderColor: Colors.amber),
-        StatCard(title: "Appointments", value: "$appointmentCount", icon: FontAwesomeIcons.calendarCheck, borderColor: Colors.teal),
-        StatCard(title: "Services", value: "$serviceCount", icon: FontAwesomeIcons.conciergeBell, borderColor: Colors.blue),
-        StatCard(title: "Completed Appointments", value: "$completedAppointments", icon: FontAwesomeIcons.check, borderColor: Colors.green),
-      ],
-    );
-  }
 }
-
-

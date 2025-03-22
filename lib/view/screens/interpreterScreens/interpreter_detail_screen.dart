@@ -41,6 +41,8 @@
 //   }
 // }
 
+import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
+import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/model/interpreter_model.dart';
 import '../../../utils/AppTheme.dart';
@@ -53,59 +55,62 @@ class InterpreterDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          interpreter.fullName,
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: AppTheme.primaryColor,
-      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 10,
           children: [
-            // Profile Image
-            Center(
-              child: CircleAvatar(
-                radius: 60,
-                backgroundColor: Colors.grey[200],
-                backgroundImage: interpreter.photoUrl.isNotEmpty
-                    ? NetworkImage(interpreter.photoUrl)
-                    : AssetImage('assets/img.png') as ImageProvider,
-              ),
-            ),
-            SizedBox(height: 16),
+            CustomAppbar(isLeading: true,title: interpreter.fullName,),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 10,
+              children: [
+                CustomContainer(
+              conColor: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      // Profile Image
+                      Center(
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage: interpreter.photoUrl.isNotEmpty
+                              ? NetworkImage(interpreter.photoUrl)
+                              : AssetImage('assets/img.png') as ImageProvider,
+                        ),
+                      ),
+                      SizedBox(height: 16),
 
-            // Full Name
-            Text(
-              interpreter.fullName,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            Divider(thickness: 1, height: 24),
-
-            // Details Card
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildDetailRow(Icons.person, "Full Name", interpreter.fullName),
-                    _buildDetailRow(Icons.school, "Education", interpreter.education),
-                    _buildDetailRow(Icons.timer, "Experience", "${interpreter.experience} years"),
-                    _buildDetailRow(Icons.language, "Languages", interpreter.languages.join(', ')),
-                    _buildDetailRow(Icons.translate, "Interpreter Types", interpreter.interpreterTypes.join(', ')),
-                    _buildDetailRow(Icons.star, "Rating", "${interpreter.rating} ⭐"),
-                  ],
+                      // Full Name
+                      Text(
+                        interpreter.fullName,
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                // Details Card
+                Expanded(
+                  child: CustomContainer(
+                    conColor: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildDetailRow(Icons.person, "Full Name", interpreter.fullName),
+                        _buildDetailRow(Icons.school, "Education", interpreter.education),
+                        _buildDetailRow(Icons.timer, "Experience", "${interpreter.experience} years"),
+                        _buildDetailRow(Icons.language, "Languages", interpreter.languages.join(', ')),
+                        _buildDetailRow(Icons.translate, "Interpreter Types", interpreter.interpreterTypes.join(', ')),
+                        _buildDetailRow(Icons.star, "Rating", "${interpreter.rating} ⭐"),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

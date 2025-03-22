@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coin_telelemedicina_web/components/app_colors.dart';
+import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
@@ -20,7 +22,8 @@ class _PatientScreenState extends State<PatientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SingleChildScrollView( // Added ScrollView for overall body
+      body: SingleChildScrollView(
+        // Added ScrollView for overall body
         child: Column(
           children: [
             CustomAppbar(title: 'Patient Management'),
@@ -37,8 +40,7 @@ class _PatientScreenState extends State<PatientScreen> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     icon: const Icon(Icons.add, color: Colors.white, size: 13),
-                    label: const Text("New Patient",
-                        style: TextStyle(color: Colors.white, fontSize: 13)),
+                    label: const Text("New Patient", style: TextStyle(color: Colors.white, fontSize: 13)),
                     onPressed: () {
                       // Add new patient functionality
                     },
@@ -80,13 +82,11 @@ class _PatientScreenState extends State<PatientScreen> {
                       var patients = snapshot.data!.docs;
 
                       return Container(
-                        width: 1100,
+                        width: double.maxFinite,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
-                          ],
+                          boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
                         ),
                         child: Column(
                           children: [
@@ -119,27 +119,33 @@ class _PatientScreenState extends State<PatientScreen> {
                                   children: const [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Patient", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text("Patient",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Disability", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text("Disability",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Gender", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text("Gender",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Status", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text("Status",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Registration", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text("Registration",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text("Actions",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
@@ -148,105 +154,6 @@ class _PatientScreenState extends State<PatientScreen> {
                             const Divider(height: 1, color: Colors.grey),
 
                             const Divider(height: 1, color: Colors.grey),
-                            // SizedBox( // Replaced Expanded with SizedBox
-                            //   height: 500, // Provide fixed height to avoid layout issue
-                            //   child: ListView.builder(
-                            //     shrinkWrap: true,
-                            //     itemCount: patients.length,
-                            //     itemBuilder: (context, index) {
-                            //       var patient = patients[index].data() as Map<String, dynamic>;
-                            //
-                            //       return Container(
-                            //         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                            //         decoration: BoxDecoration(
-                            //           border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
-                            //         ),
-                            //         child: Row(
-                            //           children: [
-                            //             Expanded(
-                            //               flex: 4,
-                            //               child: Row(
-                            //                 children: [
-                            //                   const SizedBox(width: 5),
-                            //                   Column(
-                            //                     crossAxisAlignment: CrossAxisAlignment.start,
-                            //                     children: [
-                            //                       Text(patient['fullName'] ?? '',
-                            //                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                            //                           overflow: TextOverflow.ellipsis),
-                            //                       Text(patient['email'] ?? '',
-                            //                           style: const TextStyle(color: Colors.grey, fontSize: 13),
-                            //                           overflow: TextOverflow.ellipsis),
-                            //                     ],
-                            //                   ),
-                            //                 ],
-                            //               ),
-                            //             ),
-                            //             Expanded(
-                            //               flex: 2,
-                            //               child: Chip(
-                            //                 label: Text(patient['disability'] ?? '', style: const TextStyle(fontSize: 13)),
-                            //                 backgroundColor: Colors.green.shade100,
-                            //               ),
-                            //             ),
-                            //             Expanded(
-                            //               flex: 2,
-                            //               child: Chip(
-                            //                 label: Text(patient['gender'] ?? '', style: const TextStyle(fontSize: 13)),
-                            //                 backgroundColor: Colors.blue.shade100,
-                            //               ),
-                            //             ),
-                            //             Expanded(
-                            //               flex: 3,
-                            //               child: Chip(
-                            //                 label: Text(patient['status'] ?? '', style: const TextStyle(fontSize: 13)),
-                            //                 backgroundColor: Colors.green.shade300,
-                            //               ),
-                            //             ),
-                            //             Expanded(
-                            //               flex: 2,
-                            //               child: Row(
-                            //                 children: [
-                            //                   const Icon(Icons.calendar_today, size: 13),
-                            //                   const SizedBox(width: 4),
-                            //                   Text(
-                            //                     patient['regDate'] is Timestamp
-                            //                         ? (patient['regDate'] as Timestamp).toDate().toLocal().toString().split(' ')[0]
-                            //                         : patient['regDate'] ?? '',
-                            //                     style: const TextStyle(fontSize: 13),
-                            //                   ),
-                            //                 ],
-                            //               ),
-                            //             ),
-                            //             Flexible(
-                            //               flex: 2,
-                            //               child: Row(
-                            //                 mainAxisAlignment: MainAxisAlignment.center,
-                            //                 children: [
-                            //                   IconButton(
-                            //                     icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13),
-                            //                     onPressed: () {
-                            //                       Get.to(() => PatientViewScreen(patient: patient));
-                            //                     },
-                            //                   ),
-                            //                   IconButton(
-                            //                     icon: const Icon(Icons.delete, color: Colors.red, size: 13),
-                            //                     onPressed: () {
-                            //                       FirebaseFirestore.instance
-                            //                           .collection('patients')
-                            //                           .doc(patients[index].id)
-                            //                           .delete();
-                            //                     },
-                            //                   ),
-                            //                 ],
-                            //               ),
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       );
-                            //     },
-                            //   ),
-                            // ),
                             SizedBox(
                               height: 500,
                               child: ListView.builder(
@@ -277,7 +184,8 @@ class _PatientScreenState extends State<PatientScreen> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(patient['fullName'] ?? '',
-                                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                                    style: const TextStyle(
+                                                        fontWeight: FontWeight.bold, fontSize: 13),
                                                     overflow: TextOverflow.ellipsis),
                                                 Text(patient['email'] ?? '',
                                                     style: const TextStyle(color: Colors.grey, fontSize: 13),
@@ -289,24 +197,36 @@ class _PatientScreenState extends State<PatientScreen> {
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Chip(
-                                              label: Text(patient['disability'] ?? '', style: const TextStyle(fontSize: 13)),
-                                              backgroundColor: Colors.green.shade100,
+                                              label: Text(patient['disability'] ?? '',
+                                                  style: const TextStyle(fontSize: 13, color: Colors.white)),
+                                              backgroundColor: AppTheme.lightGreen,
                                             ),
                                           ),
                                           // Gender
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Chip(
-                                              label: Text(patient['gender'] ?? '', style: const TextStyle(fontSize: 13)),
-                                              backgroundColor: Colors.blue.shade100,
+                                              label: Text(
+                                                patient['gender'] ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color:
+                                                      Colors.white,
+                                                ),
+                                              ),
+                                              backgroundColor: (patient['gender']?.toLowerCase() == 'male')
+                                                  ? Colors.black
+                                                  : Colors.blue,
                                             ),
                                           ),
+
                                           // Status
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Chip(
-                                              label: Text(patient['status'] ?? '', style: const TextStyle(fontSize: 13)),
-                                              backgroundColor: Colors.green.shade300,
+                                              label: Text(patient['status'] ?? '',
+                                                  style: TextStyle(fontSize: 13,color: Colors.white)),
+                                              backgroundColor: AppTheme.lightGreen,
                                             ),
                                           ),
                                           // Registration Date
@@ -318,7 +238,11 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 const SizedBox(width: 4),
                                                 Text(
                                                   patient['regDate'] is Timestamp
-                                                      ? (patient['regDate'] as Timestamp).toDate().toLocal().toString().split(' ')[0]
+                                                      ? (patient['regDate'] as Timestamp)
+                                                          .toDate()
+                                                          .toLocal()
+                                                          .toString()
+                                                          .split(' ')[0]
                                                       : patient['regDate'] ?? '',
                                                   style: const TextStyle(fontSize: 13),
                                                 ),
@@ -332,7 +256,8 @@ class _PatientScreenState extends State<PatientScreen> {
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 IconButton(
-                                                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 13),
+                                                  icon: const Icon(Icons.remove_red_eye,
+                                                      color: Colors.blue, size: 13),
                                                   onPressed: () {
                                                     Get.to(() => PatientViewScreen(patient: patient));
                                                   },
@@ -356,7 +281,6 @@ class _PatientScreenState extends State<PatientScreen> {
                                 },
                               ),
                             ),
-
                           ],
                         ),
                       );

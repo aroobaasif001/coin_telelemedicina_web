@@ -17,78 +17,184 @@ class DoctorListScreen extends StatelessWidget {
       body: Column(
         children: [
           CustomAppbar(title: 'Doctors List'),
+          // Doctor List
           Expanded(
             child: CustomContainer(
-              conColor: Colors.white,
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               borderRadius: BorderRadius.circular(10),
-              child: Obx(() {
-                if (doctorController.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (doctorController.doctors.isEmpty) {
-                  return Center(child: Text('No doctors found.'));
-                }
-
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: doctorController.doctors.length,
-                  itemBuilder: (context, index) {
-                    final doctor = doctorController.doctors[index];
-
-                    return Card(
-                      margin: EdgeInsets.all(8.0),
-                      child: ListTile(
-                        // leading: CircleAvatar(
-                        //   radius: 50,
-                        //   backgroundColor: Colors.grey[300],
-                        //   backgroundImage: doctor.photoUrl.isNotEmpty
-                        //       ? NetworkImage(doctor.photoUrl)
-                        //       : AssetImage('assets/img.png') as ImageProvider,
-                        //   onBackgroundImageError: (_, __) {
-                        //     print("Error loading doctor image: ${doctor.photoUrl}");
-                        //   },
-                        // ),
-                        leading: CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.grey[300],
-                child: ClipOval(
-                  child: Image.network(
-              doctor.photoUrl,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                print("Error loading doctor image: ${doctor.photoUrl}");
-                return Image.asset('assets/img.png', width: 100, height: 100, fit: BoxFit.cover);
-              },
-                  ),
-                ),
-              ),
-
-                        title: Text(doctor.fullName, style: TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('Specialty: ${doctor.specialty}\nExperience: ${doctor.experience} years'),
-                        trailing: PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'view') {
-                              Get.to(() => DoctorDetailScreen(doctor: doctor));
-                            } else if (value == 'edit') {
-                              Get.to(() => EditDoctorScreen(doctor: doctor));
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem(value: 'view', child: Text('View Details')),
-                            PopupMenuItem(value: 'edit', child: Text('Edit Details')),
-                          ],
-                        ),
+              conColor: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+                    ),
+                    child: TextField(
+                      style: const TextStyle(fontSize: 13),
+                      decoration: const InputDecoration(
+                        hintText: 'Search by name, email or disability...',
+                        prefixIcon: Icon(Icons.search, size: 13),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(12),
                       ),
-                    );
-                  },
-                );
-              }),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: Obx(
+                      () {
+                        if (doctorController.isLoading.value) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                    
+                        if (doctorController.doctors.isEmpty) {
+                          return Center(child: Text('No doctors found.'));
+                        }
+                    
+                        return Column(
+                          children: [
+                            Table(
+                              columnWidths: const {
+                                0: FlexColumnWidth(3),
+                                1: FlexColumnWidth(2),
+                                2: FlexColumnWidth(2),
+                                3: FlexColumnWidth(2),
+                                4: FlexColumnWidth(1),
+                                5: FlexColumnWidth(1),
+                              },
+                              children: [
+                                TableRow(
+                                  decoration: BoxDecoration(color: Colors.grey.shade200),
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Doctor",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Specialty",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Experience",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Rating",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Actions",
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: doctorController.doctors.length,
+                                itemBuilder: (context, index) {
+                                  final doctor = doctorController.doctors[index];
+                                  return Table(
+                                    columnWidths: const {
+                                      0: FlexColumnWidth(3),
+                                      1: FlexColumnWidth(2),
+                                      2: FlexColumnWidth(2),
+                                      3: FlexColumnWidth(2),
+                                      4: FlexColumnWidth(1),
+                                      5: FlexColumnWidth(2),
+                                    },
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundColor: Colors.grey[300],
+                                                  child: ClipOval(
+                                                    child: Image.network(
+                                                      doctor.photoUrl,
+                                                      width: 60,
+                                                      height: 60,
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context, error, stackTrace) {
+                                                        print("Error loading doctor image: ${doctor.photoUrl}");
+                                                        return Image.asset('assets/img.png',
+                                                            width: 60, height: 60, fit: BoxFit.cover);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Flexible(
+                                                  child: Text(
+                                                    doctor.fullName,
+                                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(doctor.specialty),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${doctor.experience} yrs'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('${doctor.rating} ★'),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  icon: const Icon(Icons.remove_red_eye,
+                                                      color: Colors.blue, size: 13),
+                                                  onPressed: () {
+                                                    Get.to(() => DoctorDetailScreen(doctor: doctor));
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 13),
+                                                  onPressed: () {
+                                                    Get.to(() => EditDoctorScreen(doctor: doctor));
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(

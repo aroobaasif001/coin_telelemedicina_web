@@ -210,6 +210,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coin_telelemedicina_web/components/app_colors.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
+import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -232,63 +233,59 @@ class PatientViewScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 60,
-                                  backgroundImage: NetworkImage(
-                                      patient['profileImage'] ?? "https://via.placeholder.com/150"),
-                                ),
-                                const SizedBox(height: 12),
-                                CustomText(
-                                  text: patient['fullName'] ?? "N/A",
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                const SizedBox(height: 4),
-                                CustomText(
-                                  text: patient['email'] ?? "N/A",
-                                  color: Colors.grey[700],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(width: 24),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  _buildInfoCard("Personal Information", [
-                                    _infoField("ID / Document", patient['id']),
-                                    _infoField("Phone", patient['phone']),
-                                    _infoField("Birthdate", patient['dob']),
-                                    _infoField("Province", patient['province']),
-                                    _infoField("Status", patient['status']),
-                                    _infoField("Disability", patient['disability']),
-                                  ]),
-                                  const SizedBox(height: 16),
-                                  _buildInfoCard("Additional Information", [
-                                    _infoField("Registration Date", formatTimestamp(patient['regDate'])),
-                                    _infoField("Last Update", patient['lastUpdate']),
-                                  ]),
-                                ],
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomContainer(
+                          conColor: Colors.white,
+                          padding: EdgeInsets.all(15),
+                          borderRadius: BorderRadius.circular(10),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 60,
+                                backgroundImage: NetworkImage(
+                                    patient['profileImage'] ?? "https://via.placeholder.com/150"),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 12),
+                              CustomText(
+                                text: patient['fullName'] ?? "N/A",
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              const SizedBox(height: 4),
+                              CustomText(
+                                text: patient['email'] ?? "N/A",
+                                color: Colors.grey[700],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              _buildInfoCard("Personal Information", [
+                                _infoField("ID / Document", patient['id']),
+                                _infoField("Phone", patient['phone']),
+                                _infoField("Birthdate", patient['dob']),
+                                _infoField("Province", patient['province']),
+                                _infoField("Status", patient['status']),
+                                _infoField("Disability", patient['disability']),
+                              ]),
+                              const SizedBox(height: 16),
+                              _buildInfoCard("Additional Information", [
+                                _infoField("Registration Date", formatTimestamp(patient['regDate'])),
+                                _infoField("Last Update", patient['lastUpdate']),
+                              ]),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                    CustomContainer(
+                        conColor: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
@@ -297,7 +294,6 @@ class PatientViewScreen extends StatelessWidget {
                             spreadRadius: 2,
                           ),
                         ],
-                      ),
                       child: Column(
                         children: [
                           TabBar(
@@ -350,9 +346,9 @@ class PatientViewScreen extends StatelessWidget {
   }
 
   Widget _buildInfoCard(String title, List<Widget> children) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 2,
+    return CustomContainer(
+      conColor: Colors.white,
+      borderRadius: BorderRadius.circular(10),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
