@@ -3,13 +3,11 @@ import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../components/app_colors.dart';
 import '../../components/custom_appbar.dart';
 import '../../components/custom_button.dart';
 import '../../components/custom_textfield.dart';
 import '../../services/responsive.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -63,7 +61,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSellerButton() {
     return CustomButton(text: "Login", onPressed: _login);
   }
-
 
   Future<void> _login() async {
     String email = emailInputController.text.trim();

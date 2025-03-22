@@ -14,7 +14,7 @@ class DisabilityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: TopNavBar(),
       ),
@@ -27,30 +27,33 @@ class DisabilityScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Provinces & Municipalities",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                   GestureDetector(
-                    onTap: (){
-                      Get.to(()=>AddDisabilityScreen());
+                    onTap: () {
+                      Get.to(() => AddDisabilityScreen());
                     },
                     child: Container(
-
                       decoration: BoxDecoration(
-                        color:AppTheme.primaryColor  ,
-                        borderRadius: BorderRadius.circular(12)
-                      ),
+                          color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Icon(Icons.add,color: Colors.white,),
-                            SizedBox(width: 10,),
-                            CustomText(text: 'Add Disability',color: Colors.white,)
-
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            CustomText(
+                              text: 'Add Disability',
+                              color: Colors.white,
+                            )
                           ],
                         ),
                       ),
@@ -90,7 +93,8 @@ class DisabilityScreen extends StatelessWidget {
                                     child: Text(disability["name"]),
                                   ))
                               .toList(),
-                          onChanged: (value) => disabilityController.selectedDisabilityFilter.value = value ?? "",
+                          onChanged: (value) =>
+                              disabilityController.selectedDisabilityFilter.value = value ?? "",
                         )),
                   ),
                   SizedBox(width: 10),
@@ -98,7 +102,7 @@ class DisabilityScreen extends StatelessWidget {
                   // Type Filter Dropdown
                   Expanded(
                     child: Obx(
-                          () => DropdownButton<String>(
+                      () => DropdownButton<String>(
                         value: disabilityController.selectedTypeFilter.value.isEmpty
                             ? null
                             : disabilityController.selectedTypeFilter.value,

@@ -1,5 +1,4 @@
 import 'package:coin_telelemedicina_web/view/auth/login_screen.dart';
-import 'package:coin_telelemedicina_web/view/screens/availability/availability_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/banner/banner_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_list_screen.dart';
@@ -8,7 +7,6 @@ import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpre
 import 'package:coin_telelemedicina_web/view/screens/notification/notification_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/patient/patient_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_list_screen.dart';
-import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -131,8 +129,8 @@ class HomeScreen extends GetView<HomeController> {
                 SideMenuItem(
                   title: 'Logout',
                   badgeColor: Colors.red,
-                  iconWidget: Icon(Icons.logout_outlined,color: Colors.red),
-                  onTap:(index, sideMenuController) async {
+                  iconWidget: Icon(Icons.logout_outlined, color: Colors.red),
+                  onTap: (index, sideMenuController) async {
                     _showLogoutDialog(context);
                   },
                 ),
@@ -164,6 +162,7 @@ class HomeScreen extends GetView<HomeController> {
       ),
     );
   }
+
   void _showLogoutDialog(BuildContext context) {
     Get.dialog(
       AlertDialog(
@@ -189,4 +188,3 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
-
