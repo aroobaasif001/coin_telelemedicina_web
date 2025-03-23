@@ -1,3 +1,4 @@
+import 'package:coin_telelemedicina_web/translate/controller/translations_controller.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class CustomAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TranslationsController controller = Get.find<TranslationsController>();
+
     return CustomContainer(
       conColor: Colors.white,
       borderRadius: BorderRadius.circular(15),
@@ -41,13 +44,16 @@ class CustomAppbar extends StatelessWidget {
             ],
           ),
           Row(
+            spacing: 10,
             children: [
               CustomText(text: 'Admin@gmail.com'),
-              SizedBox(width: 10), // Add some spacing between the email and the avatar
               PopupMenuButton<String>(
-                icon: Icon(Icons.language, color: Colors.black),
+                child: Obx(() => Text(
+                  controller.selectedLanguage.value == 'en' ? 'English' : 'Spanish', // Display selected language
+                  style: TextStyle(color: Colors.black),
+                )),
                 onSelected: (String value) {
-                  Get.updateLocale(Locale(value));
+                  controller.updateLanguage(value); // Update language
                 },
                 itemBuilder: (BuildContext context) => [
                   PopupMenuItem(
@@ -66,13 +72,12 @@ class CustomAppbar extends StatelessWidget {
                       children: [
                         Icon(Icons.language, color: Colors.black),
                         SizedBox(width: 8),
-                        Text('Español'),
+                        Text('Spanish'),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(width: 10), // Add some spacing between the language button and the avatar
               CircleAvatar(radius: 25),
             ],
           ),

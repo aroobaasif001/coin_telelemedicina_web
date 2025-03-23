@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:coin_telelemedicina_web/model/service_model.dart';
 import 'package:universal_html/html.dart' as html;
-
 import '../../../utils/AppTheme.dart';
 
 class ServiceEditScreen extends StatefulWidget {
@@ -91,14 +90,14 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Service updated successfully!')),
+          SnackBar(content: Text('service_updated_successfully'.tr)),
         );
 
         Get.back();
       } catch (e) {
         print("Error updating service: $e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update service')),
+          SnackBar(content: Text('failed_to_update_service'.tr)),
         );
       } finally {
         setState(() {
@@ -113,7 +112,9 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Edit Service',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
+        title: Text('edit_service'.tr, style: TextStyle(color: Colors.white)),
+        backgroundColor: AppTheme.primaryColor,
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -135,16 +136,16 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
               ),
               SizedBox(height: 20),
 
-              _buildTextField(_nameController, 'Service Name', Icons.title),
-              _buildTextField(_descriptionController, 'Description', Icons.description, maxLines: 3),
-              _buildTextField(_durationController, 'Duration (mins)', Icons.timer, isNumeric: true),
-              _buildTextField(_priceController, 'Price', Icons.attach_money, isNumeric: true),
+              _buildTextField(_nameController, 'service_name'.tr, Icons.title),
+              _buildTextField(_descriptionController, 'description'.tr, Icons.description, maxLines: 3),
+              _buildTextField(_durationController, 'duration_mins'.tr, Icons.timer, isNumeric: true),
+              _buildTextField(_priceController, 'price'.tr, Icons.attach_money, isNumeric: true),
 
               // Requires Interpreter Switch
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Requires Interpreter', style: TextStyle(fontSize: 16)),
+                  Text('requires_interpreter'.tr, style: TextStyle(fontSize: 16)),
                   Switch(
                     value: _requiresInterpreter,
                     onChanged: (bool value) {
@@ -160,7 +161,7 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Service Active', style: TextStyle(fontSize: 16)),
+                  Text('service_active'.tr, style: TextStyle(fontSize: 16)),
                   Switch(
                     value: _isActive,
                     onChanged: (bool value) {
@@ -176,11 +177,11 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
               SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Supported Interpreter Types', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                child: Text('supported_interpreter_types'.tr, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ),
               Wrap(
                 spacing: 10,
-                children: ['Medical', 'Legal', 'Business', 'Community'].map((type) {
+                children: ['medical'.tr, 'legal'.tr, 'business'.tr, 'community'.tr].map((type) {
                   return ChoiceChip(
                     label: Text(type),
                     selected: _supportedInterpreterTypes.contains(type),
@@ -203,14 +204,14 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
               isLoading
                   ? CircularProgressIndicator(color: Colors.green)
                   : ElevatedButton.icon(
-                      onPressed: _updateService,
-                      icon: Icon(Icons.save),
-                      label: Text('Save Changes'),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                        backgroundColor: Colors.green,
-                      ),
-                    ),
+                onPressed: _updateService,
+                icon: Icon(Icons.save),
+                label: Text('save_changes'.tr),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  backgroundColor: Colors.green,
+                ),
+              ),
             ],
           ),
         ),
@@ -231,7 +232,7 @@ class _ServiceEditScreenState extends State<ServiceEditScreen> {
           prefixIcon: Icon(icon),
         ),
         maxLines: maxLines,
-        validator: (value) => value!.isEmpty ? 'Please enter $label' : null,
+        validator: (value) => value!.isEmpty ? '${'please_enter'.tr} $label' : null,
       ),
     );
   }

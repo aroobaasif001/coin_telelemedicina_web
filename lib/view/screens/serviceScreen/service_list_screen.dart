@@ -18,17 +18,16 @@ class ServiceListScreen extends StatelessWidget {
         spacing: 10,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomAppbar(title: 'Service Management'),
+          CustomAppbar(title: 'service_management'.tr), // Use translation key
           // Add New Service Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton.icon(
               onPressed: () {
-                                                                             Get.to(() => MainLayout(child:ServiceScreen()));
-
+                Get.to(() => MainLayout(child: ServiceScreen()));
               },
               icon: const Icon(Icons.add),
-              label: const Text("Add New Service"),
+              label: Text('add_new_service'.tr), // Use translation key
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
               ),
@@ -42,7 +41,7 @@ class ServiceListScreen extends StatelessWidget {
               }
 
               if (serviceController.services.isEmpty) {
-                return const Center(child: Text('No services found.'));
+                return Center(child: Text('no_services_found'.tr)); // Use translation key
               }
 
               return GridView.builder(
@@ -82,33 +81,27 @@ class ServiceListScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                    
                         const SizedBox(height: 8),
-                    
                         // Service Description
                         Text(
                           service.description,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                    
                         const SizedBox(height: 8),
-                    
                         // Duration and Price
                         Row(
                           children: [
                             const Icon(Icons.access_time, size: 16),
                             const SizedBox(width: 4),
-                            Text('${service.duration} min'),
+                            Text('${service.duration} ${'min'.tr}'), // Use translation key
                             const SizedBox(width: 12),
                             const Icon(Icons.attach_money, size: 16),
                             const SizedBox(width: 4),
                             Text('${service.price}'),
                           ],
                         ),
-                    
                         const Spacer(),
-                    
                         // Status and Actions
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,20 +114,17 @@ class ServiceListScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                service.isActive ? 'Active' : 'Inactive',
+                                service.isActive ? 'active'.tr : 'inactive'.tr, // Use translation key
                                 style: const TextStyle(color: Colors.white, fontSize: 12),
                               ),
                             ),
-                    
                             // Edit & Delete Actions
                             Row(
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.edit, color: Colors.green),
                                   onPressed: () {
-
-                                   Get.to(() => MainLayout(child:ServiceEditScreen(service: service,)));
-
+                                    Get.to(() => MainLayout(child: ServiceEditScreen(service: service)));
                                   },
                                 ),
                                 IconButton(

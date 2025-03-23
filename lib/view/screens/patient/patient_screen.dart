@@ -29,21 +29,21 @@ class _PatientScreenState extends State<PatientScreen> {
         // Added ScrollView for overall body
         child: Column(
           children: [
-            CustomAppbar(title: 'Patient Management'),
+            CustomAppbar(title: 'patient_management'.tr), // Use translation key
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(
-                    text: 'Patient Management',
+                    text: 'patient_management'.tr, // Use translation key
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     icon: const Icon(Icons.add, color: Colors.white, size: 13),
-                    label: const Text("New Patient", style: TextStyle(color: Colors.white, fontSize: 13)),
+                    label: Text('new_patient'.tr, style: TextStyle(color: Colors.white, fontSize: 13)), // Use translation key
                     onPressed: () {
                       // Add new patient functionality
                     },
@@ -66,8 +66,8 @@ class _PatientScreenState extends State<PatientScreen> {
                     child: TextField(
                       controller: _searchController,
                       style: const TextStyle(fontSize: 13),
-                      decoration: const InputDecoration(
-                        hintText: 'Search by name, email or disability...',
+                      decoration: InputDecoration(
+                        hintText: 'search_hint'.tr, // Use translation key
                         prefixIcon: Icon(Icons.search, size: 13),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(12),
@@ -93,8 +93,8 @@ class _PatientScreenState extends State<PatientScreen> {
                       var filteredPatients = patients.where((doc) {
                         var patient = doc.data() as Map<String, dynamic>;
                         return patient['fullName']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true ||
-                               patient['email']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true ||
-                               patient['disability']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true;
+                            patient['email']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true ||
+                            patient['disability']?.toLowerCase().contains(_searchQuery.toLowerCase()) == true;
                       }).toList();
 
                       return Container(
@@ -118,35 +118,35 @@ class _PatientScreenState extends State<PatientScreen> {
                               children: [
                                 TableRow(
                                   decoration: BoxDecoration(color: Colors.grey.shade200),
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Patient",
+                                      child: Text('patient'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Disability",
+                                      child: Text('disability'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Gender",
+                                      child: Text('gender'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Status",
+                                      child: Text('status'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Registration",
+                                      child: Text('registration'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Actions",
+                                      child: Text('actions'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
@@ -209,11 +209,10 @@ class _PatientScreenState extends State<PatientScreen> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Chip(
                                               label: Text(
-                                                patient['gender'] ?? '',
+                                                patient['gender']?.toLowerCase() == 'male' ? 'male'.tr : 'female'.tr, // Use translation key
                                                 style: TextStyle(
                                                   fontSize: 13,
-                                                  color:
-                                                      Colors.white,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                               backgroundColor: (patient['gender']?.toLowerCase() == 'male')
@@ -227,7 +226,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Chip(
                                               label: Text(patient['status'] ?? '',
-                                                  style: TextStyle(fontSize: 13,color: Colors.white)),
+                                                  style: TextStyle(fontSize: 13, color: Colors.white)),
                                               backgroundColor: AppTheme.lightGreen,
                                             ),
                                           ),
@@ -241,10 +240,10 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 Text(
                                                   patient['regDate'] is Timestamp
                                                       ? (patient['regDate'] as Timestamp)
-                                                          .toDate()
-                                                          .toLocal()
-                                                          .toString()
-                                                          .split(' ')[0]
+                                                      .toDate()
+                                                      .toLocal()
+                                                      .toString()
+                                                      .split(' ')[0]
                                                       : patient['regDate'] ?? '',
                                                   style: const TextStyle(fontSize: 13),
                                                 ),
@@ -261,7 +260,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                   icon: const Icon(Icons.remove_red_eye,
                                                       color: Colors.blue, size: 13),
                                                   onPressed: () {
-                                 Get.to(() => MainLayout(child: PatientViewScreen(patient: patient)));
+                                                    Get.to(() => MainLayout(child: PatientViewScreen(patient: patient)));
                                                   },
                                                 ),
                                                 IconButton(

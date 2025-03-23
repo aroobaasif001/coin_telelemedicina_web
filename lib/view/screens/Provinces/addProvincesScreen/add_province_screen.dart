@@ -6,7 +6,7 @@ import 'controller/add_province_controller.dart';
 
 class AddProvinceScreen extends StatelessWidget {
   final AddProvinceController firestoreController =
-      Get.put(AddProvinceController());
+  Get.put(AddProvinceController());
 
   final TextEditingController provinceController = TextEditingController();
   final TextEditingController municipalityController = TextEditingController();
@@ -17,7 +17,7 @@ class AddProvinceScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text("Manage Provinces",
+        title: Text("manage_provinces".tr,
             style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
         backgroundColor: AppTheme.primaryColor,
@@ -29,12 +29,12 @@ class AddProvinceScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCard(
-                title: "Add Province",
+                title: "add_province".tr,
                 icon: Icons.location_city,
                 iconColor: AppTheme.primaryColor,
                 controller: provinceController,
-                hintText: "Enter Province Name",
-                buttonLabel: "Add Province",
+                hintText: "enter_province_name".tr,
+                buttonLabel: "add_province".tr,
                 buttonColor: AppTheme.primaryColor,
                 onPressed: () {
                   if (provinceController.text.isNotEmpty) {
@@ -42,7 +42,7 @@ class AddProvinceScreen extends StatelessWidget {
                         .addProvince(provinceController.text.trim());
                     provinceController.clear();
                   } else {
-                    Get.snackbar("Error", "Please enter a province name!");
+                    Get.snackbar("error".tr, "please_enter_province_name".tr);
                   }
                 },
               ),
@@ -56,7 +56,7 @@ class AddProvinceScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Add Municipality",
+                      Text("add_municipality".tr,
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -66,10 +66,10 @@ class AddProvinceScreen extends StatelessWidget {
                         return _buildDropdown(
                           items: firestoreController.provinces,
                           value:
-                              firestoreController.selectedProvince.value.isEmpty
-                                  ? null
-                                  : firestoreController.selectedProvince.value,
-                          hint: "Select Province",
+                          firestoreController.selectedProvince.value.isEmpty
+                              ? null
+                              : firestoreController.selectedProvince.value,
+                          hint: "select_province".tr,
                           icon: Icons.map,
                           iconColor: AppTheme.primaryColor,
                           onChanged: (value) {
@@ -82,17 +82,17 @@ class AddProvinceScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       _buildTextField(
                           municipalityController,
-                          "Enter Municipality Name",
+                          "enter_municipality_name".tr,
                           Icons.business,
                           Colors.green),
                       SizedBox(height: 10),
                       _buildElevatedButton(
-                        label: "Add Municipality",
+                        label: "add_municipality".tr,
                         icon: Icons.add,
                         color: AppTheme.primaryColor,
                         onPressed: () {
                           if (firestoreController
-                                  .selectedProvince.value.isNotEmpty &&
+                              .selectedProvince.value.isNotEmpty &&
                               municipalityController.text.isNotEmpty) {
                             firestoreController.addMunicipality(
                               firestoreController.selectedProvince.value,
@@ -100,8 +100,8 @@ class AddProvinceScreen extends StatelessWidget {
                             );
                             municipalityController.clear();
                           } else {
-                            Get.snackbar("Error",
-                                "Select a province & enter a municipality name!");
+                            Get.snackbar("error".tr,
+                                "please_select_province_and_enter_municipality_name".tr);
                           }
                         },
                       ),
@@ -119,7 +119,7 @@ class AddProvinceScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Add Sector",
+                      Text("add_sector".tr,
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -129,10 +129,10 @@ class AddProvinceScreen extends StatelessWidget {
                         return _buildDropdown(
                           items: firestoreController.municipalities,
                           value: firestoreController
-                                  .selectedMunicipality.value.isEmpty
+                              .selectedMunicipality.value.isEmpty
                               ? null
                               : firestoreController.selectedMunicipality.value,
-                          hint: "Select Municipality",
+                          hint: "select_municipality".tr,
                           icon: Icons.location_on,
                           iconColor: AppTheme.primaryColor,
                           onChanged: (value) {
@@ -142,16 +142,16 @@ class AddProvinceScreen extends StatelessWidget {
                         );
                       }),
                       SizedBox(height: 10),
-                      _buildTextField(sectorController, "Enter Sector Name",
+                      _buildTextField(sectorController, "enter_sector_name".tr,
                           Icons.apartment, AppTheme.primaryColor),
                       SizedBox(height: 10),
                       _buildElevatedButton(
-                        label: "Add Sector",
+                        label: "add_sector".tr,
                         icon: Icons.add,
                         color: AppTheme.primaryColor,
                         onPressed: () {
                           if (firestoreController
-                                  .selectedMunicipality.value.isNotEmpty &&
+                              .selectedMunicipality.value.isNotEmpty &&
                               sectorController.text.isNotEmpty) {
                             firestoreController.addSector(
                               firestoreController.selectedProvince.value,
@@ -160,8 +160,8 @@ class AddProvinceScreen extends StatelessWidget {
                             );
                             sectorController.clear();
                           } else {
-                            Get.snackbar("Error",
-                                "Select a municipality & enter a sector name!");
+                            Get.snackbar("error".tr,
+                                "please_select_municipality_and_enter_sector_name".tr);
                           }
                         },
                       ),
@@ -253,9 +253,9 @@ class AddProvinceScreen extends StatelessWidget {
 
   Widget _buildElevatedButton(
       {required String label,
-      required IconData icon,
-      required Color color,
-      required VoidCallback onPressed}) {
+        required IconData icon,
+        required Color color,
+        required VoidCallback onPressed}) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(

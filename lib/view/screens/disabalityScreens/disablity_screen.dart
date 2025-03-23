@@ -237,7 +237,7 @@ class DisabilityScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Provinces & Municipalities",
+                    Text('provinces_and_municipalities'.tr, // Use translation key
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
@@ -258,7 +258,7 @@ class DisabilityScreen extends StatelessWidget {
                                 width: 10,
                               ),
                               CustomText(
-                                text: 'Add Disability',
+                                text: 'add_disability'.tr, // Use translation key
                                 color: Colors.white,
                               )
                             ],
@@ -269,7 +269,6 @@ class DisabilityScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10),
-
                 // Filters Section
                 Row(
                   children: [
@@ -278,42 +277,40 @@ class DisabilityScreen extends StatelessWidget {
                       child: TextField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: "Search by name...",
+                          hintText: 'search_hint'.tr, // Use translation key
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         onChanged: (value) => disabilityController.searchQuery.value = value,
                       ),
                     ),
                     SizedBox(width: 10),
-
                     // Disability Filter Dropdown
                     Expanded(
                       child: Obx(() => DropdownButton<String>(
-                            value: disabilityController.selectedDisabilityFilter.value.isEmpty
-                                ? null
-                                : disabilityController.selectedDisabilityFilter.value,
-                            hint: Text("Select Disability"),
-                            isExpanded: true,
-                            items: disabilityController.disabilities
-                                .map((disability) => DropdownMenuItem<String>(
-                                      value: disability["id"],
-                                      child: Text(disability["name"]),
-                                    ))
-                                .toList(),
-                            onChanged: (value) =>
-                                disabilityController.selectedDisabilityFilter.value = value ?? "",
-                          )),
+                        value: disabilityController.selectedDisabilityFilter.value.isEmpty
+                            ? null
+                            : disabilityController.selectedDisabilityFilter.value,
+                        hint: Text('select_disability'.tr), // Use translation key
+                        isExpanded: true,
+                        items: disabilityController.disabilities
+                            .map((disability) => DropdownMenuItem<String>(
+                          value: disability["id"],
+                          child: Text(disability["name"]),
+                        ))
+                            .toList(),
+                        onChanged: (value) =>
+                        disabilityController.selectedDisabilityFilter.value = value ?? "",
+                      )),
                     ),
                     SizedBox(width: 10),
-
                     // Type Filter Dropdown
                     Expanded(
                       child: Obx(
-                        () => DropdownButton<String>(
+                            () => DropdownButton<String>(
                           value: disabilityController.selectedTypeFilter.value.isEmpty
                               ? null
                               : disabilityController.selectedTypeFilter.value,
-                          hint: Text("Select Type"),
+                          hint: Text('select_type'.tr), // Use translation key
                           isExpanded: true,
                           items: disabilityController.types.map((type) {
                             return DropdownMenuItem<String>(
@@ -325,9 +322,7 @@ class DisabilityScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(width: 10),
-
                     // Clear Filters Button
                     ElevatedButton(
                       onPressed: () {
@@ -335,13 +330,14 @@ class DisabilityScreen extends StatelessWidget {
                         disabilityController.selectedDisabilityFilter.value = '';
                         disabilityController.selectedTypeFilter.value = '';
                       },
-                      child: Text("Clear"),
+                      child: Text('clear'.tr), // Use translation key
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
                 // Disability Count
-                Obx(() => Text("${disabilityController.filteredDisabilities.length} disabilities found")),
+                Obx(() => Text(
+                    "${disabilityController.filteredDisabilities.length} ${'disabilities_found'.tr}")), // Use translation key
               ],
             ),
           ),

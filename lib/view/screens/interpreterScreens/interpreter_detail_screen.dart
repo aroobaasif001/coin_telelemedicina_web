@@ -1,55 +1,11 @@
-// import 'package:flutter/material.dart';
-// import 'package:coin_telelemedicina_web/model/interpreter_model.dart';
-
-// import '../../../utils/AppTheme.dart';
-
-// class InterpreterDetailScreen extends StatelessWidget {
-//   final InterpreterModel interpreter;
-
-//   InterpreterDetailScreen({required this.interpreter});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//        appBar: AppBar(
-//         centerTitle: true,
-//         title: Text(interpreter.fullName,style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
-
-   
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             CircleAvatar(
-//               radius: 50,
-//               backgroundImage: interpreter.photoUrl.isNotEmpty
-//                   ? NetworkImage(interpreter.photoUrl)
-//                   : AssetImage('assets/img.png') as ImageProvider,
-//             ),
-//             SizedBox(height: 16),
-//             Text("Full Name: ${interpreter.fullName}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//             Text("Education: ${interpreter.education}"),
-//             Text("Experience: ${interpreter.experience} years"),
-//             Text("Languages: ${interpreter.languages.join(', ')}"),
-//             Text("Interpreter Types: ${interpreter.interpreterTypes.join(', ')}"),
-//             Text("Rating: ${interpreter.rating}"),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/model/interpreter_model.dart';
-import '../../../utils/AppTheme.dart';
+import 'package:get/get.dart'; // Import GetX
 
 class InterpreterDetailScreen extends StatelessWidget {
   final InterpreterModel interpreter;
-
   InterpreterDetailScreen({required this.interpreter});
 
   @override
@@ -57,60 +13,63 @@ class InterpreterDetailScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          spacing: 10,
           children: [
-            CustomAppbar(isLeading: true,title: interpreter.fullName,),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 10,
-              children: [
-                CustomContainer(
-              conColor: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      // Profile Image
-                      Center(
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.grey[200],
-                          backgroundImage: interpreter.photoUrl.isNotEmpty
-                              ? NetworkImage(interpreter.photoUrl)
-                              : AssetImage('assets/img.png') as ImageProvider,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-
-                      // Full Name
-                      Text(
-                        interpreter.fullName,
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                // Details Card
-                Expanded(
-                  child: CustomContainer(
+            CustomAppbar(
+              isLeading: true,
+              title: 'interpreter_detail'.tr, // Translated title
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Profile Image and Name
+                  CustomContainer(
                     conColor: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     padding: EdgeInsets.all(16.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildDetailRow(Icons.person, "Full Name", interpreter.fullName),
-                        _buildDetailRow(Icons.school, "Education", interpreter.education),
-                        _buildDetailRow(Icons.timer, "Experience", "${interpreter.experience} years"),
-                        _buildDetailRow(Icons.language, "Languages", interpreter.languages.join(', ')),
-                        _buildDetailRow(Icons.translate, "Interpreter Types", interpreter.interpreterTypes.join(', ')),
-                        _buildDetailRow(Icons.star, "Rating", "${interpreter.rating} ⭐"),
+                        Center(
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundColor: Colors.grey[200],
+                            backgroundImage: interpreter.photoUrl.isNotEmpty
+                                ? NetworkImage(interpreter.photoUrl)
+                                : AssetImage('assets/img.png') as ImageProvider,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          interpreter.fullName,
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(width: 16),
+                  // Details Card
+                  Expanded(
+                    child: CustomContainer(
+                      conColor: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDetailRow(Icons.person, "full_name".tr, interpreter.fullName),
+                          _buildDetailRow(Icons.school, "education".tr, interpreter.education),
+                          _buildDetailRow(Icons.timer, "experience".tr, "${interpreter.experience} ${'years'.tr}"),
+                          _buildDetailRow(Icons.language, "languages".tr, interpreter.languages.join(', ')),
+                          _buildDetailRow(Icons.translate, "interpreter_types".tr, interpreter.interpreterTypes.join(', ')),
+                          _buildDetailRow(Icons.star, "rating".tr, "${interpreter.rating} ⭐"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -136,4 +95,3 @@ class InterpreterDetailScreen extends StatelessWidget {
     );
   }
 }
-

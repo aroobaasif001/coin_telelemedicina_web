@@ -3,7 +3,7 @@ import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../dashboardScreen/widget/top_nav_bar_widget.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -12,14 +12,13 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: TopNavBar(),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             const SizedBox(height: 8),
             CustomContainer(
               margin: const EdgeInsets.all(10),
@@ -30,7 +29,7 @@ class NotificationScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    text: "General Summary",
+                    text: 'general_summary'.tr, // Use translation key
                     fontSize: Theme.of(context).textTheme.titleLarge?.fontSize ?? 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -45,34 +44,32 @@ class NotificationScreen extends StatelessWidget {
                           child: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('notifications')
-                            // .where('userId', isEqualTo: 'yourUserId') // Filter by user
-                            // .where('isRead', isEqualTo: false) // Only count unread notifications
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Column(
                                   children: const [
                                     CustomText(
-                                      text: "Total Notifications",
+                                      text: "Loading...",
                                       fontWeight: FontWeight.bold,
                                     ),
                                     SizedBox(height: 8),
-                                    CircularProgressIndicator(), // Show loading indicator while fetching data
+                                    CircularProgressIndicator(), // Show loading indicator
                                   ],
                                 );
                               }
 
-                              int notificationCount = snapshot.data!.docs.length; // Get total count
+                              int notificationCount = snapshot.data!.docs.length;
 
                               return Column(
                                 children: [
-                                  const CustomText(
-                                    text: "Total Notifications",
+                                  CustomText(
+                                    text: 'total_notifications'.tr, // Use translation key
                                     fontWeight: FontWeight.bold,
                                   ),
                                   const SizedBox(height: 8),
                                   CustomText(
-                                    text: "$notificationCount", // Show dynamic count
+                                    text: "$notificationCount",
                                     fontSize: 24,
                                   ),
                                 ],
@@ -89,12 +86,12 @@ class NotificationScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.grey.shade200),
                           child: Column(
-                            children: const [
+                            children: [
                               CustomText(
-                                text: "Read Rate",
+                                text: 'read_rate'.tr, // Use translation key
                                 fontWeight: FontWeight.bold,
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               CustomText(
                                 text: "54%",
                                 fontSize: 24,
@@ -119,7 +116,7 @@ class NotificationScreen extends StatelessWidget {
                 children: [
                   // Statistics by User Type
                   CustomText(
-                    text: "Statistics by User Type",
+                    text: 'statistics_by_user_type'.tr, // Use translation key
                     fontSize: Theme.of(context).textTheme.titleLarge?.fontSize ?? 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -138,8 +135,8 @@ class NotificationScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey.shade200),
                             child: _UserStatsWidget(
-                              title: "Providers",
-                             userId: 'Appointment Confirmed',
+                              title: 'providers'.tr, // Use translation key
+                              userId: 'Appointment Confirmed',
                             ),
                           ),
                         ),
@@ -149,7 +146,8 @@ class NotificationScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey.shade200),
                             child: _UserStatsWidget(
-                              title: "Patients", userId: 'Nueva Cita',
+                              title: 'patients'.tr, // Use translation key
+                              userId: 'Nueva Cita',
                             ),
                           ),
                         ),
@@ -169,7 +167,7 @@ class NotificationScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    text: "Breakdown by Notification Type",
+                    text: 'breakdown_by_notification_type'.tr, // Use translation key
                     fontSize: Theme.of(context).textTheme.titleLarge?.fontSize ?? 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -180,26 +178,26 @@ class NotificationScreen extends StatelessWidget {
                     conColor: Colors.white,
                     child: Row(
                       spacing: 10,
-                      children:  [
-                      Expanded(
-                        child: CustomContainer(
-                          padding: const EdgeInsets.all(16),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade200),
-                          child: _NotificationTypeWidget(
-                              title: "New Appointments",
-                              total: "18",
-                              readRate: "80%",
-                            ),
-                          ),
-                      ),
+                      children: [
                         Expanded(
                           child: CustomContainer(
                             padding: const EdgeInsets.all(16),
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.grey.shade200),
                             child: _NotificationTypeWidget(
-                              title: "Appointment on Hold",
+                              title: 'new_appointments'.tr, // Use translation key
+                              total: "18",
+                              readRate: "80%",
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: CustomContainer(
+                            padding: const EdgeInsets.all(16),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey.shade200),
+                            child: _NotificationTypeWidget(
+                              title: 'appointment_on_hold'.tr, // Use translation key
                               total: "11",
                               readRate: "70%",
                             ),
@@ -207,7 +205,7 @@ class NotificationScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -219,45 +217,9 @@ class NotificationScreen extends StatelessWidget {
 }
 
 // Helper widget for "Statistics by User Type"
-// class _UserStatsWidget extends StatelessWidget {
-//   final String title;
-//   final String total;
-//   final String readRate;
-
-//   const _UserStatsWidget({
-//     Key? key,
-//     required this.title,
-//     required this.total,
-//     required this.readRate,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         CustomText(
-//           text: title,
-//           fontWeight: FontWeight.bold,
-//         ),
-//         const SizedBox(height: 8),
-//         CustomText(
-//           text: total,
-//           fontSize: 20,
-//         ),
-//         const SizedBox(height: 4),
-//         CustomText(
-//           text: "Read Rate: $readRate",
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-
-
 class _UserStatsWidget extends StatelessWidget {
   final String title;
-  final String userId; // Pass user ID dynamically
+  final String userId;
 
   const _UserStatsWidget({
     Key? key,
@@ -270,7 +232,7 @@ class _UserStatsWidget extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('notifications')
-          .where('title', isEqualTo: userId) // Filter by user ID
+          .where('title', isEqualTo: userId)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -294,7 +256,7 @@ class _UserStatsWidget extends StatelessWidget {
 
         String readRate = totalNotifications > 0
             ? ((readNotifications / totalNotifications) * 100).toStringAsFixed(1) + "%"
-            : "0%"; // Avoid division by zero
+            : "0%";
 
         return Column(
           children: [
@@ -304,10 +266,9 @@ class _UserStatsWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             CustomText(
-              text: "$totalNotifications", // Show total notifications count
+              text: "$totalNotifications",
               fontSize: 20,
             ),
-
             const SizedBox(height: 4),
             CustomText(
               text: "Read Rate: $readRate",

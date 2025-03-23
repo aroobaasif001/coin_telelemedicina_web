@@ -1,39 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:coin_telelemedicina_web/model/service_model.dart';
-
-// class ServiceDetailScreen extends StatelessWidget {
-//   final ServiceModel service;
-
-//   ServiceDetailScreen({required this.service});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text(service.name)),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             CircleAvatar(
-//               radius: 50,
-//               backgroundImage: service.icon.isNotEmpty
-//                   ? NetworkImage(service.icon)
-//                   : AssetImage('assets/default_service.png') as ImageProvider,
-//             ),
-//             SizedBox(height: 16),
-//             Text("Name: ${service.name}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//             Text("Description: ${service.description}"),
-//             Text("Duration: ${service.duration} mins"),
-//             Text("Price: \$${service.price}"),
-//             Text("Requires Interpreter: ${service.requiresInterpreter ? 'Yes' : 'No'}"),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/model/service_model.dart';
 

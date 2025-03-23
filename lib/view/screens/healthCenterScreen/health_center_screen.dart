@@ -2,7 +2,7 @@ import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:get/get.dart';
 import '../../../utils/AppTheme.dart';
 
 class HealthCenterScreen extends StatefulWidget {
@@ -22,9 +22,10 @@ class _HealthCenterScreenState extends State<HealthCenterScreen> {
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _sectorController = TextEditingController();
-  List<String> selectedServices = [];
-final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
   final TextEditingController _longitudeController = TextEditingController();
+  List<String> selectedServices = [];
+  List<String> selectedAccessibilityOptions = [];
   bool isActive = true;
   bool isLoading = false;
 
@@ -37,20 +38,18 @@ final TextEditingController _latitudeController = TextEditingController();
     'saturday': {'open': null, 'close': null},
     'sunday': {'open': null, 'close': null},
   };
-List<String> accessibilityOptions = [
-  'Priority Assistance',
-  'Wheelchair Ramp',
-  'Accessible Restrooms',
-  'Sign Language Support',
-  'Elevator Available',
-  'Accessible Parking ',
-  'Wheelchairs Available ',
-];
 
-List<String> selectedAccessibilityOptions = [];
+  List<String> accessibilityOptions = [
+    'Priority Assistance',
+    'Wheelchair Ramp',
+    'Accessible Restrooms',
+    'Sign Language Support',
+    'Elevator Available',
+    'Accessible Parking',
+    'Wheelchairs Available',
+  ];
 
-  Future<void> _selectTime(
-      BuildContext context, String day, String type) async {
+  Future<void> _selectTime(BuildContext context, String day, String type) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: availability[day]![type] ?? TimeOfDay.now(),
@@ -62,85 +61,67 @@ List<String> selectedAccessibilityOptions = [];
     }
   }
 
-
   Future<void> _submitForm() async {
-  if (_formKey.currentState!.validate()) {
-    setState(() {
-      isLoading = true;
-    });
+    if (_formKey.currentState!.validate()) {
+      setState(() => isLoading = true);
 
-    final formattedAvailability = availability.map((day, times) => MapEntry(
-          day,
-          {
-            'open': times['open']?.format(context) ?? '',
-            'close': times['close']?.format(context) ?? '',
-          },
-        ));
+      final formattedAvailability = availability.map((day, times) => MapEntry(
+            day,
+            {
+              'open': times['open']?.format(context) ?? '',
+              'close': times['close']?.format(context) ?? '',
+            },
+          ));
 
-    // Add health center data to Firestore
-    DocumentReference healthCenterRef =
-        await FirebaseFirestore.instance.collection('healthCenters').add({
-      'name': _nameController.text,
-      'address': _addressController.text,
-      'city': _cityController.text,
-      'municipality': _municipalityController.text,
-      'province': _provinceController.text,
-      'phone': _phoneController.text,
-      'email': _emailController.text,
-      'website': _websiteController.text,
-      'description': _descriptionController.text,
-      'sector': _sectorController.text,
-      'services': selectedServices,
-      'isActive': isActive,
-      'availability': formattedAvailability,
-      'coordinates': {
-        'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
-        'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
-      },
-      'createdAt': DateTime.now(),
-      'updatedAt': DateTime.now(),
-    });
-
-    // Store accessibility options in a separate collection
-    List<Map<String, dynamic>> accessibilityOptions = [
-      {'id': 'priority-assistance', 'name': 'Priority Assistance'},
-      {'id': 'wheelchair-ramp', 'name': 'Wheelchair Ramp'},
-      {'id': 'accessible-restrooms', 'name': 'Accessible Restrooms'},
-      {'id': 'sign-language-support', 'name': 'Sign Language Support'},
-      {'id': 'elevator-available', 'name': 'Elevator Available'},
-      {'id': 'accessible-parking', 'name': 'Accessible Parking'},
-      {'id': 'wheelchairs-available', 'name': 'Wheelchairs Available'},
-    ];
-
-    for (var option in accessibilityOptions) {
-      await FirebaseFirestore.instance
-          .collection('accessibilityOptions')
-          .doc(option['id'])
-          .set({
-        'name': option['name'],
-        'isActive': selectedAccessibilityOptions.contains(option['name']),
-        'healthCenterId': healthCenterRef.id, // Link to the health center
+      DocumentReference healthCenterRef = await FirebaseFirestore.instance.collection('healthCenters').add({
+        'name': _nameController.text,
+        'address': _addressController.text,
+        'city': _cityController.text,
+        'municipality': _municipalityController.text,
+        'province': _provinceController.text,
+        'phone': _phoneController.text,
+        'email': _emailController.text,
+        'website': _websiteController.text,
+        'description': _descriptionController.text,
+        'sector': _sectorController.text,
+        'services': selectedServices,
+        'isActive': isActive,
+        'availability': formattedAvailability,
+        'coordinates': {
+          'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
+          'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
+        },
         'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now(),
       });
+
+      for (var option in accessibilityOptions) {
+        await FirebaseFirestore.instance
+            .collection('accessibilityOptions')
+            .doc(option.toLowerCase().replaceAll(' ', '-'))
+            .set({
+          'name': option,
+          'isActive': selectedAccessibilityOptions.contains(option),
+          'healthCenterId': healthCenterRef.id,
+          'createdAt': DateTime.now(),
+        });
+      }
+
+      setState(() => isLoading = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('health_center_saved'.tr)),
+      );
     }
-
-    setState(() {
-      isLoading = false;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Health Center saved successfully!')),
-    );
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-        centerTitle: true,
-        title: Text('Add Health Center ',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
+      appBar: AppBar(
+          centerTitle: true,
+          title: Text('add_health_center'.tr, style: TextStyle(color: Colors.white)),
+          backgroundColor: AppTheme.primaryColor),
       body: CustomContainer(
         conColor: Colors.white,
         margin: EdgeInsets.all(10),
@@ -152,108 +133,83 @@ List<String> selectedAccessibilityOptions = [];
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _buildTextField(_nameController, 'Name'),
-                  _buildTextField(_addressController, 'Address'),
-                  _buildTextField(_cityController, 'City'),
-                  _buildTextField(_municipalityController, 'Municipality'),
-                  _buildTextField(_provinceController, 'Province'),
-                  _buildTextField(_phoneController, 'Phone'),
-                  _buildTextField(_emailController, 'Email'),
-                  _buildTextField(_websiteController, 'Website'),
-                  _buildTextField(_descriptionController, 'Description'),
-                  _buildTextField(_sectorController, 'Sector'),
-                   _buildTextField(_latitudeController, 'Latitude'),
-                  _buildTextField(_longitudeController, 'Longitude'),
+                  _buildTextField(_nameController, 'name'.tr),
+                  _buildTextField(_addressController, 'address'.tr),
+                  _buildTextField(_cityController, 'city'.tr),
+                  _buildTextField(_municipalityController, 'municipality'.tr),
+                  _buildTextField(_provinceController, 'province'.tr),
+                  _buildTextField(_phoneController, 'phone'.tr),
+                  _buildTextField(_emailController, 'email'.tr),
+                  _buildTextField(_websiteController, 'website'.tr),
+                  _buildTextField(_descriptionController, 'description'.tr),
+                  _buildTextField(_sectorController, 'sector'.tr),
+                  _buildTextField(_latitudeController, 'latitude'.tr),
+                  _buildTextField(_longitudeController, 'longitude'.tr),
                   const SizedBox(height: 20),
-                  const Text('Select Services',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text('select_services'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Wrap(
                     spacing: 5,
-                    children: [
-                      'Cardiology',
-                      'General Medicine',
-                      'Pediatrics',
-                      'Psychology'
-                    ].map((service) {
+                    children: ['Cardiology', 'General Medicine', 'Pediatrics', 'Psychology'].map((service) {
                       return FilterChip(
                         label: Text(service),
                         selected: selectedServices.contains(service),
                         onSelected: (selected) {
                           setState(() {
-                            if (selected) {
-                              selectedServices.add(service);
-                            } else {
-                              selectedServices.remove(service);
-                            }
+                            selected ? selectedServices.add(service) : selectedServices.remove(service);
                           });
                         },
                       );
                     }).toList(),
                   ),
                   const SizedBox(height: 20),
-                  const SizedBox(height: 20),
-        const Text('Accessibility Options',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        Wrap(
-          spacing: 5,
-          children: accessibilityOptions.map((option) {
-            return FilterChip(
-        label: Text(option),
-        selected: selectedAccessibilityOptions.contains(option),
-        onSelected: (selected) {
-          setState(() {
-            if (selected) {
-              selectedAccessibilityOptions.add(option);
-            } else {
-              selectedAccessibilityOptions.remove(option);
-            }
-          });
-        },
-            );
-          }).toList(),
-        ),
-        SizedBox(height: 20,),
-                  SwitchListTile(
-                    title: const Text('Active'),
-                    value: isActive,
-                    onChanged: (value) {
-                      setState(() {
-                        isActive = value;
-                      });
-                    },
+                  Text('accessibility_options'.tr,
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Wrap(
+                    spacing: 5,
+                    children: accessibilityOptions.map((option) {
+                      return FilterChip(
+                        label: Text(option),
+                        selected: selectedAccessibilityOptions.contains(option),
+                        onSelected: (selected) {
+                          setState(() {
+                            selected
+                                ? selectedAccessibilityOptions.add(option)
+                                : selectedAccessibilityOptions.remove(option);
+                          });
+                        },
+                      );
+                    }).toList(),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('Availability',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 20),
+                  SwitchListTile(
+                    title: Text('active'.tr),
+                    value: isActive,
+                    onChanged: (value) => setState(() => isActive = value),
+                  ),
+                  SizedBox(height: 20),
+                  Text('availability'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
                   ...availability.keys.map((day) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(day.toUpperCase(),
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(day.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
                         Row(
                           children: [
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () =>
-                                    _selectTime(context, day, 'open'),
+                                onPressed: () => _selectTime(context, day, 'open'),
                                 child: Text(
-                                  availability[day]!['open']?.format(context) ??
-                                      'Select Open Time',
+                                  availability[day]!['open']?.format(context) ?? 'select_open_time'.tr,
                                 ),
                               ),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () =>
-                                    _selectTime(context, day, 'close'),
+                                onPressed: () => _selectTime(context, day, 'close'),
                                 child: Text(
-                                  availability[day]!['close']?.format(context) ??
-                                      'Select Close Time',
+                                  availability[day]!['close']?.format(context) ?? 'select_close_time'.tr,
                                 ),
                               ),
                             ),
@@ -277,9 +233,7 @@ List<String> selectedAccessibilityOptions = [];
                       ),
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('Submit',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white)),
+                          : Text('submit'.tr, style: TextStyle(fontSize: 16, color: Colors.white)),
                     ),
                   ),
                 ],
@@ -300,9 +254,8 @@ List<String> selectedAccessibilityOptions = [];
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        validator: (value) => value!.isEmpty ? 'Please enter $label' : null,
+        validator: (value) => value!.isEmpty ? 'enter'.tr + ' $label' : null,
       ),
     );
   }
 }
-

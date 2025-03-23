@@ -295,7 +295,7 @@ class ProvinceScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Provinces & Municipalities",
+                    Text('provinces_and_municipalities'.tr, // Use translation key
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
@@ -317,7 +317,7 @@ class ProvinceScreen extends StatelessWidget {
                                 width: 10,
                               ),
                               CustomText(
-                                text: 'New Province',
+                                text: 'new_province'.tr, // Use translation key
                                 color: Colors.white,
                               )
                             ],
@@ -337,8 +337,9 @@ class ProvinceScreen extends StatelessWidget {
                       child: TextField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: "Search by name...",
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          hintText: 'search_hint'.tr, // Use translation key
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8)),
                         ),
                         onChanged: (value) => provinceController.searchQuery.value = value,
                       ),
@@ -349,7 +350,7 @@ class ProvinceScreen extends StatelessWidget {
                         value: provinceController.selectedProvinceFilter.value.isEmpty
                             ? null
                             : provinceController.selectedProvinceFilter.value,
-                        hint: Text("Select Province"),
+                        hint: Text('select_province'.tr), // Use translation key
                         isExpanded: true,
                         items: provinceController.provinces
                             .map((province) => DropdownMenuItem<String>(
@@ -369,7 +370,7 @@ class ProvinceScreen extends StatelessWidget {
                         value: provinceController.selectedMunicipalityFilter.value.isEmpty
                             ? null
                             : provinceController.selectedMunicipalityFilter.value,
-                        hint: Text("Select Municipality"),
+                        hint: Text("select_municipality".tr),
                         isExpanded: true,
                         items: provinceController.municipalities[
                         provinceController.selectedProvinceFilter.value] != null
@@ -394,7 +395,7 @@ class ProvinceScreen extends StatelessWidget {
                         provinceController.selectedProvinceFilter.value = '';
                         provinceController.selectedMunicipalityFilter.value = '';
                       },
-                      child: Text("Clear"),
+                      child: Text('clear'.tr), // Use translation key
                     ),
                   ],
                 ),
