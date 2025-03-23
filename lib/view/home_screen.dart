@@ -28,6 +28,7 @@ class HomeScreen extends GetView<HomeController> {
       body: SafeArea(
         child: Row(
           children: [
+
             SidebarMenu(isFromMain: false,), // Use extracted SidebarMenu widget
             Expanded(
               child: Obx(
