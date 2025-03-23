@@ -1,50 +1,7 @@
-// import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
-// import 'package:flutter/material.dart';
-// import 'package:coin_telelemedicina_web/model/health_center_model.dart';
-
-// class HealthCenterDetailScreen extends StatelessWidget {
-//   final HealthCenterModel center;
-
-//   HealthCenterDetailScreen({required this.center});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//      appBar: AppBar(
-//         centerTitle: true,
-//         title: Text(center.name,style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: SingleChildScrollView(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text("🏥 Name: ${center.name}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//               Text("📍 Address: ${center.address}"),
-//               Text("🌆 City: ${center.city}"),
-//               Text("📞 Phone: ${center.phone}"),
-//               Text("✉️ Email: ${center.email}"),
-//               Text("💻 Website: ${center.website}"),
-//               Text("📖 Description: ${center.description}"),
-//               Text("📍 Latitude: ${center.latitude}"),
-//               Text("📍 Longitude: ${center.longitude}"),
-//               SizedBox(height: 16),
-//               Text("🕒 Availability:", style: TextStyle(fontWeight: FontWeight.bold)),
-//               ...center.availability.entries.map((entry) {
-//                 return Text("${entry.key}: Open - ${entry.value['open']} | Close - ${entry.value['close']}");
-//               }),
-//               SizedBox(height: 16),
-//               Text("✅ Active: ${center.isActive ? 'Yes' : 'No'}"),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/model/health_center_model.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+import 'package:get/get.dart'; // Import GetX
 
 class HealthCenterDetailScreen extends StatelessWidget {
   final HealthCenterModel center;
@@ -86,19 +43,20 @@ class HealthCenterDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildDetailRow(Icons.location_on, "Address", center.address),
-                    _buildDetailRow(Icons.location_city, "City", center.city),
-                    _buildDetailRow(Icons.phone, "Phone", center.phone),
-                    _buildDetailRow(Icons.email, "Email", center.email),
-                    _buildDetailRow(Icons.web, "Website", center.website),
-                    _buildDetailRow(Icons.description, "Description", center.description),
-                    _buildDetailRow(Icons.map, "Latitude", center.latitude.toString()),
-                    _buildDetailRow(Icons.map, "Longitude", center.longitude.toString()),
+                    _buildDetailRow(Icons.location_on, "address".tr, center.address),
+                    _buildDetailRow(Icons.location_city, "city".tr, center.city),
+                    _buildDetailRow(Icons.phone, "phone".tr, center.phone),
+                    _buildDetailRow(Icons.email, "email".tr, center.email),
+                    _buildDetailRow(Icons.web, "website".tr, center.website),
+                    _buildDetailRow(Icons.description, "description".tr, center.description),
+                    _buildDetailRow(Icons.map, "latitude".tr, center.latitude.toString()),
+                    _buildDetailRow(Icons.map, "longitude".tr, center.longitude.toString()),
                     _buildDetailRow(
-                        Icons.check_circle,
-                        "Status",
-                        center.isActive ? "Active" : "Inactive",
-                        textColor: center.isActive ? Colors.green : Colors.red),
+                      Icons.check_circle,
+                      "status".tr,
+                      center.isActive ? "active".tr : "inactive".tr,
+                      textColor: center.isActive ? Colors.green : Colors.red,
+                    ),
                   ],
                 ),
               ),
@@ -118,7 +76,7 @@ class HealthCenterDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "🕒 Availability",
+                      "🕒 ${'availability'.tr}",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Divider(),
@@ -133,9 +91,9 @@ class HealthCenterDetailScreen extends StatelessWidget {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Text("Open: ${entry.value['open'] ?? 'Closed'}"),
+                            Text("${'open'.tr}: ${entry.value['open'] ?? 'closed'.tr}"),
                             SizedBox(width: 10),
-                            Text("Close: ${entry.value['close'] ?? 'Closed'}"),
+                            Text("${'close'.tr}: ${entry.value['close'] ?? 'closed'.tr}"),
                           ],
                         ),
                       );
@@ -168,4 +126,3 @@ class HealthCenterDetailScreen extends StatelessWidget {
     );
   }
 }
-

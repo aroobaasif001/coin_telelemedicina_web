@@ -8,10 +8,12 @@ class CustomTextField extends StatelessWidget {
   final TextInputType textInputType;
   final EdgeInsets contentPadding;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
 
   const CustomTextField({
     Key? key,
     required this.controller,
+    this.prefixIcon,
     this.suffixIcon,
     required this.hintText,
     this.isObscure = false,
@@ -35,6 +37,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: isObscure,
       decoration: InputDecoration(
         hintText: hintText,
+        prefixIcon: prefixIcon,
         hintStyle: const TextStyle(
           color: Color(0X99000000),
           fontSize: 12,

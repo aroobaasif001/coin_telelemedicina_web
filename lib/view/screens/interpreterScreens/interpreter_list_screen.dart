@@ -19,7 +19,7 @@ class InterpreterListScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          CustomAppbar(title: 'Interpreters List'),
+          CustomAppbar(title: 'interpreters_list'.tr), // Use translation key
           Expanded(
             child: CustomContainer(
               margin: const EdgeInsets.all(10),
@@ -36,8 +36,8 @@ class InterpreterListScreen extends StatelessWidget {
                     ),
                     child: TextField(
                       style: const TextStyle(fontSize: 13),
-                      decoration: const InputDecoration(
-                        hintText: 'Search by name, email or disability...',
+                      decoration: InputDecoration(
+                        hintText: 'search_hint'.tr, // Use translation key
                         prefixIcon: Icon(Icons.search, size: 13),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(12),
@@ -53,7 +53,7 @@ class InterpreterListScreen extends StatelessWidget {
                         }
 
                         if (interpreterController.interpreters.isEmpty) {
-                          return const Center(child: Text('No doctors found.'));
+                          return Center(child: Text('no_interpreters_found'.tr)); // Use translation key
                         }
 
                         return Column(
@@ -69,26 +69,31 @@ class InterpreterListScreen extends StatelessWidget {
                               children: [
                                 TableRow(
                                   decoration: BoxDecoration(color: Colors.grey.shade200),
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Doctor", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('interpreter'.tr, // Use translation key
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Experience", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('experience'.tr, // Use translation key
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Rating", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('rating'.tr, // Use translation key
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Registration", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('registration'.tr, // Use translation key
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Actions", style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('actions'.tr, // Use translation key
+                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
@@ -158,11 +163,11 @@ class InterpreterListScreen extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text('${interpreter.experience} yrs'),
+                                            child: Text('${interpreter.experience} ${'years'.tr}'), // Use translation key
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text('${interpreter.rating} ★'),
+                                            child: Text('${interpreter.rating} ${'star'.tr}'), // Use translation key
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -182,17 +187,13 @@ class InterpreterListScreen extends StatelessWidget {
                                                 IconButton(
                                                   icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 18),
                                                   onPressed: () {
-                                                     Get.to(() => MainLayout(child: InterpreterDetailScreen(interpreter: interpreter)));
-
-
-
+                                                    Get.to(() => MainLayout(child: InterpreterDetailScreen(interpreter: interpreter)));
                                                   },
                                                 ),
                                                 IconButton(
                                                   icon: const Icon(Icons.edit, color: Colors.red, size: 18),
                                                   onPressed: () {
-                                                             Get.to(() => MainLayout(child:EditInterpreterScreen(interpreter: interpreter)));
-
+                                                    Get.to(() => MainLayout(child:EditInterpreterScreen(interpreter: interpreter)));
                                                   },
                                                 ),
                                               ],
@@ -210,68 +211,15 @@ class InterpreterListScreen extends StatelessWidget {
                       },
                     ),
                   ),
-
                 ],
               ),
             ),
           )
-          // Expanded(
-          //   child: CustomContainer(
-          //     conColor: Colors.white,
-          //     margin: EdgeInsets.all(10),
-          //     borderRadius: BorderRadius.circular(10),
-          //     child: Obx(() {
-          //       if (interpreterController.isLoading.value) {
-          //         return Center(child: CircularProgressIndicator());
-          //       }
-          //
-          //       if (interpreterController.interpreters.isEmpty) {
-          //         return Center(child: Text('No interpreters found.'));
-          //       }
-          //       return ListView.builder(
-          //         shrinkWrap: true,
-          //         itemCount: interpreterController.interpreters.length,
-          //         itemBuilder: (context, index) {
-          //           final interpreter = interpreterController.interpreters[index];
-          //
-          //           return Card(
-          //             margin: EdgeInsets.all(8.0),
-          //             child: ListTile(
-          //               leading: CircleAvatar(
-          //                 radius: 30,
-          //                 backgroundImage: interpreter.photoUrl.isNotEmpty
-          //                     ? NetworkImage(interpreter.photoUrl)
-          //                     : AssetImage('assets/img.png') as ImageProvider,
-          //               ),
-          //               title: Text(interpreter.fullName, style: TextStyle(fontWeight: FontWeight.bold)),
-          //               subtitle: Text(
-          //                   'Languages: ${interpreter.languages.join(', ')}\nExperience: ${interpreter.experience} years'),
-          //               trailing: PopupMenuButton<String>(
-          //                 onSelected: (value) {
-          //                   if (value == 'view') {
-          //                     Get.to(() => InterpreterDetailScreen(interpreter: interpreter));
-          //                   } else if (value == 'edit') {
-          //                     Get.to(() => EditInterpreterScreen(interpreter: interpreter));
-          //                   }
-          //                 },
-          //                 itemBuilder: (context) => [
-          //                   PopupMenuItem(value: 'view', child: Text('View Details')),
-          //                   PopupMenuItem(value: 'edit', child: Text('Edit Details')),
-          //                 ],
-          //               ),
-          //             ),
-          //           );
-          //         },
-          //       );
-          //     }),
-          //   ),
-          // ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          
-                                                             Get.to(() => MainLayout(child:InterpreterScreen()));
+          Get.to(() => MainLayout(child: InterpreterScreen()));
         },
         backgroundColor: AppTheme.primaryColor,
         child: Icon(Icons.add, color: Colors.white),

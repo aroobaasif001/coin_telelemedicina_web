@@ -1,7 +1,243 @@
+// import 'package:coin_telelemedicina_web/widget/custom_container.dart';
+// import 'package:flutter/material.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'widget/stat_card.dart';
+// import 'widget/top_nav_bar_widget.dart';
+//
+// class DashboardScreen extends StatefulWidget {
+//   @override
+//   State<DashboardScreen> createState() => _DashboardScreenState();
+// }
+//
+// class _DashboardScreenState extends State<DashboardScreen> {
+//   String selectedTimeFilter = "30 days";
+//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+//   int patientCount = 0;
+//   int doctorCount = 0;
+//   int serviceCount = 0;
+//   int appointmentCount = 0;
+//   int completedAppointments = 0;
+//   int companiesCount = 0;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _fetchStats();
+//   }
+//   Future<void> _fetchStats() async {
+//     try {
+//       var patientsSnapshot = await _firestore.collection('patients').get();
+//       var doctorsSnapshot = await _firestore.collection('providers').get();
+//       var servicesSnapshot = await _firestore.collection('services').get();
+//       var appointmentsSnapshot = await _firestore.collection('appointments').get();
+//       var completedAppointmentsSnapshot =
+//           await _firestore.collection('appointments').where('status', isEqualTo: 'completed').get();
+//       var companiesSnapshot = await _firestore.collection('interpreterProfiles').get();
+//
+//       setState(() {
+//         patientCount = patientsSnapshot.docs.length;
+//         doctorCount = doctorsSnapshot.docs.length;
+//         serviceCount = servicesSnapshot.docs.length;
+//         appointmentCount = appointmentsSnapshot.docs.length;
+//         completedAppointments = completedAppointmentsSnapshot.docs.length;
+//         companiesCount = companiesSnapshot.docs.length;
+//       });
+//     } catch (e) {
+//       print("Error fetching stats: $e");
+//     }
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: PreferredSize(
+//         preferredSize: Size.fromHeight(80),
+//         child: TopNavBar(),
+//       ),
+//       body: SingleChildScrollView(
+//         child: CustomContainer(
+//           margin: const EdgeInsets.all(10),
+//           borderRadius: BorderRadius.circular(10),
+//           conColor: Colors.white,
+//           child: Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 16),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 SizedBox(height: 10),
+//                 Padding(
+//                   padding: EdgeInsets.symmetric(horizontal: 20),
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       Text(
+//                         "Dashboard",
+//                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+//                       ),
+//                       Row(
+//                         children: [
+//                           _buildTimeFilterButton("30 days"),
+//                           _buildTimeFilterButton("60 days"),
+//                           _buildTimeFilterButton("90 days"),
+//                           SizedBox(width: 10),
+//                           IconButton(
+//                             icon: Icon(Icons.refresh, color: Colors.black),
+//                             onPressed: _fetchStats,
+//                           ),
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 SizedBox(height: 10),
+//                 Divider(thickness: 1, color: Colors.grey[300]),
+//                 Text(
+//                   'General Statistics',
+//                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+//                 ),
+//                 SizedBox(height: 10),
+//                 Wrap(
+//                   spacing: 10,
+//                   runSpacing: 10,
+//                   children: [
+//                     StatCard(
+//                         title: "Patients",
+//                         value: "$patientCount",
+//                         icon: FontAwesomeIcons.users,
+//                         borderColor: Colors.green),
+//                     StatCard(
+//                         title: "Doctors",
+//                         value: "$doctorCount",
+//                         icon: FontAwesomeIcons.userDoctor,
+//                         borderColor: Colors.purple),
+//                     StatCard(
+//                         title: "InterPreters",
+//                         value: "$companiesCount",
+//                         icon: FontAwesomeIcons.building,
+//                         borderColor: Colors.amber),
+//                     StatCard(
+//                         title: "Appointments",
+//                         value: "$appointmentCount",
+//                         icon: FontAwesomeIcons.calendarCheck,
+//                         borderColor: Colors.teal),
+//                     StatCard(
+//                         title: "Services",
+//                         value: "$serviceCount",
+//                         icon: FontAwesomeIcons.conciergeBell,
+//                         borderColor: Colors.blue),
+//                     StatCard(
+//                         title: "Completed Appointments",
+//                         value: "$completedAppointments",
+//                         icon: FontAwesomeIcons.check,
+//                         borderColor: Colors.green),
+//                   ],
+//                 ),
+//                 SizedBox(height: 20),
+//                 const Text(
+//                   'General Statistics',
+//                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+//                 ),
+//                 const SizedBox(height: 16),
+//                 Row(
+//                   children: [
+//                     // First Card
+//                     Expanded(
+//                         child: Container(
+//                       height: 220,
+//                       decoration: BoxDecoration(
+//                         color: Colors.white,
+//                         borderRadius: BorderRadius.circular(12),
+//                         boxShadow: const [
+//                           BoxShadow(
+//                             color: Colors.black12,
+//                             blurRadius: 8,
+//                             offset: Offset(0, 4),
+//                           ),
+//                         ],
+//                       ),
+//                       padding: const EdgeInsets.all(16),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             'Confirmed Appointments per Day',
+//                             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+//                           ),
+//                           const SizedBox(height: 16),
+//                           Expanded(child: Center(child: Text('Graph or Data Here'))),
+//                         ],
+//                       ),
+//                     )),
+//                     const SizedBox(width: 16),
+//                     // Second Card
+//                     Expanded(
+//                         child: Container(
+//                       height: 220,
+//                       decoration: BoxDecoration(
+//                         color: Colors.white,
+//                         borderRadius: BorderRadius.circular(12),
+//                         boxShadow: const [
+//                           BoxShadow(
+//                             color: Colors.black12,
+//                             blurRadius: 8,
+//                             offset: Offset(0, 4),
+//                           ),
+//                         ],
+//                       ),
+//                       padding: const EdgeInsets.all(16),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text(
+//                             'New Patients Registered',
+//                             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+//                           ),
+//                           const SizedBox(height: 16),
+//                           Expanded(child: Center(child: Text('Graph or Data Here'))),
+//                         ],
+//                       ),
+//                     )),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//   Widget _buildTimeFilterButton(String label) {
+//     return Padding(
+//       padding: EdgeInsets.symmetric(horizontal: 5),
+//       child: InkWell(
+//         onTap: () {
+//           setState(() {
+//             selectedTimeFilter = label;
+//           });
+//         },
+//         child: Container(
+//           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//           decoration: BoxDecoration(
+//             color: selectedTimeFilter == label ? Colors.grey[400] : Colors.grey[300],
+//             borderRadius: BorderRadius.circular(8),
+//           ),
+//           child: Text(
+//             label,
+//             style: TextStyle(
+//               color: Colors.black,
+//               fontWeight: selectedTimeFilter == label ? FontWeight.bold : FontWeight.normal,
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'widget/stat_card.dart';
 import 'widget/top_nav_bar_widget.dart';
 
@@ -33,7 +269,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       var servicesSnapshot = await _firestore.collection('services').get();
       var appointmentsSnapshot = await _firestore.collection('appointments').get();
       var completedAppointmentsSnapshot =
-          await _firestore.collection('appointments').where('status', isEqualTo: 'completed').get();
+      await _firestore.collection('appointments').where('status', isEqualTo: 'completed').get();
       var companiesSnapshot = await _firestore.collection('interpreterProfiles').get();
 
       setState(() {
@@ -64,142 +300,140 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                 SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'dashboard'.tr, // Use translation key
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
                     children: [
-                      Text(
-                        "Dashboard",
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: [
-                          _buildTimeFilterButton("30 days"),
-                          _buildTimeFilterButton("60 days"),
-                          _buildTimeFilterButton("90 days"),
-                          SizedBox(width: 10),
-                          IconButton(
-                            icon: Icon(Icons.refresh, color: Colors.black),
-                            onPressed: _fetchStats,
-                          ),
-                        ],
+                      _buildTimeFilterButton('30_days'.tr), // Use translation key
+                      _buildTimeFilterButton('60_days'.tr), // Use translation key
+                      _buildTimeFilterButton('90_days'.tr), // Use translation key
+                      SizedBox(width: 10),
+                      IconButton(
+                        icon: Icon(Icons.refresh, color: Colors.black),
+                        onPressed: _fetchStats,
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 10),
-                Divider(thickness: 1, color: Colors.grey[300]),
-                Text(
-                  'General Statistics',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 10),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    StatCard(
-                        title: "Patients",
-                        value: "$patientCount",
-                        icon: FontAwesomeIcons.users,
-                        borderColor: Colors.green),
-                    StatCard(
-                        title: "Doctors",
-                        value: "$doctorCount",
-                        icon: FontAwesomeIcons.userDoctor,
-                        borderColor: Colors.purple),
-                    StatCard(
-                        title: "InterPreters",
-                        value: "$companiesCount",
-                        icon: FontAwesomeIcons.building,
-                        borderColor: Colors.amber),
-                    StatCard(
-                        title: "Appointments",
-                        value: "$appointmentCount",
-                        icon: FontAwesomeIcons.calendarCheck,
-                        borderColor: Colors.teal),
-                    StatCard(
-                        title: "Services",
-                        value: "$serviceCount",
-                        icon: FontAwesomeIcons.conciergeBell,
-                        borderColor: Colors.blue),
-                    StatCard(
-                        title: "Completed Appointments",
-                        value: "$completedAppointments",
-                        icon: FontAwesomeIcons.check,
-                        borderColor: Colors.green),
-                  ],
-                ),
-                SizedBox(height: 20),
-                const Text(
-                  'General Statistics',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 16),
-
-                Row(
-                  children: [
-                    // First Card
-                    Expanded(
-                        child: Container(
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Divider(thickness: 1, color: Colors.grey[300]),
+            Text(
+              'general_statistics'.tr, // Use translation key
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: [
+                StatCard(
+                    title: 'patients'.tr, // Use translation key
+                    value: "$patientCount",
+                    icon: FontAwesomeIcons.users,
+                    borderColor: Colors.green),
+                StatCard(
+                    title: 'doctors'.tr, // Use translation key
+                    value: "$doctorCount",
+                    icon: FontAwesomeIcons.userDoctor,
+                    borderColor: Colors.purple),
+                StatCard(
+                    title: 'interpreters'.tr, // Use translation key
+                    value: "$companiesCount",
+                    icon: FontAwesomeIcons.building,
+                    borderColor: Colors.amber),
+                StatCard(
+                    title: 'appointments'.tr, // Use translation key
+                    value: "$appointmentCount",
+                    icon: FontAwesomeIcons.calendarCheck,
+                    borderColor: Colors.teal),
+                StatCard(
+                    title: 'services'.tr, // Use translation key
+                    value: "$serviceCount",
+                    icon: FontAwesomeIcons.conciergeBell,
+                    borderColor: Colors.blue),
+                StatCard(
+                    title: 'completed_appointments'.tr, // Use translation key
+                    value: "$completedAppointments",
+                    icon: FontAwesomeIcons.check,
+                    borderColor: Colors.green),
+              ],
+            ),
+            SizedBox(height: 20),
+            Text(
+              'general_statistics'.tr, // Use translation key
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                // First Card
+                Expanded(
+                  child: Container(
                       height: 220,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Confirmed Appointments per Day',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: 16),
-                          Expanded(child: Center(child: Text('Graph or Data Here'))),
-                        ],
-                      ),
-                    )),
-                    const SizedBox(width: 16),
-                    // Second Card
-                    Expanded(
-                        child: Container(
-                      height: 220,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'New Patients Registered',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: 16),
-                          Expanded(child: Center(child: Text('Graph or Data Here'))),
-                        ],
-                      ),
-                    )),
+                        boxShadow: const <BoxShadow>[
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ), ],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'confirmed_appointments_per_day'.tr, // Use translation key
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 16),
+                            Expanded(child: Center(child: Text('graph_or_data_here'.tr))), // Use translation key
+                          ],
+                        ),
+                      )),
+                  SizedBox(width: 16),
+                  // Second Card
+                  Expanded(
+                      child: Container(
+                        height: 220,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'new_patients_registered'.tr, // Use translation key
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(height: 16),
+                            Expanded(child: Center(child: Text('graph_or_data_here'.tr))), // Use translation key
+                          ],
+                        ),
+                      )),
                   ],
                 ),
               ],

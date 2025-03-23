@@ -15,22 +15,12 @@ class HealthCenterEditScreen extends StatefulWidget {
 
 class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
   final _formKey = GlobalKey<FormState>();
+  late TextEditingController _nameController, _addressController, _cityController, _municipalityController;
+  late TextEditingController _provinceController, _phoneController, _emailController, _websiteController;
+  late TextEditingController _descriptionController, _sectorController, _latitudeController, _longitudeController;
 
-  late TextEditingController _nameController;
-  late TextEditingController _addressController;
-  late TextEditingController _cityController;
-  late TextEditingController _municipalityController;
-  late TextEditingController _provinceController;
-  late TextEditingController _phoneController;
-  late TextEditingController _emailController;
-  late TextEditingController _websiteController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _sectorController;
-  late TextEditingController _latitudeController;
-  late TextEditingController _longitudeController;
   bool _isActive = true;
   List<String> selectedServices = [];
-
   Map<String, Map<String, String>> availability = {};
 
   @override
@@ -58,8 +48,8 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
       context: context,
       initialTime: availability[day]![type]!.isNotEmpty
           ? TimeOfDay(
-              hour: int.parse(availability[day]![type]!.split(":")[0]),
-              minute: int.parse(availability[day]![type]!.split(":")[1].split(" ")[0]))
+          hour: int.parse(availability[day]![type]!.split(":")[0]),
+          minute: int.parse(availability[day]![type]!.split(":")[1].split(" ")[0]))
           : TimeOfDay.now(),
     );
     if (picked != null) {
@@ -93,7 +83,7 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Health Center updated successfully!')),
+        SnackBar(content: Text('health_center_updated'.tr)),
       );
 
       Get.back();
@@ -105,7 +95,9 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Edit Health Center',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
+        title: Text('edit_health_center'.tr, style: TextStyle(color: Colors.white)),
+        backgroundColor: AppTheme.primaryColor,
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -113,28 +105,26 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                _buildTextField(_nameController, 'Name'),
-                _buildTextField(_addressController, 'Address'),
-                _buildTextField(_cityController, 'City'),
-                _buildTextField(_municipalityController, 'Municipality'),
-                _buildTextField(_provinceController, 'Province'),
-                _buildTextField(_phoneController, 'Phone'),
-                _buildTextField(_emailController, 'Email'),
-                _buildTextField(_websiteController, 'Website'),
-                _buildTextField(_descriptionController, 'Description'),
-                _buildTextField(_sectorController, 'Sector'),
-
-                // 📍 Latitude & Longitude (Editable)
-                _buildTextField(_latitudeController, 'Latitude'),
-                _buildTextField(_longitudeController, 'Longitude'),
+                _buildTextField(_nameController, 'name'.tr),
+                _buildTextField(_addressController, 'address'.tr),
+                _buildTextField(_cityController, 'city'.tr),
+                _buildTextField(_municipalityController, 'municipality'.tr),
+                _buildTextField(_provinceController, 'province'.tr),
+                _buildTextField(_phoneController, 'phone'.tr),
+                _buildTextField(_emailController, 'email'.tr),
+                _buildTextField(_websiteController, 'website'.tr),
+                _buildTextField(_descriptionController, 'description'.tr),
+                _buildTextField(_sectorController, 'sector'.tr),
+                _buildTextField(_latitudeController, 'latitude'.tr),
+                _buildTextField(_longitudeController, 'longitude'.tr),
 
                 SizedBox(height: 20),
-                Text('Select Services', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text('select_services'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Wrap(
                   spacing: 5,
                   children: ['Cardiology', 'General Medicine', 'Pediatrics', 'Psychology'].map((service) {
                     return FilterChip(
-                      label: Text(service),
+                      label: Text(service.tr),
                       selected: selectedServices.contains(service),
                       onSelected: (selected) {
                         setState(() {
@@ -151,7 +141,7 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
 
                 SizedBox(height: 20),
                 SwitchListTile(
-                  title: Text('Active'),
+                  title: Text('active'.tr),
                   value: _isActive,
                   onChanged: (value) {
                     setState(() {
@@ -161,7 +151,7 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
                 ),
 
                 SizedBox(height: 20),
-                Text('Availability', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text('availability'.tr, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 ...availability.keys.map((day) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,14 +162,14 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
                           Expanded(
                             child: OutlinedButton(
                               onPressed: () => _selectTime(context, day, 'open'),
-                              child: Text(availability[day]!['open'] ?? 'Select Open Time'),
+                              child: Text(availability[day]!['open'] ?? 'select_open_time'.tr),
                             ),
                           ),
                           SizedBox(width: 8),
                           Expanded(
                             child: OutlinedButton(
                               onPressed: () => _selectTime(context, day, 'close'),
-                              child: Text(availability[day]!['close'] ?? 'Select Close Time'),
+                              child: Text(availability[day]!['close'] ?? 'select_close_time'.tr),
                             ),
                           ),
                         ],
@@ -201,7 +191,7 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text('Save Changes', style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: Text('save_changes'.tr, style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ],
@@ -221,7 +211,7 @@ class _HealthCenterEditScreenState extends State<HealthCenterEditScreen> {
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        validator: (value) => value!.isEmpty ? 'Please enter $label' : null,
+        validator: (value) => value!.isEmpty ? 'please_enter'.trParams({'field': label}) : null,
       ),
     );
   }

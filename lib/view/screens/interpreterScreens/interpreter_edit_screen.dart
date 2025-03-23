@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:coin_telelemedicina_web/model/interpreter_model.dart';
 import 'package:universal_html/html.dart' as html;
-
 import '../../../utils/AppTheme.dart';
 
 class EditInterpreterScreen extends StatefulWidget {
@@ -33,10 +32,14 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
 
   bool _isVerified = false;
 
-  final List<String> availableLanguages = ['English', 'French', 'Spanish', 'Sign Language'];
+  final List<String> availableLanguages = [
+    'english'.tr, 'french'.tr, 'spanish'.tr, 'sign_language'.tr
+  ];
   List<String> selectedLanguages = [];
 
-  final List<String> availableInterpreterTypes = ['Medical', 'Legal', 'Business', 'Community'];
+  final List<String> availableInterpreterTypes = [
+    'medical'.tr, 'legal'.tr, 'business'.tr, 'community'.tr
+  ];
   List<String> selectedInterpreterTypes = [];
 
   @override
@@ -105,14 +108,14 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Interpreter details updated successfully!')),
+          SnackBar(content: Text('interpreter_details_updated'.tr)),
         );
 
         Get.back();
       } catch (e) {
         print("Error updating interpreter: $e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update interpreter details')),
+          SnackBar(content: Text('failed_to_update_interpreter'.tr)),
         );
       } finally {
         setState(() {
@@ -125,10 +128,11 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         centerTitle: true,
-        title: Text('Edit Interpreter',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
-
+        title: Text('edit_interpreter'.tr, style: TextStyle(color: Colors.white)),
+        backgroundColor: AppTheme.primaryColor,
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -150,19 +154,19 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
               ),
               SizedBox(height: 20),
 
-              _buildTextField(_nameController, 'Full Name', Icons.person),
-              _buildTextField(_biographyController, 'Biography', Icons.info, maxLines: 3),
-              _buildTextField(_educationController, 'Education', Icons.school),
-              _buildTextField(_experienceController, 'Experience (years)', Icons.timer, isNumeric: true),
-              _buildTextField(_healthCenterController, 'Health Center ID', Icons.local_hospital),
-              _buildTextField(_ratingController, 'Rating', Icons.star, isNumeric: true),
-              _buildTextField(_totalRatingsController, 'Total Ratings', Icons.rate_review, isNumeric: true),
+              _buildTextField(_nameController, 'full_name'.tr, Icons.person),
+              _buildTextField(_biographyController, 'biography'.tr, Icons.info, maxLines: 3),
+              _buildTextField(_educationController, 'education'.tr, Icons.school),
+              _buildTextField(_experienceController, 'experience'.tr, Icons.timer, isNumeric: true),
+              _buildTextField(_healthCenterController, 'health_center_id'.tr, Icons.local_hospital),
+              _buildTextField(_ratingController, 'rating'.tr, Icons.star, isNumeric: true),
+              _buildTextField(_totalRatingsController, 'total_ratings'.tr, Icons.rate_review, isNumeric: true),
 
               // Language Selection
               SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Languages', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                child: Text('languages'.tr, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ),
               Wrap(
                 spacing: 10,
@@ -188,7 +192,7 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
               SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Interpreter Types', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                child: Text('interpreter_types'.tr, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ),
               Wrap(
                 spacing: 10,
@@ -221,7 +225,7 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
                       });
                     },
                   ),
-                  Text("Verified Interpreter"),
+                  Text("verified_interpreter".tr),
                 ],
               ),
               SizedBox(height: 24),
@@ -229,14 +233,14 @@ class _EditInterpreterScreenState extends State<EditInterpreterScreen> {
               isLoading
                   ? CircularProgressIndicator(color: Colors.green)
                   : ElevatedButton.icon(
-                      onPressed: _updateInterpreter,
-                      icon: Icon(Icons.save),
-                      label: Text('Save Changes'),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                        backgroundColor: Colors.green,
-                      ),
-                    ),
+                onPressed: _updateInterpreter,
+                icon: Icon(Icons.save),
+                label: Text('save_changes'.tr),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  backgroundColor: Colors.green,
+                ),
+              ),
             ],
           ),
         ),

@@ -31,12 +31,11 @@ class DisabilityScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Provinces & Municipalities",
+                    Text('provinces_and_municipalities'.tr, // Use translation key
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
-                                                                                     Get.to(() => MainLayout(child:AddDisabilityScreen()));
-
+                        Get.to(() => MainLayout(child: AddDisabilityScreen()));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -53,7 +52,7 @@ class DisabilityScreen extends StatelessWidget {
                                 width: 10,
                               ),
                               CustomText(
-                                text: 'Add Disability',
+                                text: 'add_disability'.tr, // Use translation key
                                 color: Colors.white,
                               )
                             ],
@@ -64,7 +63,6 @@ class DisabilityScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10),
-
                 // Filters Section
                 Row(
                   children: [
@@ -73,42 +71,40 @@ class DisabilityScreen extends StatelessWidget {
                       child: TextField(
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: "Search by name...",
+                          hintText: 'search_hint'.tr, // Use translation key
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         onChanged: (value) => disabilityController.searchQuery.value = value,
                       ),
                     ),
                     SizedBox(width: 10),
-
                     // Disability Filter Dropdown
                     Expanded(
                       child: Obx(() => DropdownButton<String>(
-                            value: disabilityController.selectedDisabilityFilter.value.isEmpty
-                                ? null
-                                : disabilityController.selectedDisabilityFilter.value,
-                            hint: Text("Select Disability"),
-                            isExpanded: true,
-                            items: disabilityController.disabilities
-                                .map((disability) => DropdownMenuItem<String>(
-                                      value: disability["id"],
-                                      child: Text(disability["name"]),
-                                    ))
-                                .toList(),
-                            onChanged: (value) =>
-                                disabilityController.selectedDisabilityFilter.value = value ?? "",
-                          )),
+                        value: disabilityController.selectedDisabilityFilter.value.isEmpty
+                            ? null
+                            : disabilityController.selectedDisabilityFilter.value,
+                        hint: Text('select_disability'.tr), // Use translation key
+                        isExpanded: true,
+                        items: disabilityController.disabilities
+                            .map((disability) => DropdownMenuItem<String>(
+                          value: disability["id"],
+                          child: Text(disability["name"]),
+                        ))
+                            .toList(),
+                        onChanged: (value) =>
+                        disabilityController.selectedDisabilityFilter.value = value ?? "",
+                      )),
                     ),
                     SizedBox(width: 10),
-
                     // Type Filter Dropdown
                     Expanded(
                       child: Obx(
-                        () => DropdownButton<String>(
+                            () => DropdownButton<String>(
                           value: disabilityController.selectedTypeFilter.value.isEmpty
                               ? null
                               : disabilityController.selectedTypeFilter.value,
-                          hint: Text("Select Type"),
+                          hint: Text('select_type'.tr), // Use translation key
                           isExpanded: true,
                           items: disabilityController.types.map((type) {
                             return DropdownMenuItem<String>(
@@ -120,9 +116,7 @@ class DisabilityScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(width: 10),
-
                     // Clear Filters Button
                     ElevatedButton(
                       onPressed: () {
@@ -130,13 +124,14 @@ class DisabilityScreen extends StatelessWidget {
                         disabilityController.selectedDisabilityFilter.value = '';
                         disabilityController.selectedTypeFilter.value = '';
                       },
-                      child: Text("Clear"),
+                      child: Text('clear'.tr), // Use translation key
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
                 // Disability Count
-                Obx(() => Text("${disabilityController.filteredDisabilities.length} disabilities found")),
+                Obx(() => Text(
+                    "${disabilityController.filteredDisabilities.length} ${'disabilities_found'.tr}")), // Use translation key
               ],
             ),
           ),
@@ -149,50 +144,50 @@ class DisabilityScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Expanded(
                   child: Obx(() => ListView.builder(
-                        itemCount: disabilityController.filteredDisabilities.length,
-                        itemBuilder: (context, index) {
-                          var disability = disabilityController.filteredDisabilities[index];
-                          return CustomContainer(
-                            margin: EdgeInsets.symmetric(vertical: 6),
-                            borderRadius: BorderRadius.circular(10),
-                            conColor: Colors.white,
-                            child: Row(
-                              spacing: 10,
+                    itemCount: disabilityController.filteredDisabilities.length,
+                    itemBuilder: (context, index) {
+                      var disability = disabilityController.filteredDisabilities[index];
+                      return CustomContainer(
+                        margin: EdgeInsets.symmetric(vertical: 6),
+                        borderRadius: BorderRadius.circular(10),
+                        conColor: Colors.white,
+                        child: Row(
+                          spacing: 10,
+                          children: [
+                            Icon(FontAwesomeIcons.wheelchair, color: Colors.green),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              spacing: 5,
                               children: [
-                                Icon(FontAwesomeIcons.wheelchair, color: Colors.green),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  spacing: 5,
-                                  children: [
-                                    Text(disability["name"],
-                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                    Text("${disability["types"]} types"),
-                                  ],
+                                Text(disability["name"],
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                Text("${disability["types"]} ${'types'.tr}"), // Use translation key
+                              ],
+                            ),
+                            Spacer(),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Edit Button
+                                IconButton(
+                                  icon: Icon(Icons.edit, color: Colors.black54),
+                                  onPressed: () {
+                                    // TODO: Implement Edit Disability
+                                  },
                                 ),
-                                Spacer(),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // Edit Button
-                                    IconButton(
-                                      icon: Icon(Icons.edit, color: Colors.black54),
-                                      onPressed: () {
-                                        // TODO: Implement Edit Disability
-                                      },
-                                    ),
-                                    // Delete Button
-                                    IconButton(
-                                      icon: Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () =>
-                                          disabilityController.deleteDisability(disability["id"]),
-                                    ),
-                                  ],
+                                // Delete Button
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () =>
+                                      disabilityController.deleteDisability(disability["id"]),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      )),
+                          ],
+                        ),
+                      );
+                    },
+                  )),
                 ),
               ),
             ),
