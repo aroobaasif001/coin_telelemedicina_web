@@ -62,51 +62,7 @@ List<String> selectedAccessibilityOptions = [];
     }
   }
 
-  // Future<void> _submitForm() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     final formattedAvailability = availability.map((day, times) => MapEntry(
-  //           day,
-  //           {
-  //             'open': times['open']?.format(context) ?? '',
-  //             'close': times['close']?.format(context) ?? '',
-  //           },
-  //         ));
 
-  //     await FirebaseFirestore.instance.collection('healthCenters').add({
-  //       'name': _nameController.text,
-  //       'address': _addressController.text,
-  //       'city': _cityController.text,
-  //       'municipality': _municipalityController.text,
-  //       'province': _provinceController.text,
-  //       'phone': _phoneController.text,
-  //       'email': _emailController.text,
-  //       'website': _websiteController.text,
-  //       'description': _descriptionController.text,
-  //       'sector': _sectorController.text,
-  //       'services': selectedServices,
-  //        'accessibilityOptions': selectedAccessibilityOptions,
-  //       'isActive': isActive,
-  //       'availability': formattedAvailability,
-  //        'coordinates': {
-  //         'latitude': double.tryParse(_latitudeController.text) ?? 0.0,
-  //         'longitude': double.tryParse(_longitudeController.text) ?? 0.0,
-  //       },
-  //       'createdAt': DateTime.now(),
-  //       'updatedAt': DateTime.now(),
-  //     });
-
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Health Center saved successfully!')),
-  //     );
-  //   }
-  // }
   Future<void> _submitForm() async {
   if (_formKey.currentState!.validate()) {
     setState(() {

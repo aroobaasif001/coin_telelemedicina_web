@@ -116,28 +116,28 @@ class _ServiceScreenState extends State<ServiceScreen> {
               const SizedBox(height: 16),
               _buildTextField(_priceController, 'Price', Icons.attach_money, isNumeric: true),
               const SizedBox(height: 16),
-              Obx(() => SwitchListTile(
-                    title: Text('Requires Interpreter'),
-                    value: controller.requiresInterpreter.value,
-                    onChanged: (value) => controller.requiresInterpreter(value),
-                  )),
-              const SizedBox(height: 16),
-              Obx(() => Wrap(
-                    spacing: 8,
-                    children: ['Type1', 'Type2', 'Type3'].map((type) {
-                      return FilterChip(
-                        label: Text(type),
-                        selected: controller.supportedInterpreterTypes.contains(type),
-                        onSelected: (bool selected) {
-                          if (selected) {
-                            controller.supportedInterpreterTypes.add(type);
-                          } else {
-                            controller.supportedInterpreterTypes.remove(type);
-                          }
-                        },
-                      );
-                    }).toList(),
-                  )),
+              // Obx(() => SwitchListTile(
+              //       title: Text('Requires Interpreter'),
+              //       value: controller.requiresInterpreter.value,
+              //       onChanged: (value) => controller.requiresInterpreter(value),
+              //     )),
+              // const SizedBox(height: 16),
+              // Obx(() => Wrap(
+              //       spacing: 8,
+              //       children: ['Type1', 'Type2', 'Type3'].map((type) {
+              //         return FilterChip(
+              //           label: Text(type),
+              //           selected: controller.supportedInterpreterTypes.contains(type),
+              //           onSelected: (bool selected) {
+              //             if (selected) {
+              //               controller.supportedInterpreterTypes.add(type);
+              //             } else {
+              //               controller.supportedInterpreterTypes.remove(type);
+              //             }
+              //           },
+              //         );
+              //       }).toList(),
+              //     )),
               const SizedBox(height: 24),
               Obx(() => controller.isLoading.value
                   ? CircularProgressIndicator()

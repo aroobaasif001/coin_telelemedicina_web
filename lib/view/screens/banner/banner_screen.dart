@@ -1,5 +1,7 @@
 // import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+// import 'package:coin_telelemedicina_web/view/home_screen.dart';
 // import 'package:coin_telelemedicina_web/widget/CustomText.dart';
+// import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,8 +23,9 @@
 //   @override
 //   void initState() {
 //     super.initState();
-//     fetchBanners(); 
+//     fetchBanners();
 //   }
+
 //   Future<void> fetchBanners() async {
 //     try {
 //       QuerySnapshot snapshot = await _firestore.collection('banners').get();
@@ -46,157 +49,171 @@
 //     }
 //   }
 
+//   Future<void> deleteBanner(String id) async {
+//     try {
+//       await _firestore.collection('banners').doc(id).delete();
+//       Get.snackbar('Success', 'Banner deleted successfully');
+//       fetchBanners();
+//     } catch (e) {
+//       print('Error deleting banner: $e');
+//       Get.snackbar('Error', 'Failed to delete banner');
+//     }
+//   }
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       backgroundColor: Colors.grey[100],
 //       appBar: PreferredSize(
-//         preferredSize: Size.fromHeight(80),
-//         child: TopNavBar(),
+//         preferredSize: const Size.fromHeight(80),
+//         child:  TopNavBar(),
 //       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 16),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Text("Banners", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-//                   GestureDetector(
-//                     onTap: () {
-//                       Get.to(() => AddBannerScreen());
-//                     },
-//                     child: Container(
-//                       decoration: BoxDecoration(color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(8.0),
-//                         child: Row(
-//                           children: [
-//                             Icon(Icons.add, color: Colors.white),
-//                             SizedBox(width: 10),
-//                             CustomText(text: 'New Banner', color: Colors.white),
-//                           ],
+//       body: CustomContainer(
+//         conColor: Colors.white,
+//         margin: EdgeInsets.all(10),
+//         borderRadius: BorderRadius.circular(10),
+//         child: SingleChildScrollView(
+//           child: Column(
+//             children: [
+//               Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 16),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     const Text("Banners", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+//                     GestureDetector(
+//                       onTap: () {
+//                                                              Get.to(() => MainLayout(child:AddBannerScreen()));},
+//                       child: Container(
+//                         decoration: BoxDecoration(color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
+//                         child: const Padding(
+//                           padding: EdgeInsets.all(8.0),
+//                           child: Row(
+//                             children: [
+//                               Icon(Icons.add, color: Colors.white),
+//                               SizedBox(width: 10),
+//                               CustomText(text: 'New Banner', color: Colors.white),
+//                             ],
+//                           ),
 //                         ),
 //                       ),
 //                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const SizedBox(height: 16),
-//             Padding(
-//               padding: const EdgeInsets.all(16.0),
-//               child: GridView.builder(
-//                 shrinkWrap: true,
-//                 itemCount: banners.length,
-//                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                   crossAxisCount: 3, // 3 columns
-//                   crossAxisSpacing: 16,
-//                   mainAxisSpacing: 16,
-//                   childAspectRatio: 0.8,
+//                   ],
 //                 ),
-//                 physics: NeverScrollableScrollPhysics(),
-//                 itemBuilder: (context, index) {
-//                   final banner = banners[index];
-
-//                   return Container(
-//                     decoration: BoxDecoration(
-//                       color: Colors.white,
-//                       borderRadius: BorderRadius.circular(10),
-//                       boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
-//                     ),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         // Placeholder Image
-//                         Container(
-//                           height: 200,
+//               ),
+//               const SizedBox(height: 16),
+//               LayoutBuilder(
+//                 builder: (context, constraints) {
+//                   int crossAxisCount = constraints.maxWidth > 800 ? 3 : 1;
+//                   return Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: GridView.builder(
+//                       shrinkWrap: true,
+//                       itemCount: banners.length,
+//                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: crossAxisCount,
+//                         crossAxisSpacing: 16,
+//                         mainAxisSpacing: 16,
+//                         childAspectRatio: 0.8,
+//                       ),
+//                       physics: const NeverScrollableScrollPhysics(),
+//                       itemBuilder: (context, index) {
+//                         final banner = banners[index];
+//                         return Container(
 //                           decoration: BoxDecoration(
-//                             color: Colors.grey.shade200,
-//                             borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+//                             color: Colors.white,
+//                             borderRadius: BorderRadius.circular(10),
+//                             boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
 //                           ),
-//                           child: const Center(
-//                             child: Icon(Icons.image, size: 40, color: Colors.grey),
-//                           ),
-//                         ),
-//                         // Banner Info
-//                         Padding(
-//                           padding: const EdgeInsets.all(10),
 //                           child: Column(
 //                             crossAxisAlignment: CrossAxisAlignment.start,
 //                             children: [
-//                               Text(
-//                                 banner['title'],
-//                                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-//                                 maxLines: 2,
-//                                 overflow: TextOverflow.ellipsis,
+//                               Container(
+//                                 height: 200,
+//                                 decoration: BoxDecoration(
+//                                   color: Colors.grey.shade200,
+//                                   borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+//                                 ),
+//                                 child: const Center(
+//                                   child: Icon(Icons.image, size: 40, color: Colors.grey),
+//                                 ),
 //                               ),
-//                               const SizedBox(height: 5),
-//                               Text(
-//                                 banner['description'],
-//                                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-//                                 maxLines: 2,
-//                                 overflow: TextOverflow.ellipsis,
+//                               Padding(
+//                                 padding: const EdgeInsets.all(10),
+//                                 child: Column(
+//                                   crossAxisAlignment: CrossAxisAlignment.start,
+//                                   children: [
+//                                     Text(
+//                                       banner['title'],
+//                                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+//                                       maxLines: 2,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                     const SizedBox(height: 5),
+//                                     Text(
+//                                       banner['description'],
+//                                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+//                                       maxLines: 2,
+//                                       overflow: TextOverflow.ellipsis,
+//                                     ),
+//                                     const SizedBox(height: 5),
+//                                     Row(
+//                                       children: [
+//                                         const Icon(Icons.calendar_today, size: 14),
+//                                         const SizedBox(width: 4),
+//                                         Text("Expiry: ${banner['expiry'].toLocal()}".split(' ')[0],
+//                                             style: const TextStyle(fontSize: 12)),
+//                                       ],
+//                                     ),
+//                                     const SizedBox(height: 5),
+//                                     Row(
+//                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                                       children: [
+//                                         Chip(
+//                                           label: Text(banner['status'], style: const TextStyle(fontSize: 12)),
+//                                           backgroundColor: Colors.green.shade300,
+//                                         ),
+//                                         Text(banner['order'], style: const TextStyle(fontSize: 12, color: Colors.grey)),
+//                                       ],
+//                                     ),
+//                                   ],
+//                                 ),
 //                               ),
-//                               const SizedBox(height: 5),
-//                               // Expiry Date and Status
-//                               Row(
-//                                 children: [
-//                                   const Icon(Icons.calendar_today, size: 14),
-//                                   const SizedBox(width: 4),
-//                                   Text("Hasta: ${banner['expiry'].toLocal()}".split(' ')[0], style: const TextStyle(fontSize: 12)),
-//                                 ],
-//                               ),
-//                               const SizedBox(height: 5),
-//                               // Status & Order
-//                               Row(
-//                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                 children: [
-//                                   Chip(
-//                                     label: Text(banner['status'], style: const TextStyle(fontSize: 12)),
-//                                     backgroundColor: Colors.green.shade300,
-//                                   ),
-//                                   Text(banner['order'], style: const TextStyle(fontSize: 12, color: Colors.grey)),
-//                                 ],
+//                               Padding(
+//                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//                                 child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.end,
+//                                   children: [
+//                                     IconButton(
+//                                       icon: const Icon(Icons.edit, color: Colors.green, size: 18),
+//                                       onPressed: () {
+//                                                              Get.to(() => MainLayout(child:AddBannerScreen()));
+                                                             
+//                                                              }
+                                      
+//                                     ),
+//                                     IconButton(
+//                                       icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+//                                       onPressed: () => deleteBanner(banner['id']),
+//                                     ),
+//                                   ],
+//                                 ),
 //                               ),
 //                             ],
 //                           ),
-//                         ),
-//                         // Action Buttons (Edit, Delete)
-//                         Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.end,
-//                             children: [
-//                               IconButton(
-//                                 icon: const Icon(Icons.edit, color: Colors.green, size: 18),
-//                                 onPressed: () {
-//                                   // Edit banner functionality
-//                                 },
-//                               ),
-//                               IconButton(
-//                                 icon: const Icon(Icons.delete, color: Colors.red, size: 18),
-//                                 onPressed: () {
-//                                   // Delete banner functionality
-//                                 },
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
+//                         );
+//                       },
 //                     ),
 //                   );
 //                 },
 //               ),
-//             ),
-//           ],
+//             ],
+//           ),
 //         ),
 //       ),
 //     );
 //   }
 // }
-
 
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/view/home_screen.dart';
@@ -237,6 +254,11 @@ class _BannersScreenState extends State<BannersScreen> {
           'expiry': (doc['endDate'] as Timestamp).toDate(),
           'order': doc['order'].toString(),
           'status': doc['isActive'] ? 'Active' : 'Inactive',
+          'actionUrl': doc['actionUrl'],
+          'type': doc['type'],
+          'startDate': (doc['startDate'] as Timestamp).toDate(),
+          'endDate': (doc['endDate'] as Timestamp).toDate(),
+          'isActive': doc['isActive'],
         };
       }).toList();
 
@@ -260,13 +282,222 @@ class _BannersScreenState extends State<BannersScreen> {
     }
   }
 
+  Future<void> editBanner(Map<String, dynamic> banner) async {
+    TextEditingController actionUrlController =
+        TextEditingController(text: banner['actionUrl']);
+    TextEditingController descriptionController =
+        TextEditingController(text: banner['description']);
+    TextEditingController titleController =
+        TextEditingController(text: banner['title']);
+    TextEditingController typeController =
+        TextEditingController(text: banner['type']);
+    TextEditingController orderController =
+        TextEditingController(text: banner['order']);
+    DateTime startDate = banner['startDate'];
+    DateTime endDate = banner['endDate'];
+    bool isActive = banner['isActive'];
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Edit Banner"),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Action URL",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                TextField(
+                  controller: actionUrlController,
+                  decoration: InputDecoration(
+                    hintText: "Enter action URL",
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text("Description",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    hintText: "Enter description",
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text("Start Date",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all()),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Text("${startDate.toLocal()}".split(' ')[0],
+                            style: TextStyle(fontSize: 14)),
+                        IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () async {
+                            DateTime pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: startDate,
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
+                                ) ??
+                                startDate;
+                            setState(() {
+                              startDate = pickedDate;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text("End Date",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all()),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Text("${endDate.toLocal()}".split(' ')[0],
+                            style: TextStyle(fontSize: 14)),
+                        IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () async {
+                            DateTime pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: endDate,
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
+                                ) ??
+                                endDate;
+                            setState(() {
+                              endDate = pickedDate;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text("Title",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    hintText: "Enter title",
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text("Type",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                TextField(
+                  controller: typeController,
+                  decoration: InputDecoration(
+                    hintText: "Enter type",
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text("Order",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                TextField(
+                  controller: orderController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Enter order",
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    Text("Is Active",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600)),
+                    Switch(
+                      value: isActive,
+                      onChanged: (value) {
+                        setState(() {
+                          isActive = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  await _firestore.collection('banners').doc(banner['id']).update({
+                    'actionUrl': actionUrlController.text,
+                    'description': descriptionController.text,
+                    'title': titleController.text,
+                    'type': typeController.text,
+                    'order': int.tryParse(orderController.text) ?? 1,
+                    'startDate': Timestamp.fromDate(startDate),
+                    'endDate': Timestamp.fromDate(endDate),
+                    'isActive': isActive,
+                    'updatedAt': Timestamp.fromDate(DateTime.now()),
+                  });
+                  Get.snackbar('Success', 'Banner updated successfully');
+                  fetchBanners();
+                  Navigator.pop(context);
+                } catch (e) {
+                  print('Error updating banner: $e');
+                  Get.snackbar('Error', 'Failed to update banner');
+                }
+              },
+              child: Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child:  TopNavBar(),
+        child: TopNavBar(),
       ),
       body: CustomContainer(
         conColor: Colors.white,
@@ -280,19 +511,25 @@ class _BannersScreenState extends State<BannersScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Banners", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const Text("Banners",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
-                                                             Get.to(() => MainLayout(child:AddBannerScreen()));},
+                        Get.to(() => MainLayout(child: AddBannerScreen()));
+                      },
                       child: Container(
-                        decoration: BoxDecoration(color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(
+                            color: AppTheme.primaryColor,
+                            borderRadius: BorderRadius.circular(12)),
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Row(
                             children: [
                               Icon(Icons.add, color: Colors.white),
                               SizedBox(width: 10),
-                              CustomText(text: 'New Banner', color: Colors.white),
+                              CustomText(
+                                  text: 'New Banner', color: Colors.white),
                             ],
                           ),
                         ),
@@ -314,7 +551,7 @@ class _BannersScreenState extends State<BannersScreen> {
                         crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
-                        childAspectRatio: 0.9,
+                        childAspectRatio: 0.8,
                       ),
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
@@ -323,7 +560,10 @@ class _BannersScreenState extends State<BannersScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey.shade300, blurRadius: 5)
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -332,10 +572,12 @@ class _BannersScreenState extends State<BannersScreen> {
                                 height: 200,
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade200,
-                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                                  borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(10)),
                                 ),
                                 child: const Center(
-                                  child: Icon(Icons.image, size: 40, color: Colors.grey),
+                                  child: Icon(Icons.image,
+                                      size: 40, color: Colors.grey),
                                 ),
                               ),
                               Padding(
@@ -345,55 +587,65 @@ class _BannersScreenState extends State<BannersScreen> {
                                   children: [
                                     Text(
                                       banner['title'],
-                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
                                       banner['description'],
-                                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.grey[600]),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 5),
                                     Row(
                                       children: [
-                                        const Icon(Icons.calendar_today, size: 14),
+                                        const Icon(Icons.calendar_today,
+                                            size: 14),
                                         const SizedBox(width: 4),
-                                        Text("Expiry: ${banner['expiry'].toLocal()}".split(' ')[0],
+                                        Text(
+                                            "Expiry: ${banner['expiry'].toLocal()}"
+                                                .split(' ')[0],
                                             style: const TextStyle(fontSize: 12)),
                                       ],
                                     ),
                                     const SizedBox(height: 5),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Chip(
-                                          label: Text(banner['status'], style: const TextStyle(fontSize: 12)),
+                                          label: Text(banner['status'],
+                                              style: const TextStyle(fontSize: 12)),
                                           backgroundColor: Colors.green.shade300,
                                         ),
-                                        Text(banner['order'], style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                                        Text(banner['order'],
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey)),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: Colors.green, size: 18),
-                                      onPressed: () {
-                                                             Get.to(() => MainLayout(child:AddBannerScreen()));
-                                                             
-                                                             }
-                                      
+                                      icon: const Icon(Icons.edit,
+                                          color: Colors.green, size: 18),
+                                      onPressed: () => editBanner(banner),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete, color: Colors.red, size: 18),
+                                      icon: const Icon(Icons.delete,
+                                          color: Colors.red, size: 18),
                                       onPressed: () => deleteBanner(banner['id']),
                                     ),
                                   ],

@@ -28,24 +28,90 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _fetchStats() async {
     try {
-      var patientsSnapshot = await _firestore.collection('patients').get();
-      var doctorsSnapshot = await _firestore.collection('providers').get();
-      var servicesSnapshot = await _firestore.collection('services').get();
-      var appointmentsSnapshot = await _firestore.collection('appointments').get();
-      var completedAppointmentsSnapshot =
-          await _firestore.collection('appointments').where('status', isEqualTo: 'completed').get();
-      var companiesSnapshot = await _firestore.collection('interpreterProfiles').get();
+      DateTime startDate = _calculateStartDate(selectedTimeFilter);
+
+      // Convert DateTime to Timestamp for Firestore query
+      Timestamp startTimestamp = Timestamp.fromDate(startDate);
+
+      // Fetch patients
+      var patientsSnapshot = await _firestore
+          .collection('patients')
+          .where('regDate', isGreaterThanOrEqualTo: startTimestamp)
+          .get();
+
+      // Fetch doctors
+      var doctorsSnapshot = await _firestore
+          .collection('providers')
+          .where('createdAt', isGreaterThanOrEqualTo: startTimestamp)
+          .get();
+
+      // Fetch services
+      var servicesSnapshot = await _firestore
+          .collection('services')
+          .where('createdAt', isGreaterThanOrEqualTo: startTimestamp)
+          .get();
+
+      // Fetch appointments
+      var appointmentsSnapshot =
+          await _firestore.collection('appointments').get();
+
+      // Filter appointments based on the parsed date
+      var filteredAppointments = appointmentsSnapshot.docs.where((doc) {
+        var appointmentDateString =
+            doc['createdAt']; // Assuming 'createdAt' is the field name
+        DateTime appointmentDate = DateTime.parse(appointmentDateString);
+        return appointmentDate.isAfter(startDate);
+      }).toList();
+
+      // Fetch completed appointments
+      var completedAppointmentsSnapshot = await _firestore
+          .collection('appointments')
+          .where('status', isEqualTo: 'completed')
+          .get();
+
+      // Filter completed appointments based on the parsed date
+      var filteredCompletedAppointments =
+          completedAppointmentsSnapshot.docs.where((doc) {
+        var appointmentDateString =
+            doc['createdAt']; // Assuming 'createdAt' is the field name
+        DateTime appointmentDate = DateTime.parse(appointmentDateString);
+        return appointmentDate.isAfter(startDate);
+      }).toList();
+
+      // Fetch companies
+      var companiesSnapshot = await _firestore
+          .collection('interpreterProfiles')
+          .where('createdAt', isGreaterThanOrEqualTo: startTimestamp)
+          .get();
 
       setState(() {
         patientCount = patientsSnapshot.docs.length;
         doctorCount = doctorsSnapshot.docs.length;
         serviceCount = servicesSnapshot.docs.length;
-        appointmentCount = appointmentsSnapshot.docs.length;
-        completedAppointments = completedAppointmentsSnapshot.docs.length;
+        appointmentCount = filteredAppointments.length;
+        completedAppointments = filteredCompletedAppointments.length;
         companiesCount = companiesSnapshot.docs.length;
       });
     } catch (e) {
       print("Error fetching stats: $e");
+    }
+  }
+
+  DateTime _calculateStartDate(String timeFilter) {
+    DateTime now = DateTime.now();
+    switch (timeFilter) {
+      case "7 days":
+        return now.subtract(Duration(days: 7));
+      case "14 days":
+        return now.subtract(Duration(days: 14));
+      case "30 days":
+        return now.subtract(Duration(days: 30));
+      case "60 days":
+        return now.subtract(Duration(days: 60));
+      case "90 days":
+        return now.subtract(Duration(days: 90));
+      default:
+        return now.subtract(Duration(days: 30));
     }
   }
 
@@ -74,10 +140,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Text(
                         "Dashboard",
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       Row(
                         children: [
+                           _buildTimeFilterButton("7 days"),
+                            _buildTimeFilterButton("14 days"),
                           _buildTimeFilterButton("30 days"),
                           _buildTimeFilterButton("60 days"),
                           _buildTimeFilterButton("90 days"),
@@ -163,10 +232,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           Text(
                             'Confirmed Appointments per Day',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 16),
-                          Expanded(child: Center(child: Text('Graph or Data Here'))),
+                          Expanded(
+                              child: Center(child: Text('Graph or Data Here'))),
                         ],
                       ),
                     )),
@@ -192,10 +263,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           Text(
                             'New Patients Registered',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 16),
-                          Expanded(child: Center(child: Text('Graph or Data Here'))),
+                          Expanded(
+                              child: Center(child: Text('Graph or Data Here'))),
                         ],
                       ),
                     )),
@@ -217,18 +290,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
           setState(() {
             selectedTimeFilter = label;
           });
+          _fetchStats(); 
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: selectedTimeFilter == label ? Colors.grey[400] : Colors.grey[300],
+            color: selectedTimeFilter == label
+                ? Colors.grey[400]
+                : Colors.grey[300],
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             label,
             style: TextStyle(
               color: Colors.black,
-              fontWeight: selectedTimeFilter == label ? FontWeight.bold : FontWeight.normal,
+              fontWeight: selectedTimeFilter == label
+                  ? FontWeight.bold
+                  : FontWeight.normal,
             ),
           ),
         ),
