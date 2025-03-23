@@ -233,6 +233,8 @@
 //     );
 //   }
 // }
+import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/appoinent_graph.dart';
+import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/patientregisters_graph.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -379,61 +381,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Row(
               children: [
                 // First Card
-                Expanded(
-                  child: Container(
-                      height: 220,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: const <BoxShadow>[
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ), ],
-                        ),
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'confirmed_appointments_per_day'.tr, // Use translation key
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(height: 16),
-                            Expanded(child: Center(child: Text('graph_or_data_here'.tr))), // Use translation key
-                          ],
-                        ),
-                      )),
-                  SizedBox(width: 16),
-                  // Second Card
-                  Expanded(
-                      child: Container(
-                        height: 220,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 8,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'new_patients_registered'.tr, // Use translation key
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(height: 16),
-                            Expanded(child: Center(child: Text('graph_or_data_here'.tr))), // Use translation key
-                          ],
-                        ),
-                      )),
+                AppointmentGraph(),
+                const SizedBox(width: 16),
+                // Second Card
+                PatientRegistrationGraph(),
                   ],
                 ),
               ],

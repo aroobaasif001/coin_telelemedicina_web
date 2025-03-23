@@ -219,6 +219,7 @@ class TranslationsApp extends Translations {
       'select_municipality_and_sector': 'Select a municipality & enter a sector name!',
       'please_select_province_and_enter_municipality_name': 'Select a province & enter a municipality name!',
       'please_select_municipality_and_enter_sector_name': 'Select a municipality & enter a sector name!',
+      'are_you_sure_logout': 'Are you sure you want to logout?',
     },
     'es': {
       'admin_dashboard': 'Panel de Administrador',
@@ -434,7 +435,7 @@ class TranslationsApp extends Translations {
       'please_enter_province_name': '¡Por favor ingrese un nombre de provincia!',
       'please_select_province_and_enter_municipality_name': '¡Seleccione una provincia e ingrese un nombre de municipio!',
       'please_select_municipality_and_enter_sector_name': '¡Seleccione un municipio e ingrese un nombre de sector!',
-
+      'are_you_sure_logout': '¿Está seguro de que desea cerrar sesión?',
 
     },
   };
