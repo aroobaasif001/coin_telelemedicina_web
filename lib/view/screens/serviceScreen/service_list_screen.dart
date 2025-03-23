@@ -1,3 +1,4 @@
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/serviceScreen/service_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
@@ -23,7 +24,8 @@ class ServiceListScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton.icon(
               onPressed: () {
-                Get.to(() => ServiceScreen());
+                                                                             Get.to(() => MainLayout(child:ServiceScreen()));
+
               },
               icon: const Icon(Icons.add),
               label: const Text("Add New Service"),
@@ -130,7 +132,9 @@ class ServiceListScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.edit, color: Colors.green),
                                   onPressed: () {
-                                    Get.to(() => ServiceEditScreen(service: service));
+
+                                   Get.to(() => MainLayout(child:ServiceEditScreen(service: service,)));
+
                                   },
                                 ),
                                 IconButton(

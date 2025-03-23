@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:coin_telelemedicina_web/components/app_colors.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
@@ -260,7 +261,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                   icon: const Icon(Icons.remove_red_eye,
                                                       color: Colors.blue, size: 13),
                                                   onPressed: () {
-                                                    Get.to(() => PatientViewScreen(patient: patient));
+                                 Get.to(() => MainLayout(child: PatientViewScreen(patient: patient)));
                                                   },
                                                 ),
                                                 IconButton(

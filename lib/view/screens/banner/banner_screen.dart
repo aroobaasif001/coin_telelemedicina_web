@@ -199,6 +199,7 @@
 
 
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
@@ -282,8 +283,7 @@ class _BannersScreenState extends State<BannersScreen> {
                     const Text("Banners", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => AddBannerScreen());
-                      },
+                                                             Get.to(() => MainLayout(child:AddBannerScreen()));},
                       child: Container(
                         decoration: BoxDecoration(color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
                         child: const Padding(
@@ -314,7 +314,7 @@ class _BannersScreenState extends State<BannersScreen> {
                         crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
-                        childAspectRatio: 0.8,
+                        childAspectRatio: 0.9,
                       ),
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
@@ -387,8 +387,10 @@ class _BannersScreenState extends State<BannersScreen> {
                                     IconButton(
                                       icon: const Icon(Icons.edit, color: Colors.green, size: 18),
                                       onPressed: () {
-                                        Get.to(() => AddBannerScreen());
-                                      },
+                                                             Get.to(() => MainLayout(child:AddBannerScreen()));
+                                                             
+                                                             }
+                                      
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.delete, color: Colors.red, size: 18),

@@ -1,4 +1,5 @@
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/Provinces/addProvincesScreen/add_province_screen.dart';
 import 'package:coin_telelemedicina_web/widget/CustomText.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
@@ -33,7 +34,8 @@ class ProvinceScreen extends StatelessWidget {
                         TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => AddProvinceScreen());
+                         Get.to(() => MainLayout(child:AddProvinceScreen()));
+
                       },
                       child: Container(
                         decoration: BoxDecoration(

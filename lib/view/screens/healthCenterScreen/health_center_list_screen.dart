@@ -78,6 +78,7 @@
 //   }
 // }
 
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/controller/health_center_controller.dart';
 import 'package:coin_telelemedicina_web/view/screens/healthCenterScreen/health_center_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
@@ -225,13 +226,17 @@ class HealthCenterListScreen extends StatelessWidget {
                                       IconButton(
                                         icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 16),
                                         onPressed: () {
-                                          Get.to(() => HealthCenterDetailScreen(center: center));
+
+                                             Get.to(() => MainLayout(child:HealthCenterDetailScreen(center: center)));
+
                                         },
                                       ),
                                       IconButton(
                                         icon: const Icon(Icons.edit, color: Colors.red, size: 16),
                                         onPressed: () {
-                                          Get.to(() => HealthCenterEditScreen(center: center));
+                                             Get.to(() => MainLayout(child:HealthCenterEditScreen(center: center)));
+
+                                          
                                         },
                                       ),
                                     ],
@@ -252,7 +257,9 @@ class HealthCenterListScreen extends StatelessWidget {
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => HealthCenterScreen());
+          
+           Get.to(() => MainLayout(child:HealthCenterScreen()));
+
         },
         backgroundColor: AppTheme.primaryColor,
         child: Icon(Icons.add, color: Colors.white),

@@ -1,3 +1,4 @@
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/disabalityScreens/addDisabailityScreen/add_disabaility_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ class DisabilityScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => AddDisabilityScreen());
+                                                                                     Get.to(() => MainLayout(child:AddDisabilityScreen()));
+
                       },
                       child: Container(
                         decoration: BoxDecoration(

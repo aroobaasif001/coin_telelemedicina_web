@@ -32,9 +32,12 @@ class HomeController extends GetxController {
   }
 
   // Directly change page from code.
-  void changePage(int index) {
+  void changePage(int index , bool isFromMain) {
     currentPage.value = index;
+     if(isFromMain)
+    Get.back();
     sideMenu.changePage(index);
+   
   }
 
   // Toggle the "Usuarios" submenu.

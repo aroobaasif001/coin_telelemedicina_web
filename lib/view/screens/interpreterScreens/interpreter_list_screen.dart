@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/interpreterScreens/interpreter_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
@@ -181,13 +182,17 @@ class InterpreterListScreen extends StatelessWidget {
                                                 IconButton(
                                                   icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 18),
                                                   onPressed: () {
-                                                    Get.to(() => InterpreterDetailScreen(interpreter: interpreter));
+                                                     Get.to(() => MainLayout(child: InterpreterDetailScreen(interpreter: interpreter)));
+
+
+
                                                   },
                                                 ),
                                                 IconButton(
                                                   icon: const Icon(Icons.edit, color: Colors.red, size: 18),
                                                   onPressed: () {
-                                                    Get.to(() => EditInterpreterScreen(interpreter: interpreter));
+                                                             Get.to(() => MainLayout(child:EditInterpreterScreen(interpreter: interpreter)));
+
                                                   },
                                                 ),
                                               ],
@@ -265,7 +270,8 @@ class InterpreterListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => InterpreterScreen());
+          
+                                                             Get.to(() => MainLayout(child:InterpreterScreen()));
         },
         backgroundColor: AppTheme.primaryColor,
         child: Icon(Icons.add, color: Colors.white),

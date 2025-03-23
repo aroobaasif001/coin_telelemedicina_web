@@ -1,4 +1,6 @@
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/patient/patient_view_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +69,9 @@ class DoctorListScreen extends StatelessWidget {
                               },
                               children: [
                                 TableRow(
-                                  decoration: BoxDecoration(color: Colors.grey.shade200),
+                                  decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                                  ),    
                                   children: const [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
@@ -114,6 +118,9 @@ class DoctorListScreen extends StatelessWidget {
                                     },
                                     children: [
                                       TableRow(
+                                        decoration: BoxDecoration(
+                                           border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                                        ),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -148,7 +155,7 @@ class DoctorListScreen extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text(doctor.specialty),
+                                            child: Text(doctor.specialty,),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -166,14 +173,14 @@ class DoctorListScreen extends StatelessWidget {
                                                 IconButton(
                                                   icon: const Icon(Icons.remove_red_eye,
                                                       color: Colors.blue, size: 13),
-                                                  onPressed: () {
-                                                    Get.to(() => DoctorDetailScreen(doctor: doctor));
+                                                  onPressed: () {                             
+                                                     Get.to(() => MainLayout(child: DoctorDetailScreen(doctor: doctor)));
                                                   },
                                                 ),
                                                 IconButton(
                                                   icon: const Icon(Icons.edit, color: Colors.red, size: 13),
                                                   onPressed: () {
-                                                    Get.to(() => EditDoctorScreen(doctor: doctor));
+                                                     Get.to(() => MainLayout(child: EditDoctorScreen(doctor: doctor)));
                                                   },
                                                 ),
                                               ],
@@ -199,7 +206,7 @@ class DoctorListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => DoctorScreen());
+                                                     Get.to(() => MainLayout(child: DoctorScreen()));
         },
         backgroundColor: AppTheme.primaryColor,
         child: Icon(Icons.add, color: Colors.white),

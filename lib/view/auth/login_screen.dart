@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildEmailInput() {
     return CustomTextField(
       controller: emailInputController,
-      hintText: "Enter your email",
+      hintText: "enter_email".tr,
     );
   }
 
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, isVisible, child) {
         return CustomTextField(
           controller: passwordInputController,
-          hintText: "Enter your password",
+          hintText: "enter_password".tr,
           isObscure: !isVisible,
           suffixIcon: IconButton(
             icon: Icon(
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildSellerButton() {
-    return CustomButton(text: "Login", onPressed: _login);
+    return CustomButton(text: "login".tr, onPressed: _login);
   }
 
   Future<void> _login() async {
@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = passwordInputController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      Get.snackbar("Error", "Email and password cannot be empty");
+      Get.snackbar("error".tr, "email_and_password_cannot_be_empty".tr);
       return;
     }
 
@@ -81,11 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
       if (adminDoc.docs.isNotEmpty) {
         Get.to(() => HomeScreen());
       } else {
-        Get.snackbar("Error", "Invalid email or password");
+        Get.snackbar("error".tr, "invalid_email_or_password".tr);
       }
     } catch (e) {
       print("Firestore query error: $e");
-      Get.snackbar("Error", "An error occurred: $e");
+      Get.snackbar("error".tr, "${'an_error_occurred'.tr}: $e");
     }
   }
 
@@ -94,8 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0XFFF2F3F3),
-      appBar: const CustomAppBar(
-        title: "Admin Dashboard",
+      appBar: CustomAppBar(
+        title: "admin_dashboard".tr,
         isLeading: false,
       ),
       body: SingleChildScrollView(
@@ -125,8 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
       width: width,
       decoration: width == 400 || width == 500
           ? BoxDecoration(
-              border: Border.all(color: Colors.black38),
-            )
+        border: Border.all(color: Colors.black38),
+      )
           : const BoxDecoration(),
       padding: EdgeInsets.symmetric(
         horizontal: 18,
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Center(
             child: Text(
-              "Login",
+              "login".tr,
               style: TextStyle(
                 color: AppTheme.primaryColor,
                 fontSize: 30,
@@ -161,9 +161,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Email",
-            style: TextStyle(
+          Text(
+            "email".tr,
+            style: const TextStyle(
               color: Color(0XCC000000),
               fontSize: 18,
               fontFamily: 'Poppins',
@@ -173,9 +173,9 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 4),
           _buildEmailInput(),
           const SizedBox(height: 16),
-          const Text(
-            "Password",
-            style: TextStyle(
+          Text(
+            "password".tr,
+            style: const TextStyle(
               color: Color(0XCC000000),
               fontSize: 18,
               fontFamily: 'Poppins',
