@@ -63,8 +63,8 @@ class InterpreterListScreen extends StatelessWidget {
                                 0: FlexColumnWidth(3),
                                 1: FlexColumnWidth(2),
                                 2: FlexColumnWidth(2),
-                                3: FlexColumnWidth(3),
-                                4: FlexColumnWidth(2),
+                                3: FlexColumnWidth(2),
+                                4: FlexColumnWidth(1),
                               },
                               children: [
                                 TableRow(
@@ -124,7 +124,7 @@ class InterpreterListScreen extends StatelessWidget {
                                       0: FlexColumnWidth(3),
                                       1: FlexColumnWidth(2),
                                       2: FlexColumnWidth(2),
-                                      3: FlexColumnWidth(3),
+                                      3: FlexColumnWidth(1),
                                       4: FlexColumnWidth(2),
                                     },
                                     children: [
@@ -185,13 +185,13 @@ class InterpreterListScreen extends StatelessWidget {
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 IconButton(
-                                                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 18),
+                                                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 20),
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(child: InterpreterDetailScreen(interpreter: interpreter)));
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 18),
+                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 20),
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(child:EditInterpreterScreen(interpreter: interpreter)));
                                                   },

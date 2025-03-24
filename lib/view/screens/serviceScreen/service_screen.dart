@@ -21,35 +21,9 @@ class _ServiceScreenState extends State<ServiceScreen> {
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
 
-  Uint8List? _imageFile;
-  String? _imageUrl;
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePickerWeb.getImageAsBytes();
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = pickedFile;
-      });
-      await _uploadImageToFirebase();
-    }
-  }
-
-  Future<void> _uploadImageToFirebase() async {
-    if (_imageFile == null) return;
-    final storageRef = FirebaseStorage.instance
-        .ref()
-        .child('service_icons/${DateTime.now().millisecondsSinceEpoch}.jpg');
-
-    await storageRef.putData(_imageFile!);
-    _imageUrl = await storageRef.getDownloadURL();
-  }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      if (_imageUrl == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('please_upload_image'.tr)),
-        );
         return;
       }
 
@@ -58,10 +32,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
         'name': _nameController.text,
         'description': _descriptionController.text,
         'duration': int.parse(_durationController.text),
-        'icon': _imageUrl,
         'price': int.parse(_priceController.text),
-        'requiresInterpreter': controller.requiresInterpreter.value,
-        'supportedInterpreterTypes': controller.supportedInterpreterTypes,
         'isActive': true,
         'createdAt': DateTime.now(),
         'updatedAt': DateTime.now(),
@@ -69,7 +40,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
       await controller.addService(serviceData);
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,21 +61,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
               _buildTextField(_descriptionController, 'description'.tr, Icons.description, maxLines: 3),
               const SizedBox(height: 16),
               _buildTextField(_durationController, 'duration'.tr, Icons.timer, isNumeric: true),
-              const SizedBox(height: 16),
-              InkWell(
-                onTap: _pickImage,
-                child: _imageFile == null
-                    ? Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(child: Text('tap_to_select_image'.tr)),
-                )
-                    : Image.memory(_imageFile!, height: 150, width: double.infinity, fit: BoxFit.cover),
-              ),
               const SizedBox(height: 16),
               _buildTextField(_priceController, 'price'.tr, Icons.attach_money, isNumeric: true),
               const SizedBox(height: 16),

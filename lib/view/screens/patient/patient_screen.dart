@@ -258,18 +258,57 @@ class _PatientScreenState extends State<PatientScreen> {
                                               children: [
                                                 IconButton(
                                                   icon: const Icon(Icons.remove_red_eye,
-                                                      color: Colors.blue, size: 13),
+                                                      color: Colors.blue, size: 20),
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(child: PatientViewScreen(patient: patient)));
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.delete, color: Colors.red, size: 13),
+                                                  icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                                                   onPressed: () {
-                                                    FirebaseFirestore.instance
-                                                        .collection('patients')
-                                                        .doc(patientId)
-                                                        .delete();
+                                                    // Show a confirmation dialog
+                                                    showDialog(
+                                                      context: context, // Make sure you have access to the BuildContext
+                                                      builder: (BuildContext context) {
+                                                        return AlertDialog(
+                                                          title: const Text("Delete Patient"),
+                                                          content: const Text("Are you sure you want to delete this patient?"),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                // Close the dialog
+                                                                Navigator.of(context).pop();
+                                                              },
+                                                              child: const Text("Cancel"),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                // Delete the patient from Firestore
+                                                                FirebaseFirestore.instance
+                                                                    .collection('patients')
+                                                                    .doc(patientId)
+                                                                    .delete()
+                                                                    .then((_) {
+                                                                  // Show a success message (optional)
+                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                                    const SnackBar(content: Text("Patient deleted successfully")),
+                                                                  );
+                                                                }).catchError((error) {
+                                                                  // Show an error message (optional)
+                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                                    SnackBar(content: Text("Failed to delete patient: $error")),
+                                                                  );
+                                                                });
+
+                                                                // Close the dialog
+                                                                Navigator.of(context).pop();
+                                                              },
+                                                              child: const Text("Delete", style: TextStyle(color: Colors.red)),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
                                                   },
                                                 ),
                                               ],

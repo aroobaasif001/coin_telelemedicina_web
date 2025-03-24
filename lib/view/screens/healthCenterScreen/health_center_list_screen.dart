@@ -61,7 +61,7 @@ class HealthCenterListScreen extends StatelessWidget {
                         1: FlexColumnWidth(2),
                         2: FlexColumnWidth(2),
                         3: FlexColumnWidth(2),
-                        4: FlexColumnWidth(2),
+                        4: FlexColumnWidth(1),
                       },
                       children: [
                         TableRow(
@@ -108,7 +108,7 @@ class HealthCenterListScreen extends StatelessWidget {
                               0: FlexColumnWidth(3),
                               1: FlexColumnWidth(2),
                               2: FlexColumnWidth(2),
-                              3: FlexColumnWidth(2),
+                              3: FlexColumnWidth(1),
                               4: FlexColumnWidth(2),
                             },
                             children: [
@@ -145,13 +145,13 @@ class HealthCenterListScreen extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         IconButton(
-                                          icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 16),
+                                          icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 20),
                                           onPressed: () {
                                             Get.to(() => MainLayout(child: HealthCenterDetailScreen(center: center)));
                                           },
                                         ),
                                         IconButton(
-                                          icon: const Icon(Icons.edit, color: Colors.red, size: 16),
+                                          icon: const Icon(Icons.edit, color: Colors.red, size: 20),
                                           onPressed: () {
                                             Get.to(() => MainLayout(child: HealthCenterEditScreen(center: center)));
                                           },
