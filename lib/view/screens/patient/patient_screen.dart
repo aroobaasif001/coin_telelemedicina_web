@@ -131,8 +131,8 @@ class _PatientScreenState extends State<PatientScreen> {
                                 1: FlexColumnWidth(2),
                                 2: FlexColumnWidth(2),
                                 3: FlexColumnWidth(2),
-                                4: FlexColumnWidth(3),
-                                5: FlexColumnWidth(2),
+                                4: FlexColumnWidth(2),
+                                5: FlexColumnWidth(3),
                               },
                               children: [
                                 TableRow(
@@ -202,8 +202,8 @@ class _PatientScreenState extends State<PatientScreen> {
                                       1: FlexColumnWidth(2),
                                       2: FlexColumnWidth(2),
                                       3: FlexColumnWidth(2),
-                                      4: FlexColumnWidth(3),
-                                      5: FlexColumnWidth(2),
+                                      4: FlexColumnWidth(2),
+                                      5: FlexColumnWidth(3),
                                     },
                                     children: [
                                       TableRow(
@@ -323,11 +323,12 @@ class _PatientScreenState extends State<PatientScreen> {
                                                   icon: const Icon(
                                                       Icons.remove_red_eye,
                                                       color: Colors.blue,
-                                                      size: 13),
+                                                      size: 22),
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(
                                                         child:
                                                             PatientViewScreen(
+                                                              patientId:patient['uid'] ,
                                                                 patient:
                                                                     patient)));
                                                   },
@@ -336,7 +337,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 IconButton(
                                                   icon: const Icon(Icons.edit,
                                                       color: Colors.green,
-                                                      size: 13),
+                                                      size: 22),
                                                   onPressed: () {
                                                     Get.to(() =>
                                                         PatientRegistrationScreen(
@@ -350,7 +351,7 @@ class _PatientScreenState extends State<PatientScreen> {
                                                 IconButton(
                                                   icon: const Icon(Icons.delete,
                                                       color: Colors.red,
-                                                      size: 13),
+                                                      size: 22),
                                                   onPressed: () {
                                                     Get.defaultDialog(
                                                       title:

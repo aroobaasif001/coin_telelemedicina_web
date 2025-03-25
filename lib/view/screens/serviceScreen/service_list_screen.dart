@@ -41,7 +41,8 @@ class ServiceListScreen extends StatelessWidget {
               }
 
               if (serviceController.services.isEmpty) {
-                return Center(child: Text('no_services_found'.tr)); // Use translation key
+                return Center(
+                    child: Text('no_services_found'.tr)); // Use translation key
               }
 
               return GridView.builder(
@@ -64,22 +65,12 @@ class ServiceListScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Service Icon and Name
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey.shade300,
-                              backgroundImage: service.icon.isNotEmpty
-                                  ? NetworkImage(service.icon)
-                                  : const AssetImage('assets/default_service.png') as ImageProvider,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                service.name,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
-                          ],
+                        Expanded(
+                          child: Text(
+                            service.name,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                         ),
                         const SizedBox(height: 8),
                         // Service Description
@@ -94,7 +85,8 @@ class ServiceListScreen extends StatelessWidget {
                           children: [
                             const Icon(Icons.access_time, size: 16),
                             const SizedBox(width: 4),
-                            Text('${service.duration} ${'min'.tr}'), // Use translation key
+                            Text('${service.duration} ${'min'.tr}'),
+                            // Use translation key
                             const SizedBox(width: 12),
                             const Icon(Icons.attach_money, size: 16),
                             const SizedBox(width: 4),
@@ -108,27 +100,36 @@ class ServiceListScreen extends StatelessWidget {
                           children: [
                             // Status Badge
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: service.isActive ? Colors.green : Colors.red,
+                                color: service.isActive
+                                    ? Colors.green
+                                    : Colors.red,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                service.isActive ? 'active'.tr : 'inactive'.tr, // Use translation key
-                                style: const TextStyle(color: Colors.white, fontSize: 12),
+                                service.isActive ? 'active'.tr : 'inactive'.tr,
+                                // Use translation key
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
                               ),
                             ),
                             // Edit & Delete Actions
                             Row(
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.edit, color: Colors.green),
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.green),
                                   onPressed: () {
-                                    Get.to(() => MainLayout(child: ServiceEditScreen(service: service)));
+                                    Get.to(() => MainLayout(
+                                        child: ServiceEditScreen(
+                                            service: service)));
                                   },
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
                                   onPressed: () {
                                     // Uncomment to enable delete
                                     // serviceController.deleteService(service.id);

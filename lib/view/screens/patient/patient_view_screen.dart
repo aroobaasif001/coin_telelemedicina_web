@@ -8,8 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
 class PatientViewScreen extends StatelessWidget {
+  final String patientId;
   final Map<String, dynamic> patient;
-  const PatientViewScreen({Key? key, required this.patient}) : super(key: key);
+
+  const PatientViewScreen(
+      {Key? key, required this.patient, required this.patientId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,8 @@ class PatientViewScreen extends StatelessWidget {
                               CircleAvatar(
                                 radius: 60,
                                 backgroundImage: NetworkImage(
-                                    patient['profileImage'] ?? "https://via.placeholder.com/150"),
+                                    patient['profileImage'] ??
+                                        "https://via.placeholder.com/150"),
                               ),
                               const SizedBox(height: 12),
                               CustomText(
@@ -64,12 +69,15 @@ class PatientViewScreen extends StatelessWidget {
                                 _infoField("birthdate".tr, patient['dob']),
                                 _infoField("province".tr, patient['province']),
                                 _infoField("status".tr, patient['status']),
-                                _infoField("disability".tr, patient['disability']),
+                                _infoField(
+                                    "disability".tr, patient['disability']),
                               ]),
                               const SizedBox(height: 16),
                               _buildInfoCard("additional_information".tr, [
-                                _infoField("registration_date".tr, formatTimestamp(patient['regDate'])),
-                                _infoField("last_update".tr, patient['lastUpdate']),
+                                _infoField("registration_date".tr,
+                                    formatTimestamp(patient['regDate'])),
+                                _infoField(
+                                    "last_update".tr, patient['lastUpdate']),
                               ]),
                             ],
                           ),
@@ -102,24 +110,22 @@ class PatientViewScreen extends StatelessWidget {
                             height: 200,
                             child: TabBarView(
                               children: [
-                                // Upcoming Consultations Tab
                                 _buildConsultationList(
                                   FirebaseFirestore.instance
                                       .collection('appointments')
-                                      .where('patientId', isEqualTo: patient['patientId'])
-                                      .where('date', isGreaterThanOrEqualTo: DateTime.now().toIso8601String())
+                                      .where('patientId', isEqualTo: patientId)
+                                      .where('date',
+                                          isGreaterThanOrEqualTo:
+                                              DateTime.now().toIso8601String())
                                       .orderBy('date', descending: false)
                                       .snapshots(),
                                 ),
                                 // History Tab
-                                _buildConsultationList(
-                                  FirebaseFirestore.instance
-                                      .collection('appointments')
-                                      .where('patientId', isEqualTo: patient['patientId'])
-                                      .where('date', isLessThan: DateTime.now().toIso8601String())
-                                      .orderBy('date', descending: true)
-                                      .snapshots(),
-                                ),
+                                _buildConsultationList(FirebaseFirestore
+                                    .instance
+                                    .collection('appointments')
+                                    .where('patientId', isEqualTo: patientId)
+                                    .snapshots()),
                               ],
                             ),
                           ),
@@ -163,7 +169,8 @@ class PatientViewScreen extends StatelessWidget {
           padding: EdgeInsets.all(8),
           itemCount: appointments.length,
           itemBuilder: (context, index) {
-            var appointment = appointments[index].data() as Map<String, dynamic>;
+            var appointment =
+                appointments[index].data() as Map<String, dynamic>;
             return _buildConsultationItem(appointment);
           },
         );
