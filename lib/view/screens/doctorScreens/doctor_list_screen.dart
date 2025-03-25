@@ -114,7 +114,7 @@ class DoctorListScreen extends StatelessWidget {
                                       2: FlexColumnWidth(2),
                                       3: FlexColumnWidth(2),
                                       4: FlexColumnWidth(1),
-                                      5: FlexColumnWidth(2),
+                                      5: FlexColumnWidth(1),
                                     },
                                     children: [
                                       TableRow(
@@ -172,13 +172,13 @@ class DoctorListScreen extends StatelessWidget {
                                               children: [
                                                 IconButton(
                                                   icon: const Icon(Icons.remove_red_eye,
-                                                      color: Colors.blue, size: 13),
+                                                      color: Colors.blue, size: 20),
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(child: DoctorDetailScreen(doctor: doctor)));
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 13),
+                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 20),
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(child: EditDoctorScreen(doctor: doctor)));
                                                   },

@@ -217,7 +217,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import 'addDisabailityScreen/add_disabaility_screen.dart';
 class DisabilityScreen extends StatelessWidget {
-  final DisabilityController disabilityController = Get.put(DisabilityController());
+  final DisabilityController disabilityController = Get.find<DisabilityController>();
 
   @override
   Widget build(BuildContext context) {
@@ -352,44 +352,159 @@ class DisabilityScreen extends StatelessWidget {
                       itemCount: disabilityController.filteredDisabilities.length,
                       itemBuilder: (context, index) {
                         var disability = disabilityController.filteredDisabilities[index];
-                        return CustomContainer(
-                          margin: EdgeInsets.symmetric(vertical: 6),
-                          borderRadius: BorderRadius.circular(10),
-                          conColor: Colors.white,
-                          child: Row(
+                        // return CustomContainer(
+                        //   margin: EdgeInsets.symmetric(vertical: 6),
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   conColor: Colors.white,
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(FontAwesomeIcons.wheelchair, color: Colors.green),
+                        //       SizedBox(width: 10),
+                        //       Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.start,
+                        //         children: [
+                        //           Text(disability["name"],
+                        //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        //           Text("${disability["types"]} types"),
+                        //         ],
+                        //       ),
+                        //       Spacer(),
+                        //       Row(
+                        //         mainAxisSize: MainAxisSize.min,
+                        //         children: [
+                        //           // Edit Button
+                        //           IconButton(
+                        //             icon: Icon(Icons.edit, color: Colors.black54),
+                        //             onPressed: () {
+                        //               print("Edit button pressed for disability: ${disability["name"]}"); // Debugging
+                        //               _editDisabilityDialog(context, disability);
+                        //             },
+                        //           ),
+                        //           // Delete Button
+                        //           IconButton(
+                        //             icon: Icon(Icons.delete, color: Colors.red),
+                        //             onPressed: () =>
+                        //                 disabilityController.deleteDisability(disability["id"]),
+                        //           ),
+                        //
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // );
+                        return ExpansionTile(
+                          leading: Icon(FontAwesomeIcons.wheelchair, color: Colors.green),
+                          title: Row(
                             children: [
-                              Icon(FontAwesomeIcons.wheelchair, color: Colors.green),
-                              SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(disability["name"],
                                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  Text("${disability["types"]} types"),
-                                ],
+                              Text("${disability['types']} types"), ],
                               ),
                               Spacer(),
                               Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Edit Button
                                   IconButton(
-                                    icon: Icon(Icons.edit, color: Colors.black54),
+                                    icon: Icon(Icons.edit, color: Colors.blue),
                                     onPressed: () {
-                                      print("Edit button pressed for disability: ${disability["name"]}"); // Debugging
                                       _editDisabilityDialog(context, disability);
                                     },
                                   ),
-                                  // Delete Button
                                   IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
-                                    onPressed: () =>
-                                        disabilityController.deleteDisability(disability["id"]),
+                                    onPressed: () {
+                                      Get.defaultDialog(
+                                        title: "Delete",
+                                        middleText: "Are you sure you want to delete this disability?",
+                                        textConfirm: "Yes",
+                                        textCancel: "No",
+                                        confirmTextColor: Colors.white,
+                                        onConfirm: () async {
+                                          await disabilityController.deleteDisability(disability["id"]);
+                                          Get.back(); // Close dialog after delete
+                                        },
+                                        onCancel: () {
+                                          Get.back(); // Optional: Close dialog on cancel
+                                        },
+                                      );
+                                    },
                                   ),
+
                                 ],
                               ),
                             ],
                           ),
+                            children: [
+                              FutureBuilder<List<Map<String, dynamic>>>(
+                                future: disabilityController.fetchTypesForDisability(disability["id"]),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return Center(child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("Failed to load types"),
+                                    );
+                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text("No types available"),
+                                    );
+                                  } else {
+                                    return Column(
+                                      children: snapshot.data!.map((type) {
+                                        return ListTile(
+                                          leading: Icon(Icons.category, color: Colors.blue),
+                                          title: Text(type["name"]),
+                                        );
+                                      }).toList(),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                            // child: CustomContainer(
+                            //   margin: EdgeInsets.symmetric(vertical: 6),
+                            //   borderRadius: BorderRadius.circular(10),
+                            //   conColor: Colors.white,
+                            //   child: Row(
+                            //     children: [
+                            //       Icon(FontAwesomeIcons.wheelchair, color: Colors.green),
+                            //       SizedBox(width: 10),
+                            //       Column(
+                            //         crossAxisAlignment: CrossAxisAlignment.start,
+                            //         children: [
+                            //           Text(disability["name"],
+                            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            //           Text("${disability["types"]} types"),
+                            //         ],
+                            //       ),
+                            //       Spacer(),
+                            //       Row(
+                            //         mainAxisSize: MainAxisSize.min,
+                            //         children: [
+                            //           // Edit Button
+                            //           IconButton(
+                            //             icon: Icon(Icons.edit, color: Colors.black54),
+                            //             onPressed: () {
+                            //               print("Edit button pressed for disability: ${disability["name"]}"); // Debugging
+                            //               _editDisabilityDialog(context, disability);
+                            //             },
+                            //           ),
+                            //           // Delete Button
+                            //           IconButton(
+                            //             icon: Icon(Icons.delete, color: Colors.red),
+                            //             onPressed: () =>
+                            //                 disabilityController.deleteDisability(disability["id"]),
+                            //           ),
+                            //
+                            //         ],
+                            //       ),
+                            //     ],
+                            //   ),
+                            // )
                         );
                       },
                     )),
@@ -451,7 +566,7 @@ void _editDisabilityDialog(BuildContext context, Map<String, dynamic> disability
                 await disabilityController.updateDisability(
                   disability["id"],
                   nameController.text.trim(),
-                  typeController.text.trim(), // Pass the manually entered type
+                  // typeController.text.trim(), // Pass the manually entered type
                 );
                 Navigator.pop(context);
               } else {

@@ -42,6 +42,7 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
 
       Get.snackbar('Success'.tr, 'banner_added_successfully'.tr);
       clearFields(); // Clear the input fields after successful submission
+      Navigator.pop(context);
     } catch (e) {
       print('Error saving banner: $e');
       Get.snackbar('Error'.tr, 'failed_to_add_banner'.tr);

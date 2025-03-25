@@ -70,6 +70,7 @@ class InterpreterListScreen extends StatelessWidget {
                                 1: FlexColumnWidth(2),
                                 2: FlexColumnWidth(3),
                                 3: FlexColumnWidth(2),
+
                               },
                               children: [
                                 TableRow(
@@ -145,6 +146,7 @@ class InterpreterListScreen extends StatelessWidget {
                                       1: FlexColumnWidth(2),
                                       2: FlexColumnWidth(3),
                                       3: FlexColumnWidth(2),
+
                                     },
                                     children: [
                                       TableRow(
@@ -217,6 +219,7 @@ class InterpreterListScreen extends StatelessWidget {
                                                       Icons.remove_red_eye,
                                                       color: Colors.blue,
                                                       size: 18),
+
                                                   onPressed: () {
                                                     Get.to(() => MainLayout(
                                                         child: InterpreterDetailScreen(

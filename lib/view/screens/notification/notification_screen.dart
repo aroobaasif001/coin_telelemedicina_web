@@ -257,7 +257,9 @@ class _UserStatsWidget extends StatelessWidget {
         String readRate = totalNotifications > 0
             ? ((readNotifications / totalNotifications) * 100).toStringAsFixed(1) + "%"
             : "0%";
-
+        double readRatePercent = totalNotifications > 0
+            ? (readNotifications / totalNotifications)
+            : 0.0;
         return Column(
           children: [
             CustomText(
@@ -273,6 +275,14 @@ class _UserStatsWidget extends StatelessWidget {
             CustomText(
               text: "Read Rate: $readRate",
             ),
+            LinearProgressIndicator(
+              value: readRatePercent, // Should be 0.0 to 1.0
+              minHeight: 8,
+              backgroundColor: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.blue,
+            ),
+
           ],
         );
       },

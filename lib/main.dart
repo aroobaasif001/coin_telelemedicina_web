@@ -3,6 +3,7 @@ import 'package:coin_telelemedicina_web/translate/controller/translations_contro
 import 'package:coin_telelemedicina_web/translate/translations_app.dart';
 import 'package:coin_telelemedicina_web/view/auth/login_screen.dart';
 import 'package:coin_telelemedicina_web/view/home_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/disabalityScreens/controller/disbality_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,8 @@ void main() async {
 
   // Initialize controllers
   Get.lazyPut(() => HomeController());
+  Get.put(DisabilityController());
+
   final translationsController = Get.put(TranslationsController());
   await translationsController.loadLanguage(); // Load saved language
 
