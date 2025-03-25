@@ -63,7 +63,7 @@ class InterpreterDetailScreen extends StatelessWidget {
                           _buildDetailRow(Icons.timer, "experience".tr, "${interpreter.experience} ${'years'.tr}"),
                           _buildDetailRow(Icons.language, "languages".tr, interpreter.languages.join(', ')),
                           _buildDetailRow(Icons.translate, "interpreter_types".tr, interpreter.interpreterTypes.join(', ')),
-                          _buildDetailRow(Icons.star, "rating".tr, "${interpreter.rating} ⭐"),
+                          // _buildDetailRow(Icons.star, "rating".tr, "${interpreter.rating} ⭐"),
                         ],
                       ),
                     ),

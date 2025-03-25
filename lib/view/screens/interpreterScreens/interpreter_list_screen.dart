@@ -12,7 +12,8 @@ import 'interpreter_detail_screen.dart';
 import 'interpreter_edit_screen.dart';
 
 class InterpreterListScreen extends StatelessWidget {
-  final InterpreterController interpreterController = Get.put(InterpreterController());
+  final InterpreterController interpreterController =
+      Get.put(InterpreterController());
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,9 @@ class InterpreterListScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
-                      boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
+                      boxShadow: [
+                        BoxShadow(color: Colors.grey.shade300, blurRadius: 5)
+                      ],
                     ),
                     child: TextField(
                       style: const TextStyle(fontSize: 13),
@@ -47,13 +50,16 @@ class InterpreterListScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Expanded(
                     child: Obx(
-                          () {
+                      () {
                         if (interpreterController.isLoading.value) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
 
                         if (interpreterController.interpreters.isEmpty) {
-                          return Center(child: Text('no_interpreters_found'.tr)); // Use translation key
+                          return Center(
+                              child: Text('no_interpreters_found'
+                                  .tr)); // Use translation key
                         }
 
                         return Column(
@@ -62,38 +68,46 @@ class InterpreterListScreen extends StatelessWidget {
                               columnWidths: const {
                                 0: FlexColumnWidth(3),
                                 1: FlexColumnWidth(2),
-                                2: FlexColumnWidth(2),
+                                2: FlexColumnWidth(3),
                                 3: FlexColumnWidth(2),
-                                4: FlexColumnWidth(1),
+
                               },
                               children: [
                                 TableRow(
-                                  decoration: BoxDecoration(color: Colors.grey.shade200),
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade200),
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text('interpreter'.tr, // Use translation key
-                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('interpreter'.tr,
+                                          // Use translation key
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text('experience'.tr, // Use translation key
-                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('experience'.tr,
+                                          // Use translation key
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text('rating'.tr, // Use translation key
-                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text('registration'.tr,
+                                          // Use translation key
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text('registration'.tr, // Use translation key
-                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('actions'.tr, // Use translation key
-                                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                                      child: Text(
+                                          'actions'.tr, // Use translation key
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
@@ -101,19 +115,26 @@ class InterpreterListScreen extends StatelessWidget {
                             ),
                             Expanded(
                               child: ListView.builder(
-                                itemCount: interpreterController.interpreters.length,
+                                itemCount:
+                                    interpreterController.interpreters.length,
                                 itemBuilder: (context, index) {
-                                  final interpreter = interpreterController.interpreters[index];
+                                  final interpreter =
+                                      interpreterController.interpreters[index];
 
-                                  // Safely convert updatedAt to Date
                                   String updatedDate = '';
                                   try {
                                     if (interpreter.updatedAt is Timestamp) {
                                       updatedDate = DateFormat('yyyy-MM-dd')
-                                          .format((interpreter.updatedAt as Timestamp).toDate().toLocal());
+                                          .format((interpreter.updatedAt
+                                                  as Timestamp)
+                                              .toDate()
+                                              .toLocal());
                                     } else if (interpreter.updatedAt != null) {
                                       updatedDate = DateFormat('yyyy-MM-dd')
-                                          .format(DateTime.parse(interpreter.updatedAt.toString()).toLocal());
+                                          .format(DateTime.parse(interpreter
+                                                  .updatedAt
+                                                  .toString())
+                                              .toLocal());
                                     }
                                   } catch (e) {
                                     updatedDate = 'N/A';
@@ -123,9 +144,9 @@ class InterpreterListScreen extends StatelessWidget {
                                     columnWidths: const {
                                       0: FlexColumnWidth(3),
                                       1: FlexColumnWidth(2),
-                                      2: FlexColumnWidth(2),
-                                      3: FlexColumnWidth(1),
-                                      4: FlexColumnWidth(2),
+                                      2: FlexColumnWidth(3),
+                                      3: FlexColumnWidth(2),
+
                                     },
                                     children: [
                                       TableRow(
@@ -136,17 +157,23 @@ class InterpreterListScreen extends StatelessWidget {
                                               children: [
                                                 CircleAvatar(
                                                   radius: 30,
-                                                  backgroundColor: Colors.grey[300],
+                                                  backgroundColor:
+                                                      Colors.grey[300],
                                                   child: ClipOval(
                                                     child: Image.network(
                                                       interpreter.photoUrl,
                                                       width: 60,
                                                       height: 60,
                                                       fit: BoxFit.cover,
-                                                      errorBuilder: (context, error, stackTrace) {
-                                                        print("Error loading image: ${interpreter.photoUrl}");
-                                                        return Image.asset('assets/img.png',
-                                                            width: 60, height: 60, fit: BoxFit.cover);
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        print(
+                                                            "Error loading image: ${interpreter.photoUrl}");
+                                                        return Image.asset(
+                                                            'assets/img.png',
+                                                            width: 60,
+                                                            height: 60,
+                                                            fit: BoxFit.cover);
                                                       },
                                                     ),
                                                   ),
@@ -155,7 +182,9 @@ class InterpreterListScreen extends StatelessWidget {
                                                 Flexible(
                                                   child: Text(
                                                     interpreter.fullName,
-                                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                               ],
@@ -163,37 +192,50 @@ class InterpreterListScreen extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text('${interpreter.experience} ${'years'.tr}'), // Use translation key
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text('${interpreter.rating} ${'star'.tr}'), // Use translation key
+                                            child: Text(
+                                                '${interpreter.experience} ${'years'.tr}'), // Use translation key
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
-                                                const Icon(Icons.calendar_today, size: 13),
+                                                const Icon(Icons.calendar_today,
+                                                    size: 13),
                                                 const SizedBox(width: 4),
-                                                Text(updatedDate, style: const TextStyle(fontSize: 13)),
+                                                Text(updatedDate,
+                                                    style: const TextStyle(
+                                                        fontSize: 13)),
                                               ],
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 IconButton(
-                                                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue, size: 20),
+                                                  icon: const Icon(
+                                                      Icons.remove_red_eye,
+                                                      color: Colors.blue,
+                                                      size: 18),
+
                                                   onPressed: () {
-                                                    Get.to(() => MainLayout(child: InterpreterDetailScreen(interpreter: interpreter)));
+                                                    Get.to(() => MainLayout(
+                                                        child: InterpreterDetailScreen(
+                                                            interpreter:
+                                                                interpreter)));
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 20),
+                                                  icon: const Icon(Icons.edit,
+                                                      color: Colors.red,
+                                                      size: 18),
                                                   onPressed: () {
-                                                    Get.to(() => MainLayout(child:EditInterpreterScreen(interpreter: interpreter)));
+                                                    Get.to(() => MainLayout(
+                                                        child: EditInterpreterScreen(
+                                                            interpreter:
+                                                                interpreter)));
                                                   },
                                                 ),
                                               ],
