@@ -1,73 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
-import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../components/app_colors.dart';
-import '../../components/custom_appbar.dart';
-import '../../components/custom_button.dart';
-import '../../components/custom_textfield.dart';
-import '../../services/responsive.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../translate/controller/translations_controller.dart';
+import '../home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailInputController = TextEditingController();
-  final TextEditingController passwordInputController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final ValueNotifier<bool> isPasswordVisible = ValueNotifier(false);
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
+  bool isChecked = false;
+  final TranslationsController translationsController =
+  Get.put(TranslationsController());
 
   @override
   void dispose() {
-    emailInputController.dispose();
-    passwordInputController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     isPasswordVisible.dispose();
     isLoading.dispose();
     super.dispose();
   }
 
-  Widget _buildEmailInput() {
-    return CustomTextField(
-      controller: emailInputController,
-      hintText: "enter_email".tr,
-    );
-  }
-
-  Widget _buildPasswordInput() {
-    return ValueListenableBuilder<bool>(
-      valueListenable: isPasswordVisible,
-      builder: (context, isVisible, child) {
-        return CustomTextField(
-          controller: passwordInputController,
-          hintText: "enter_password".tr,
-          isObscure: !isVisible,
-          suffixIcon: IconButton(
-            icon: Icon(
-              isVisible ? Icons.visibility : Icons.visibility_off,
-              color: AppColor.primary,
-            ),
-            onPressed: () => isPasswordVisible.value = !isVisible,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSellerButton() {
-    return CustomButton(text: "login".tr, onPressed: _login);
-  }
-
   Future<void> _login() async {
-    String email = emailInputController.text.trim();
-    String password = passwordInputController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      Get.snackbar("error".tr, "email_and_password_cannot_be_empty".tr);
+      Get.snackbar("Error", "Email and password cannot be empty");
       return;
     }
 
@@ -81,38 +49,123 @@ class _LoginScreenState extends State<LoginScreen> {
       if (adminDoc.docs.isNotEmpty) {
         Get.to(() => HomeScreen());
       } else {
-        Get.snackbar("error".tr, "invalid_email_or_password".tr);
+        Get.snackbar("Error", "Invalid email or password");
       }
     } catch (e) {
-      print("Firestore query error: $e");
-      Get.snackbar("error".tr, "${'an_error_occurred'.tr}: $e");
+      Get.snackbar("Error", "An error occurred: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0XFFF2F3F3),
-      appBar: CustomAppBar(
-        title: "admin_dashboard".tr,
-        isLeading: false,
+      backgroundColor: const Color(0xFFF4F5F7),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF4F5F7),
+        title: Padding(
+          padding:
+          EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.9),
+          child: Obx(
+                () => DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: translationsController.selectedLanguage.value,
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87),
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    translationsController.updateLanguage(newValue);
+                  }
+                },
+                items: [
+                  DropdownMenuItem(
+                    value: 'en',
+                    child: Text("English"),
+                  ),
+                  DropdownMenuItem(
+                    value: 'es',
+                    child: Text("Spanish"),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Responsive(
-          mobile: _phoneWidget(double.maxFinite),
-          tablet: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _phoneWidget(400),
+      body: Center(
+        child: Container(
+          width: 450,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
             ],
           ),
-          desktop: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _phoneWidget(500),
+              Image.asset("assets/img.png", height: 100, width: 100),
+              const SizedBox(height: 15),
+              Text(
+                "Welcome back!",
+                style: GoogleFonts.poppins(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+              ),
+              Text(
+                "Log in to your account",
+                style: GoogleFonts.poppins(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 20),
+              _buildTextField("Email", emailController, false),
+              const SizedBox(height: 12),
+              _buildTextField("Password", passwordController, true),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      return Checkbox(
+                        activeColor: Colors.green,
+                        value: isChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            isChecked = value!;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                  Text("Remember me", style: GoogleFonts.poppins(fontSize: 14)),
+                ],
+              ),
+              const SizedBox(height: 15),
+              SizedBox(
+                width: double.infinity,
+                height: 45,
+                child: ElevatedButton(
+                  onPressed: _login,
+                  style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: Text(
+                    "Login",
+                    style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
             ],
           ),
         ),
@@ -120,72 +173,261 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _phoneWidget(double width) {
-    return Container(
-      width: width,
-      decoration: width == 400 || width == 500
-          ? BoxDecoration(
-        border: Border.all(color: Colors.black38),
-      )
-          : const BoxDecoration(),
-      padding: EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: width == 500 ? 10 : 20,
-      ),
-      child: Column(
-        children: [
-          _buildSignUpForm(width),
-          SizedBox(height: 40),
-          _buildSellerButton(),
-          SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSignUpForm(double width) {
-    return SizedBox(
-      width: width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              "login".tr,
-              style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontSize: 30,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
+  Widget _buildTextField(
+      String label, TextEditingController controller, bool isPassword) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style:
+            GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 5),
+        ValueListenableBuilder<bool>(
+          valueListenable:
+          isPassword ? isPasswordVisible : ValueNotifier(false),
+          builder: (context, isVisible, child) {
+            return TextField(
+              controller: controller,
+              obscureText: isPassword ? !isVisible : false,
+              decoration: InputDecoration(
+                hintText: "Enter $label",
+                suffixIcon: isPassword
+                    ? IconButton(
+                  icon: Icon(
+                      isVisible ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.grey[600]),
+                  onPressed: () => isPasswordVisible.value = !isVisible,
+                )
+                    : null,
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.grey[200],
               ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "email".tr,
-            style: const TextStyle(
-              color: Color(0XCC000000),
-              fontSize: 18,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 4),
-          _buildEmailInput(),
-          const SizedBox(height: 16),
-          Text(
-            "password".tr,
-            style: const TextStyle(
-              color: Color(0XCC000000),
-              fontSize: 18,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 4),
-          _buildPasswordInput(),
-        ],
-      ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
+
+
+
+///
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:get/get_core/src/get_main.dart';
+// import 'package:google_fonts/google_fonts.dart';
+//
+// import '../home_screen.dart';
+//
+// class LoginScreen extends StatefulWidget {
+//   const LoginScreen({super.key});
+//
+//   @override
+//   _LoginScreenState createState() => _LoginScreenState();
+// }
+//
+// class _LoginScreenState extends State<LoginScreen> {
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController passwordController = TextEditingController();
+//   final ValueNotifier<bool> isPasswordVisible = ValueNotifier(false);
+//   final ValueNotifier<bool> isLoading = ValueNotifier(false);
+//   bool isChecked = false;
+//
+//   @override
+//   void dispose() {
+//     emailController.dispose();
+//     passwordController.dispose();
+//     isPasswordVisible.dispose();
+//     isLoading.dispose();
+//     super.dispose();
+//   }
+//
+//   Future<void> _login() async {
+//     String email = emailController.text.trim();
+//     String password = passwordController.text.trim();
+//
+//     if (email.isEmpty || password.isEmpty) {
+//       Get.snackbar("Error", "Email and password cannot be empty");
+//       return;
+//     }
+//
+//     try {
+//       final adminDoc = await FirebaseFirestore.instance
+//           .collection('admin')
+//           .where('email', isEqualTo: email)
+//           .where('password', isEqualTo: password)
+//           .get();
+//
+//       if (adminDoc.docs.isNotEmpty) {
+//         Get.to(() => HomeScreen());
+//       } else {
+//         Get.snackbar("Error", "Invalid email or password");
+//       }
+//     } catch (e) {
+//       print("Firestore query error: $e");
+//       Get.snackbar("Error", "An error occurred: $e");
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: const Color(0xFFF4F5F7),
+//       appBar: AppBar(
+//         backgroundColor: const Color(0xFFF4F5F7),
+//         title: Padding(
+//           padding:
+//               EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.9),
+//           child: DropdownButtonHideUnderline(
+//             child: DropdownButton<String>(
+//               value: "English",
+//               icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+//               style: const TextStyle(
+//                   fontSize: 12,
+//                   fontWeight: FontWeight.w600,
+//                   color: Colors.black87),
+//               onChanged: (String? newValue) {},
+//               items: ["English", "Spanish"]
+//                   .map<DropdownMenuItem<String>>((String value) {
+//                 return DropdownMenuItem<String>(
+//                   value: value,
+//                   child: Text(value),
+//                 );
+//               }).toList(),
+//             ),
+//           ),
+//         ),
+//       ),
+//       body: Center(
+//         child: Container(
+//           width: 450,
+//           padding: const EdgeInsets.all(10),
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.circular(10),
+//             boxShadow: [
+//               BoxShadow(
+//                 color: Colors.black.withOpacity(0.1),
+//                 blurRadius: 10,
+//                 spreadRadius: 2,
+//               ),
+//             ],
+//           ),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Image.asset("assets/img.png",height: 100,width: 100,),
+//               const SizedBox(height: 15),
+//               Text(
+//                 "Welcome back!",
+//                 style: GoogleFonts.poppins(
+//                     fontSize: 22,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.black87),
+//               ),
+//               Text(
+//                 "Log in to your account",
+//                 style: GoogleFonts.poppins(fontSize: 14, color: Colors.black54),
+//               ),
+//               const SizedBox(height: 20),
+//               _buildTextField("Email", emailController, false),
+//               const SizedBox(height: 12),
+//               Stack(
+//                 children: [
+//                   _buildTextField("Password", passwordController, true),
+//                   // Positioned(
+//                   //   left: 222,
+//                   //   child: Text(
+//                   //     "Forgot password?",
+//                   //     style: GoogleFonts.poppins(
+//                   //         fontSize: 14, color: Colors.green),
+//                   //   ),
+//                   // ),
+//                 ],
+//               ),
+//               const SizedBox(height: 10),
+//               Row(
+//                 children: [
+//                   StatefulBuilder(
+//                     builder: (context, setState) {
+//                       return Checkbox(
+//                         activeColor: Colors.green,
+//                         value: isChecked,
+//                         onChanged: (value) {
+//                           setState(() {
+//                             isChecked = value!;
+//                           });
+//                         },
+//                       );
+//                     },
+//                   ),
+//                   Text("Remember me", style: GoogleFonts.poppins(fontSize: 14)),
+//                 ],
+//               ),
+//               const SizedBox(height: 15),
+//               SizedBox(
+//                 width: double.infinity,
+//                 height: 45,
+//                 child: ElevatedButton(
+//                   onPressed: _login,
+//                   style:
+//                       ElevatedButton.styleFrom(backgroundColor: Colors.green),
+//                   child: Text(
+//                     "Login",
+//                     style: GoogleFonts.poppins(
+//                         fontSize: 16,
+//                         fontWeight: FontWeight.bold,
+//                         color: Colors.white),
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 15),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget _buildTextField(
+//       String label, TextEditingController controller, bool isPassword) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text(label,
+//             style:
+//                 GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500)),
+//         const SizedBox(height: 5),
+//         ValueListenableBuilder<bool>(
+//           valueListenable:
+//               isPassword ? isPasswordVisible : ValueNotifier(false),
+//           builder: (context, isVisible, child) {
+//             return TextField(
+//               controller: controller,
+//               obscureText: isPassword ? !isVisible : false,
+//               decoration: InputDecoration(
+//                 hintText: "Enter $label",
+//                 suffixIcon: isPassword
+//                     ? IconButton(
+//                         icon: Icon(
+//                             isVisible ? Icons.visibility : Icons.visibility_off,
+//                             color: Colors.grey[600]),
+//                         onPressed: () => isPasswordVisible.value = !isVisible,
+//                       )
+//                     : null,
+//                 border: OutlineInputBorder(),
+//                 filled: true,
+//                 fillColor: Colors.grey[200],
+//               ),
+//             );
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           : const Locale('es'), // Set initial locale
       fallbackLocale: const Locale('en'), // Fallback locale
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(), // Or LoginScreen(),
+      home: LoginScreen(), // Or LoginScreen(),
     );
   }
 }
