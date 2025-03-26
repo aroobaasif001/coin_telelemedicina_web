@@ -17,6 +17,7 @@ class LocationController extends GetxController {
     fetchProvinces();
     super.onInit();
   }
+
   Future<void> fetchProvinces() async {
     try {
       QuerySnapshot snapshot = await firestore.collection("provinces").get();
@@ -25,6 +26,7 @@ class LocationController extends GetxController {
       print("Error fetching provinces: $e");
     }
   }
+
   Future<void> fetchMunicipalities(String province) async {
     selectedProvince.value = province;
     selectedMunicipality.value = "";
@@ -44,6 +46,7 @@ class LocationController extends GetxController {
       print("Error fetching municipalities: $e");
     }
   }
+
   Future<void> fetchSectors(String municipality) async {
     selectedMunicipality.value = municipality;
     selectedSector.value = "";

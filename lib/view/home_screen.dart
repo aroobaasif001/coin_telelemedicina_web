@@ -1,5 +1,6 @@
 import 'package:coin_telelemedicina_web/utils/sidebar.dart';
 import 'package:coin_telelemedicina_web/view/auth/login_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/appointments/get_all_appoitment.dart';
 import 'package:coin_telelemedicina_web/view/screens/banner/banner_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/dashboardScreen/dashboard_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_list_screen.dart';
@@ -37,6 +38,7 @@ class HomeScreen extends GetView<HomeController> {
                   children: [
                     DashboardScreen(),
                     NotificationScreen(),
+                    GetAllAppointment(),
                     PatientScreen(),
                     DoctorListScreen(),
                     InterpreterListScreen(),
@@ -77,6 +79,7 @@ class MainLayout extends StatelessWidget {
                       children: [
                         DashboardScreen(),
                         NotificationScreen(),
+                        GetAllAppointment(),
                         PatientScreen(),
                         DoctorListScreen(),
                         InterpreterListScreen(),

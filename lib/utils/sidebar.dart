@@ -205,15 +205,20 @@ class _SidebarMenuState extends State<SidebarMenu> {
                   title: 'notifications'.tr,
                   index: 1,
                 ),
+                _buildMenuItem(
+                  icon: Icons.my_library_books_outlined,
+                  title: "Appointments",
+                  index: 2,
+                ),
                 _buildExpandableMenu(
                   icon: Icons.people,
                   title: 'users'.tr,
                   isExpanded: isUsersExpanded,
                   onExpand: () => setState(() => isUsersExpanded = !isUsersExpanded),
                   children: [
-                    _buildMenuItem(icon: Icons.person, title: 'patients'.tr, index: 2, isChild: true),
-                    _buildMenuItem(icon: Icons.local_hospital_outlined, title: 'doctors'.tr, index: 3, isChild: true),
-                    _buildMenuItem(icon: Icons.translate_outlined, title: 'interpreters'.tr, index: 4, isChild: true),
+                    _buildMenuItem(icon: Icons.person, title: 'patients'.tr, index: 3, isChild: true),
+                    _buildMenuItem(icon: Icons.local_hospital_outlined, title: 'doctors'.tr, index: 4, isChild: true),
+                    _buildMenuItem(icon: Icons.translate_outlined, title: 'interpreters'.tr, index: 5, isChild: true),
                   ],
                 ),
                 _buildExpandableMenu(
@@ -222,11 +227,11 @@ class _SidebarMenuState extends State<SidebarMenu> {
                   isExpanded: isContentExpanded,
                   onExpand: () => setState(() => isContentExpanded = !isContentExpanded),
                   children: [
-                    _buildMenuItem(icon: Icons.image, title: 'banners'.tr, index: 5, isChild: true),
-                    _buildMenuItem(icon: Icons.medical_services, title: 'services'.tr, index: 6, isChild: true),
-                    _buildMenuItem(icon: Icons.accessible, title: 'disabilities'.tr, index: 7, isChild: true),
-                    _buildMenuItem(icon: Icons.local_hospital, title: 'health_centers'.tr, index: 8, isChild: true),
-                    _buildMenuItem(icon: Icons.map, title: 'provinces'.tr, index: 9, isChild: true),
+                    _buildMenuItem(icon: Icons.image, title: 'banners'.tr, index: 6, isChild: true),
+                    _buildMenuItem(icon: Icons.medical_services, title: 'services'.tr, index: 7, isChild: true),
+                    _buildMenuItem(icon: Icons.accessible, title: 'disabilities'.tr, index: 8, isChild: true),
+                    _buildMenuItem(icon: Icons.local_hospital, title: 'health_centers'.tr, index: 9, isChild: true),
+                    _buildMenuItem(icon: Icons.map, title: 'provinces'.tr, index: 10, isChild: true),
                   ],
                 ),
                 ListTile(

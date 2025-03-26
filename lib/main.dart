@@ -36,13 +36,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.grey.shade100,
       ),
-      translations: TranslationsApp(), // Add translations
+      translations: TranslationsApp(),
       locale: translationsController.selectedLanguage.value == 'en'
           ? const Locale('en')
-          : const Locale('es'), // Set initial locale
-      fallbackLocale: const Locale('en'), // Fallback locale
+          : const Locale('es'),
+      fallbackLocale: const Locale('en'),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(), // Or LoginScreen(),
+      // home: LoginScreen(),
+      home: HomeScreen(),
     );
   }
 }
