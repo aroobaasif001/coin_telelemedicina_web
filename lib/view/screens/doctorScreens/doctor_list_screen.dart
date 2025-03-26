@@ -1,4 +1,6 @@
+import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/doctorScreens/doctor_screen.dart';
+import 'package:coin_telelemedicina_web/view/screens/patient/patient_view_screen.dart';
 import 'package:coin_telelemedicina_web/widget/custom_appbar.dart';
 import 'package:coin_telelemedicina_web/widget/custom_container.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,7 @@ class DoctorListScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          CustomAppbar(title: 'Doctors List'),
+          CustomAppbar(title: 'doctors_list'.tr), // Use translation key
           // Doctor List
           Expanded(
             child: CustomContainer(
@@ -34,8 +36,8 @@ class DoctorListScreen extends StatelessWidget {
                     ),
                     child: TextField(
                       style: const TextStyle(fontSize: 13),
-                      decoration: const InputDecoration(
-                        hintText: 'Search by name, email or disability...',
+                      decoration: InputDecoration(
+                        hintText: 'search_hint'.tr, // Use translation key
                         prefixIcon: Icon(Icons.search, size: 13),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(12),
@@ -45,15 +47,15 @@ class DoctorListScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Expanded(
                     child: Obx(
-                      () {
+                          () {
                         if (doctorController.isLoading.value) {
                           return Center(child: CircularProgressIndicator());
                         }
-                    
+
                         if (doctorController.doctors.isEmpty) {
-                          return Center(child: Text('No doctors found.'));
+                          return Center(child: Text('no_doctors_found'.tr)); // Use translation key
                         }
-                    
+
                         return Column(
                           children: [
                             Table(
@@ -67,31 +69,33 @@ class DoctorListScreen extends StatelessWidget {
                               },
                               children: [
                                 TableRow(
-                                  decoration: BoxDecoration(color: Colors.grey.shade200),
-                                  children: const [
+                                  decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                                  ),
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Doctor",
+                                      child: Text('doctor'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Specialty",
+                                      child: Text('specialty'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Experience",
+                                      child: Text('experience'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Rating",
+                                      child: Text('rating'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text("Actions",
+                                      child: Text('actions'.tr, // Use translation key
                                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
@@ -110,10 +114,13 @@ class DoctorListScreen extends StatelessWidget {
                                       2: FlexColumnWidth(2),
                                       3: FlexColumnWidth(2),
                                       4: FlexColumnWidth(1),
-                                      5: FlexColumnWidth(2),
+                                      5: FlexColumnWidth(1),
                                     },
                                     children: [
                                       TableRow(
+                                        decoration: BoxDecoration(
+                                          border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
+                                        ),
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -152,11 +159,11 @@ class DoctorListScreen extends StatelessWidget {
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text('${doctor.experience} yrs'),
+                                            child: Text('${doctor.experience} ${'years'.tr}'), // Use translation key
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text('${doctor.rating} ★'),
+                                            child: Text('${doctor.rating} ${'star'.tr}'), // Use translation key
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -165,15 +172,15 @@ class DoctorListScreen extends StatelessWidget {
                                               children: [
                                                 IconButton(
                                                   icon: const Icon(Icons.remove_red_eye,
-                                                      color: Colors.blue, size: 13),
+                                                      color: Colors.blue, size: 20),
                                                   onPressed: () {
-                                                    Get.to(() => DoctorDetailScreen(doctor: doctor));
+                                                    Get.to(() => MainLayout(child: DoctorDetailScreen(doctor: doctor)));
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 13),
+                                                  icon: const Icon(Icons.edit, color: Colors.red, size: 20),
                                                   onPressed: () {
-                                                    Get.to(() => EditDoctorScreen(doctor: doctor));
+                                                    Get.to(() => MainLayout(child: EditDoctorScreen(doctor: doctor)));
                                                   },
                                                 ),
                                               ],
@@ -199,7 +206,7 @@ class DoctorListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => DoctorScreen());
+          Get.to(() => MainLayout(child: DoctorScreen()));
         },
         backgroundColor: AppTheme.primaryColor,
         child: Icon(Icons.add, color: Colors.white),

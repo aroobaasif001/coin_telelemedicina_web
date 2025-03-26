@@ -1,202 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:coin_telelemedicina_web/model/provider_model.dart';
-
-// class EditDoctorScreen extends StatefulWidget {
-//   final ProviderModel doctor;
-
-//   EditDoctorScreen({required this.doctor});
-
-//   @override
-//   _EditDoctorScreenState createState() => _EditDoctorScreenState();
-// }
-
-// class _EditDoctorScreenState extends State<EditDoctorScreen> {
-//   final _formKey = GlobalKey<FormState>();
-
-//   late TextEditingController _nameController;
-//   late TextEditingController _emailController;
-//   late TextEditingController _specialtyController;
-//   late TextEditingController _experienceController;
-//   late TextEditingController _biographyController;
-//   late TextEditingController _educationController;
-//   late TextEditingController _languagesController;
-//   late TextEditingController _ratingController;
-//   late TextEditingController _reviewCountController;
-//   late TextEditingController _healthCenterController;
-//   late TextEditingController _generatedPasswordController;
-
-//   bool _isVerified = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _nameController = TextEditingController(text: widget.doctor.fullName);
-//     _emailController = TextEditingController(text: widget.doctor.email);
-//     _specialtyController = TextEditingController(text: widget.doctor.specialty);
-//     _experienceController = TextEditingController(text: widget.doctor.experience.toString());
-//     _biographyController = TextEditingController(text: widget.doctor.biography);
-//     _educationController = TextEditingController(text: widget.doctor.education);
-//     _languagesController = TextEditingController(text: widget.doctor.languages.join(', '));
-//     _ratingController = TextEditingController(text: widget.doctor.rating.toString());
-//     _reviewCountController = TextEditingController(text: widget.doctor.reviewCount.toString());
-//     _healthCenterController = TextEditingController(text: widget.doctor.healthCenterId);
-//    // _generatedPasswordController = TextEditingController(text: widget.doctor.generatedPassword ?? '');
-//     _isVerified = widget.doctor.isVerified;
-//   }
-
-//   void _updateDoctor() async {
-//     if (_formKey.currentState!.validate()) {
-//       try {
-//         await FirebaseFirestore.instance.collection('providers').doc(widget.doctor.docId).update({
-//           'fullName': _nameController.text,
-//           'email': _emailController.text,
-//           'specialty': _specialtyController.text,
-//           'experience': int.parse(_experienceController.text),
-//           'biography': _biographyController.text,
-//           'education': _educationController.text,
-//           'languages': _languagesController.text.split(',').map((e) => e.trim()).toList(),
-//           'rating': double.parse(_ratingController.text),
-//           'reviewCount': int.parse(_reviewCountController.text),
-//           'healthCenterId': _healthCenterController.text,
-//           'generatedPassword': _generatedPasswordController.text,
-//           'isVerified': _isVerified,
-//           'updatedAt': Timestamp.now(),
-//         });
-
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Doctor details updated successfully!')),
-//         );
-
-//         Navigator.pop(context);
-//       } catch (e) {
-//         print("Error updating doctor: $e");
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Failed to update doctor details')),
-//         );
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Edit Doctor')),
-//       body: SingleChildScrollView(
-//         padding: EdgeInsets.all(16.0),
-//         child: Form(
-//           key: _formKey,
-//           child: Column(
-//             children: [
-//               // Profile Image
-//               CircleAvatar(
-//                 radius: 50,
-//                 backgroundImage: widget.doctor.photoUrl.isNotEmpty
-//                     ? NetworkImage(widget.doctor.photoUrl)
-//                     : AssetImage('assets/default_avatar.png') as ImageProvider,
-//               ),
-//               SizedBox(height: 20),
-
-//               // Full Name
-//               _buildTextField(_nameController, 'Full Name', Icons.person),
-
-//               // Email
-//               _buildTextField(_emailController, 'Email', Icons.email),
-
-//               // Specialty
-//               _buildTextField(_specialtyController, 'Specialty', Icons.medical_services),
-
-//               // Experience
-//               _buildTextField(_experienceController, 'Experience (years)', Icons.timer, isNumber: true),
-
-//               // Biography
-//               _buildTextField(_biographyController, 'Biography', Icons.info_outline, isMultiLine: true),
-
-//               // Education
-//               _buildTextField(_educationController, 'Education', Icons.school),
-
-//               // Languages
-//               _buildTextField(_languagesController, 'Languages (comma-separated)', Icons.language),
-
-//               // Rating
-//               _buildTextField(_ratingController, 'Rating', Icons.star, isNumber: true),
-
-//               // Review Count
-//               _buildTextField(_reviewCountController, 'Review Count', Icons.reviews, isNumber: true),
-
-//               // Health Center ID
-//               _buildTextField(_healthCenterController, 'Health Center ID', Icons.business),
-
-//               // Generated Password
-//               _buildTextField(_generatedPasswordController, 'Generated Password', Icons.lock),
-
-//               // Is Verified (Checkbox)
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 children: [
-//                   Checkbox(
-//                     value: _isVerified,
-//                     onChanged: (bool? value) {
-//                       setState(() {
-//                         _isVerified = value ?? false;
-//                       });
-//                     },
-//                   ),
-//                   Text("Verified Doctor"),
-//                 ],
-//               ),
-//               SizedBox(height: 24),
-
-//               // Save Button
-//               ElevatedButton.icon(
-//                 onPressed: _updateDoctor,
-//                 icon: Icon(Icons.save),
-//                 label: Text('Save Changes'),
-//                 style: ElevatedButton.styleFrom(
-//                   minimumSize: Size(double.infinity, 50),
-//                   textStyle: TextStyle(fontSize: 16),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildTextField(
-//     TextEditingController controller,
-//     String label,
-//     IconData icon, {
-//     bool isNumber = false,
-//     bool isMultiLine = false,
-//   }) {
-//     return Padding(
-//       padding: const EdgeInsets.only(bottom: 16.0),
-//       child: TextFormField(
-//         controller: controller,
-//         decoration: InputDecoration(
-//           labelText: label,
-//           border: OutlineInputBorder(),
-//           prefixIcon: Icon(icon),
-//         ),
-//         keyboardType: isNumber ? TextInputType.number : (isMultiLine ? TextInputType.multiline : TextInputType.text),
-//         maxLines: isMultiLine ? 3 : 1,
-//         validator: (value) => value!.isEmpty ? 'Enter $label' : null,
-//       ),
-//     );
-//   }
-// }
-
-
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:coin_telelemedicina_web/model/provider_model.dart';
 import 'package:universal_html/html.dart' as html;
-
+import 'package:get/get.dart';
 import '../../../utils/AppTheme.dart';
 
 class EditDoctorScreen extends StatefulWidget {
@@ -227,7 +35,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
   bool _isVerified = false;
 
   final List<String> availableLanguages = [
-    'Kreyol', 'French', 'English', 'Spanish', 'Sign Language', 'Portuguese'
+    'kreyol'.tr, 'french'.tr, 'english'.tr, 'spanish'.tr, 'sign_language'.tr, 'portuguese'.tr
   ];
   List<String> selectedLanguages = [];
 
@@ -299,14 +107,14 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Doctor details updated successfully!')),
+          SnackBar(content: Text('doctor_details_updated'.tr)),
         );
 
         Navigator.pop(context);
       } catch (e) {
         print("Error updating doctor: $e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update doctor details')),
+          SnackBar(content: Text('failed_to_update_doctor'.tr)),
         );
       } finally {
         setState(() {
@@ -321,7 +129,9 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Edit Doctor Details',style: TextStyle(color: Colors.white),),backgroundColor:AppTheme.primaryColor),
+        title: Text('edit_doctor_details'.tr, style: TextStyle(color: Colors.white)),
+        backgroundColor: AppTheme.primaryColor,
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -343,21 +153,21 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
               ),
               SizedBox(height: 20),
 
-              _buildTextField(_nameController, 'Full Name', Icons.person),
-              _buildTextField(_emailController, 'Email', Icons.email),
-              _buildTextField(_specialtyController, 'Specialty', Icons.medical_services),
-              _buildTextField(_experienceController, 'Experience (years)', Icons.timer, isNumeric: true),
-              _buildTextField(_biographyController, 'Biography', Icons.description_outlined, maxLines: 3),
-              _buildTextField(_educationController, 'Education', Icons.school),
-              _buildTextField(_ratingController, 'Rating', Icons.star, isNumeric: true),
-              _buildTextField(_reviewCountController, 'Review Count', Icons.reviews, isNumeric: true),
-              _buildTextField(_healthCenterController, 'Health Center ID', Icons.business),
+              _buildTextField(_nameController, 'full_name'.tr, Icons.person),
+              _buildTextField(_emailController, 'email'.tr, Icons.email),
+              _buildTextField(_specialtyController, 'specialty'.tr, Icons.medical_services),
+              _buildTextField(_experienceController, 'experience'.tr, Icons.timer, isNumeric: true),
+              _buildTextField(_biographyController, 'biography'.tr, Icons.description_outlined, maxLines: 3),
+              _buildTextField(_educationController, 'education'.tr, Icons.school),
+              _buildTextField(_ratingController, 'rating'.tr, Icons.star, isNumeric: true),
+              _buildTextField(_reviewCountController, 'review_count'.tr, Icons.reviews, isNumeric: true),
+              _buildTextField(_healthCenterController, 'health_center_id'.tr, Icons.business),
 
               // Language Selection
               SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Languages', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                child: Text('languages'.tr, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               ),
               Wrap(
                 spacing: 10,
@@ -391,7 +201,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
                       });
                     },
                   ),
-                  Text("Verified Doctor"),
+                  Text("verified_doctor".tr),
                 ],
               ),
               SizedBox(height: 24),
@@ -400,17 +210,17 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
               isLoading
                   ? CircularProgressIndicator(color: Colors.green)
                   : ElevatedButton.icon(
-                      onPressed: _updateDoctor,
-                      icon: Icon(Icons.save),
-                      label: Text('Save Changes'),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                onPressed: _updateDoctor,
+                icon: Icon(Icons.save),
+                label: Text('save_changes'.tr),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -431,7 +241,7 @@ class _EditDoctorScreenState extends State<EditDoctorScreen> {
           prefixIcon: Icon(icon),
         ),
         maxLines: maxLines,
-        validator: (value) => value!.isEmpty ? 'Please enter $label' : null,
+        validator: (value) => value!.isEmpty ? '${'please_enter'.tr} $label' : null,
       ),
     );
   }

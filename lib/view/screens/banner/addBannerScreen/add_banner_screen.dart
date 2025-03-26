@@ -1,9 +1,7 @@
-import 'package:coin_telelemedicina_web/components/app_colors.dart';
 import 'package:coin_telelemedicina_web/utils/AppTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../../../widget/CustomText.dart';
 
 class AddBannerScreen extends StatefulWidget {
@@ -42,11 +40,12 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
         'updatedAt': Timestamp.fromDate(DateTime.now()),
       });
 
-      Get.snackbar('Success', 'Banner added successfully');
+      Get.snackbar('Success'.tr, 'banner_added_successfully'.tr);
       clearFields(); // Clear the input fields after successful submission
+      Navigator.pop(context);
     } catch (e) {
       print('Error saving banner: $e');
-      Get.snackbar('Error', 'Failed to add banner');
+      Get.snackbar('Error'.tr, 'failed_to_add_banner'.tr);
     }
   }
 
@@ -66,11 +65,11 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
   // Date picker functions for start and end date
   Future<void> pickStartDate() async {
     DateTime pickedDate = await showDatePicker(
-          context: context,
-          initialDate: startDate,
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
-        ) ??
+      context: context,
+      initialDate: startDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    ) ??
         startDate;
     setState(() {
       startDate = pickedDate;
@@ -79,11 +78,11 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
 
   Future<void> pickEndDate() async {
     DateTime pickedDate = await showDatePicker(
-          context: context,
-          initialDate: endDate,
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2101),
-        ) ??
+      context: context,
+      initialDate: endDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    ) ??
         endDate;
     setState(() {
       endDate = pickedDate;
@@ -96,7 +95,7 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: AppTheme.primaryColor,
-        title: Text("Add Banner",
+        title: Text("add_banner".tr,
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         centerTitle: true,
       ),
@@ -106,12 +105,12 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Action URL",
+              Text("action_url".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               TextField(
                 controller: actionUrlController,
                 decoration: InputDecoration(
-                  hintText: "Enter action URL",
+                  hintText: "enter_action_url".tr,
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -119,12 +118,12 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              Text("Description",
+              Text("description".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               TextField(
                 controller: descriptionController,
                 decoration: InputDecoration(
-                  hintText: "Enter description",
+                  hintText: "enter_description".tr,
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -132,7 +131,7 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              Text("Start Date",
+              Text("start_date".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               Container(
                 decoration: BoxDecoration(
@@ -153,7 +152,7 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              Text("End Date",
+              Text("end_date".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               Container(
                 decoration: BoxDecoration(
@@ -174,12 +173,12 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              Text("Title",
+              Text("title".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(
-                  hintText: "Enter title",
+                  hintText: "enter_title".tr,
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -187,12 +186,12 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              Text("Type",
+              Text("type".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               TextField(
                 controller: typeController,
                 decoration: InputDecoration(
-                  hintText: "Enter type",
+                  hintText: "enter_type".tr,
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -200,13 +199,13 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                 ),
               ),
               SizedBox(height: 12),
-              Text("Order",
+              Text("order".tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
               TextField(
                 controller: orderController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: "Enter order",
+                  hintText: "enter_order".tr,
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -216,9 +215,9 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
               SizedBox(height: 12),
               Row(
                 children: [
-                  Text("Is Active",
+                  Text("is_active".tr,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   Switch(
                     value: isActive,
                     onChanged: (value) {
@@ -249,7 +248,7 @@ class _AddBannerScreenState extends State<AddBannerScreen> {
                           width: 10,
                         ),
                         CustomText(
-                          text: 'Save Banner',
+                          text: 'save_banner'.tr,
                           color: Colors.white,
                         )
                       ],

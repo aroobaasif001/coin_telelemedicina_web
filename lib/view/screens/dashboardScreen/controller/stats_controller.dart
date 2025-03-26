@@ -39,4 +39,6 @@ class StatController extends GetxController {
       print("Error fetching stats: $e");
     }
   }
+
+
 }

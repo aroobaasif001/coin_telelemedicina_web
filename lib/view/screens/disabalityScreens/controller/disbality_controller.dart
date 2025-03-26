@@ -1,10 +1,90 @@
-// import 'package:get/get.dart';
+
 // import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:get/get.dart';
+
+// class DisabilityController extends GetxController {
+//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+//   var disabilities = <Map<String, dynamic>>[].obs;
+//   var types = <Map<String, dynamic>>[].obs; // ✅ Add this to store types
+
+//   var searchQuery = ''.obs;
+//   var selectedDisabilityFilter = ''.obs;
+//   var selectedTypeFilter = ''.obs;
+
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     fetchDisabilities();
+//     fetchDisabilityTypes(); // ✅ Fetch types when initialized
+//   }
+
+//   // Fetch Disabilities from Firestore
+//   Future<void> fetchDisabilities() async {
+//     try {
+//       var snapshot = await _firestore.collection('disabilities').get();
+//       disabilities.value = snapshot.docs.map((doc) => {
+//         "id": doc.id,
+//         "name": doc["name"],
+//         "types": 0, // Default count
+//       }).toList();
+
+//       // Count types per disability
+//       for (var disability in disabilities) {
+//         var typesSnapshot = await _firestore
+//             .collection('disabilityTypes')
+//             .where('disabilityId', isEqualTo: disability["id"])
+//             .get();
+//         disability["types"] = typesSnapshot.docs.length;
+//       }
+
+//       update();
+//     } catch (e) {
+//       print("Error fetching disabilities: $e");
+//     }
+//   }
+
+//   // ✅ Fetch Disability Types
+//   Future<void> fetchDisabilityTypes() async {
+//     try {
+//       var snapshot = await _firestore.collection('disabilityTypes').get();
+//       types.value = snapshot.docs.map((doc) => {
+//         "id": doc.id,
+//         "name": doc["name"],
+//       }).toList();
+//       update();
+//     } catch (e) {
+//       print("Error fetching types: $e");
+//     }
+//   }
+
+//   // Filter Disabilities
+//   List<Map<String, dynamic>> get filteredDisabilities {
+//     if (searchQuery.value.isEmpty) {
+//       return disabilities;
+//     }
+//     return disabilities
+//         .where((disability) =>
+//         disability["name"].toLowerCase().contains(searchQuery.value.toLowerCase()))
+//         .toList();
+//   }
+
+//   // Delete Disability
+//   Future<void> deleteDisability(String disabilityId) async {
+//     await _firestore.collection('disabilities').doc(disabilityId).delete();
+//     fetchDisabilities();
+//   }
+// }
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:get/get.dart';
 //
 // class DisabilityController extends GetxController {
 //   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 //
 //   var disabilities = <Map<String, dynamic>>[].obs;
+//   var types = <Map<String, dynamic>>[].obs;
+//
 //   var searchQuery = ''.obs;
 //   var selectedDisabilityFilter = ''.obs;
 //   var selectedTypeFilter = ''.obs;
@@ -13,6 +93,7 @@
 //   void onInit() {
 //     super.onInit();
 //     fetchDisabilities();
+//     fetchDisabilityTypes();
 //   }
 //
 //   // Fetch Disabilities from Firestore
@@ -20,12 +101,12 @@
 //     try {
 //       var snapshot = await _firestore.collection('disabilities').get();
 //       disabilities.value = snapshot.docs.map((doc) => {
-//             "id": doc.id,
-//             "name": doc["name"],
-//             "types": 0, // Default count
-//           }).toList();
+//         "id": doc.id,
+//         "name": doc["name"],
+//         "types": 0, // Default count
+//       }).toList();
 //
-//       // Fetch the number of types for each disability
+//       // Count types per disability
 //       for (var disability in disabilities) {
 //         var typesSnapshot = await _firestore
 //             .collection('disabilityTypes')
@@ -40,6 +121,69 @@
 //     }
 //   }
 //
+//   // Fetch types for a specific disability
+//   Future<List<Map<String, dynamic>>> fetchTypesForDisability(String disabilityId) async {
+//     try {
+//       var snapshot = await _firestore
+//           .collection('disabilityTypes')
+//           .where('disabilityId', isEqualTo: disabilityId)
+//           .get();
+//
+//       return snapshot.docs.map((doc) => {
+//         "id": doc.id,
+//         "name": doc["name"],
+//         "isActive": doc["isActive"],
+//       }).toList();
+//     } catch (e) {
+//       print("Error fetching types: $e");
+//       return [];
+//     }
+//   }
+//
+//   Future<void> fetchDisabilitiesWithTypeCount() async {
+//     try {
+//       QuerySnapshot disabilitiesSnapshot = await _firestore.collection('disabilities').get();
+//
+//       List<Map<String, dynamic>> disabilitiesWithCount = [];
+//
+//       for (var disabilityDoc in disabilitiesSnapshot.docs) {
+//         String disabilityId = disabilityDoc.id;
+//
+//         QuerySnapshot typesSnapshot = await _firestore
+//             .collection('disabilityTypes')
+//             .where('disabilityId', isEqualTo: disabilityId)
+//             .get();
+//
+//         disabilitiesWithCount.add({
+//           "id": disabilityId,
+//           "name": disabilityDoc["name"],
+//           "types": typesSnapshot.docs.length, // Total count of types
+//         });
+//       }
+//
+//       disabilities.assignAll(disabilitiesWithCount);
+//       filteredDisabilities.assignAll(disabilitiesWithCount);
+//     } catch (e) {
+//       print("Error fetching disabilities: $e");
+//     }
+//   }
+//
+//
+//
+//   // Fetch Disability Types
+//   Future<void> fetchDisabilityTypes() async {
+//     try {
+//       var snapshot = await _firestore.collection('disabilityTypes').get();
+//       types.value = snapshot.docs.map((doc) => {
+//         "id": doc.id,
+//         "name": doc["name"],
+//       }).toList();
+//       update();
+//     } catch (e) {
+//       print("Error fetching types: $e");
+//     }
+//   }
+//
 //   // Filter Disabilities
 //   List<Map<String, dynamic>> get filteredDisabilities {
 //     if (searchQuery.value.isEmpty) {
@@ -47,7 +191,7 @@
 //     }
 //     return disabilities
 //         .where((disability) =>
-//             disability["name"].toLowerCase().contains(searchQuery.value.toLowerCase()))
+//         disability["name"].toLowerCase().contains(searchQuery.value.toLowerCase()))
 //         .toList();
 //   }
 //
@@ -56,6 +200,22 @@
 //     await _firestore.collection('disabilities').doc(disabilityId).delete();
 //     fetchDisabilities();
 //   }
+//
+//   // Update Disability
+//  Future<void> updateDisability(String disabilityId, String name, String typeId) async {
+//   try {
+//     // Update the disability name and type in Firestore
+//     await _firestore.collection('disabilities').doc(disabilityId).update({
+//       "name": name,
+//       "typeId": typeId, // Update the type ID
+//     });
+//
+//     // Fetch the updated list of disabilities
+//     await fetchDisabilities();
+//   } catch (e) {
+//     print("Error updating disability: $e");
+//   }
+// }
 // }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -64,7 +224,8 @@ class DisabilityController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   var disabilities = <Map<String, dynamic>>[].obs;
-  var types = <Map<String, dynamic>>[].obs; // ✅ Add this to store types
+  var types = <Map<String, dynamic>>[].obs;
+  var filteredDisabilities = <Map<String, dynamic>>[].obs;
 
   var searchQuery = ''.obs;
   var selectedDisabilityFilter = ''.obs;
@@ -73,42 +234,49 @@ class DisabilityController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchDisabilities();
-    fetchDisabilityTypes(); // ✅ Fetch types when initialized
+    fetchDisabilitiesWithTypeCount();
+    fetchDisabilityTypes();
+    ever(searchQuery, (_) => applyFilters());
   }
 
-  // Fetch Disabilities from Firestore
-  Future<void> fetchDisabilities() async {
+  // ✅ Fetch Disabilities with Type count
+  Future<void> fetchDisabilitiesWithTypeCount() async {
     try {
-      var snapshot = await _firestore.collection('disabilities').get();
-      disabilities.value = snapshot.docs.map((doc) => {
-        "id": doc.id,
-        "name": doc["name"],
-        "types": 0, // Default count
-      }).toList();
+      QuerySnapshot disabilitiesSnapshot = await _firestore.collection('disabilities').get();
 
-      // Count types per disability
-      for (var disability in disabilities) {
-        var typesSnapshot = await _firestore
+      List<Map<String, dynamic>> disabilitiesWithCount = [];
+
+      for (var disabilityDoc in disabilitiesSnapshot.docs) {
+        String disabilityId = disabilityDoc.id;
+
+        QuerySnapshot typesSnapshot = await _firestore
             .collection('disabilityTypes')
-            .where('disabilityId', isEqualTo: disability["id"])
+            .where('disabilityId', isEqualTo: disabilityId)
             .get();
-        disability["types"] = typesSnapshot.docs.length;
+
+        disabilitiesWithCount.add({
+          "id": disabilityId,
+          "name": disabilityDoc["name"],
+          "types": typesSnapshot.docs.length, // Total count of types
+        });
       }
 
-      update();
+      disabilities.assignAll(disabilitiesWithCount);
+      applyFilters();
     } catch (e) {
       print("Error fetching disabilities: $e");
     }
   }
 
-  // ✅ Fetch Disability Types
+  // ✅ Fetch All Disability Types
   Future<void> fetchDisabilityTypes() async {
     try {
       var snapshot = await _firestore.collection('disabilityTypes').get();
       types.value = snapshot.docs.map((doc) => {
         "id": doc.id,
         "name": doc["name"],
+        "disabilityId": doc["disabilityId"],
+        "isActive": doc["isActive"],
       }).toList();
       update();
     } catch (e) {
@@ -116,21 +284,50 @@ class DisabilityController extends GetxController {
     }
   }
 
-  // Filter Disabilities
-  List<Map<String, dynamic>> get filteredDisabilities {
-    if (searchQuery.value.isEmpty) {
-      return disabilities;
+  // ✅ Fetch types for a specific disability
+  Future<List<Map<String, dynamic>>> fetchTypesForDisability(String disabilityId) async {
+    try {
+      var snapshot = await _firestore
+          .collection('disabilityTypes')
+          .where('disabilityId', isEqualTo: disabilityId)
+          .get();
+
+      return snapshot.docs.map((doc) => {
+        "id": doc.id,
+        "name": doc["name"],
+        "isActive": doc["isActive"],
+      }).toList();
+    } catch (e) {
+      print("Error fetching types: $e");
+      return [];
     }
-    return disabilities
-        .where((disability) =>
-        disability["name"].toLowerCase().contains(searchQuery.value.toLowerCase()))
-        .toList();
   }
 
-  // Delete Disability
+  // ✅ Search & Filters
+  void applyFilters() {
+    if (searchQuery.value.isEmpty) {
+      filteredDisabilities.assignAll(disabilities);
+    } else {
+      filteredDisabilities.assignAll(disabilities.where((disability) =>
+          disability["name"].toLowerCase().contains(searchQuery.value.toLowerCase())).toList());
+    }
+  }
+
+  // ✅ Delete Disability
   Future<void> deleteDisability(String disabilityId) async {
     await _firestore.collection('disabilities').doc(disabilityId).delete();
-    fetchDisabilities();
+    await fetchDisabilitiesWithTypeCount();
+  }
+
+  // ✅ Update Disability
+  Future<void> updateDisability(String disabilityId, String name) async {
+    try {
+      await _firestore.collection('disabilities').doc(disabilityId).update({
+        "name": name,
+      });
+      await fetchDisabilitiesWithTypeCount();
+    } catch (e) {
+      print("Error updating disability: $e");
+    }
   }
 }
-
