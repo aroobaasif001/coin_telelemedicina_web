@@ -10,13 +10,17 @@ import 'package:image_picker/image_picker.dart';
 import '../../../model/provider_model.dart';
 import '../model/patient_model.dart';
 import '../view/screens/patient/add_patient_screen.dart';
-
+import 'package:get_storage/get_storage.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _storage = GetStorage();
+
+  final RxBool isLoggedIn = false.obs;
+  final Rx<Map<String, dynamic>?> currentAdmin = Rx<Map<String, dynamic>?>(null);
 
   var existingImageUrl = ''.obs;
   var existingProviderImageUrl = ''.obs;
@@ -24,11 +28,54 @@ class AuthController extends GetxController {
   var profileImage = Rx<File?>(null);
   var userProfile = Rxn<PatientModel>();
   var userProviderProfile = Rxn<ProviderModel>();
+
   @override
   void onInit() {
     super.onInit();
     fetchProviderProfile();
+    checkLoginStatus();
   }
+
+  void checkLoginStatus() {
+    final adminData = _storage.read('admin_data');
+    if (adminData != null) {
+      currentAdmin.value = Map<String, dynamic>.from(adminData);
+      isLoggedIn.value = true;
+    }
+  }
+
+  Future<bool> login(String email, String password) async {
+    try {
+      final adminDoc = await _firestore
+          .collection('admin')
+          .where('email', isEqualTo: email)
+          .where('password', isEqualTo: password)
+          .get();
+
+      if (adminDoc.docs.isNotEmpty) {
+        final adminData = adminDoc.docs.first.data();
+        currentAdmin.value = adminData;
+        _storage.write('admin_data', adminData);
+        isLoggedIn.value = true;
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print('Error en login: $e');
+      return false;
+    }
+  }
+
+  void logout() {
+    _storage.remove('admin_data');
+    currentAdmin.value = null;
+    isLoggedIn.value = false;
+    Get.offAllNamed('/login');
+  }
+
+  // Getter para obtener información del admin actual
+  String get adminName => currentAdmin.value?['name'] ?? '';
+  String get adminEmail => currentAdmin.value?['email'] ?? '';
 
   Future<void> pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -91,7 +138,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   Future<void> fetchProviderProfile() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -136,6 +182,7 @@ class AuthController extends GetxController {
       }
     }
   }
+
   Future<void> loadExistingProviderProfileImage() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -145,4 +192,5 @@ class AuthController extends GetxController {
       }
     }
   }
+}
 }

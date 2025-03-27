@@ -18,21 +18,40 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Panel de Administración de COIN Telemedicina - Gestión de servicios médicos y de interpretación">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="coin_telelemedicina_web">
+  <meta name="apple-mobile-web-app-title" content="COIN Telemedicina Admin">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>coin_telelemedicina_web</title>
+  <title>COIN Telemedicina - Panel de Administración</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    body {
+      background-color: #f5f5f5;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .loading img {
+      width: 150px;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
+  <div class="loading">
+    <img src="assets/coin_logo_cuadrado.png" alt="COIN Telemedicina" />
+  </div>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

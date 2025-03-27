@@ -1,4 +1,5 @@
 import 'package:coin_telelemedicina_web/controller/HomeController.dart';
+import 'package:coin_telelemedicina_web/controller/session_controller.dart';
 import 'package:coin_telelemedicina_web/translate/controller/translations_controller.dart';
 import 'package:coin_telelemedicina_web/translate/translations_app.dart';
 import 'package:coin_telelemedicina_web/view/auth/login_screen.dart';
@@ -6,6 +7,7 @@ import 'package:coin_telelemedicina_web/view/home_screen.dart';
 import 'package:coin_telelemedicina_web/view/screens/disabalityScreens/controller/disbality_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -14,10 +16,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await GetStorage.init();
 
   // Initialize controllers
   Get.lazyPut(() => HomeController());
   Get.put(DisabilityController());
+  Get.put(SessionController());
 
   final translationsController = Get.put(TranslationsController());
   await translationsController.loadLanguage(); // Load saved language
@@ -31,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translationsController = Get.find<TranslationsController>();
+    final sessionController = Get.find<SessionController>();
 
     return GetMaterialApp(
       theme: ThemeData(
@@ -42,7 +47,8 @@ class MyApp extends StatelessWidget {
           : const Locale('es'), // Set initial locale
       fallbackLocale: const Locale('en'), // Fallback locale
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(), // Or LoginScreen(),
+      home: Obx(() =>
+          sessionController.isLoggedIn.value ? HomeScreen() : LoginScreen()),
     );
   }
 }
