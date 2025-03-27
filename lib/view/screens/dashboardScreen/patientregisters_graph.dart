@@ -2,6 +2,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class PatientRegistrationGraph extends StatelessWidget {
+  List<String> getLast7Dates() {
+    final now = DateTime.now();
+    return List.generate(7, (index) {
+      final date = now.subtract(Duration(days: 6 - index));
+      return '${date.day}/${date.month}';
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -66,17 +73,22 @@ class PatientRegistrationGraph extends StatelessWidget {
                         showTitles: true,
                         reservedSize: 30,
                         getTitlesWidget: (value, meta) {
-                          const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Text(
-                              days[value.toInt()],
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                            ),
-                          );
+                          final dateLabels = getLast7Dates();
+                          if (value.toInt() >= 0 && value.toInt() < dateLabels.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Text(
+                                dateLabels[value.toInt()],
+                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
                         },
                       ),
                     ),
+
                   ),
                   borderData: FlBorderData(
                     show: true,
